@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TaskManagement.Interface;
 using TaskManagement.Models;
 using TaskManagement.Repository;
+using TaskManagement.Repository.IRepository;
+
 namespace TaskManagement
 {
     public class Startup

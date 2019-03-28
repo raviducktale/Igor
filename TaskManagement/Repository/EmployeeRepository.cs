@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TaskManagement.Interface;
 using TaskManagement.Models;
+using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
 {

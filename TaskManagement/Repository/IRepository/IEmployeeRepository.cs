@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 
-namespace TaskManagement.Interface
+namespace TaskManagement.Repository.IRepository
 {
    public interface IEmployeeRepository
     {
