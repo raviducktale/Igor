@@ -1,27 +1,21 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using TaskManagement.Models;
 
-namespace TaskManagement
+namespace TaskManagement  
 {
     public class DBContext
     {
-        //private IMongoDatabase mongoDatabase;
-        //public IMongoDatabase GetMongoDatabase()
-        //{
-        //    var mongoClient = new MongoClient("mongodb://localhost:27017");
-        //    mongoDatabase = mongoClient.GetDatabase("firstdatabase");
-        //    return mongoDatabase;
-        //}
-
-
         private readonly IMongoDatabase _database = null;
-
         public DBContext(IOptions<MongoSetting> settings)
         {
             var client = new MongoClient(settings.Value.ConnectionString);
             if (client != null)
-                _database = client.GetDatabase(settings.Value.Database);
+               
+            //MongoServer server = client.GetServer();
+            _database = client.GetDatabase(settings.Value.Database);
         }
 
         public IMongoCollection<Employee> Employee
@@ -29,6 +23,22 @@ namespace TaskManagement
             get
             {
                 return _database.GetCollection<Employee>("Employee");
+            }
+        }
+
+        public IMongoCollection<Meeting> Meeting
+        {
+            get
+            {
+                return _database.GetCollection<Meeting>("Meeting");
+            }
+        }
+
+        public IMongoCollection<Call> Call
+        {
+            get
+            {
+                return _database.GetCollection<Call>("Call");
             }
         }
     }

@@ -10,21 +10,22 @@ using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class CallRepository : ICallRepository
     {
-
         private readonly DBContext _context = null;
 
-        public EmployeeRepository(IOptions<MongoSetting> settings)
+        public CallRepository(IOptions<MongoSetting> settings)
         {
             _context = new DBContext(settings);
         }
 
-        public Task<List<Employee>> GetAllEmployees()
+
+
+        public Task<List<Call>> GetAllCall()
         {
             try
             {
-                return  _context.Employee.Find(_ => true).ToListAsync();
+                return _context.Call.Find(_ => true).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -32,16 +33,16 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<Employee> GetEmployee(string id)
+        public Task<Call> GetCall(string id)
         {
             try
             {
 
-                FilterDefinition<Employee> filter = Builders<Employee>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = _context.Employee.Find(filter).ToList();
+                FilterDefinition<Call> filter = Builders<Call>.Filter.Eq("_id", ObjectId.Parse(id));
+                var result = _context.Call.Find(filter).ToList();
 
                 return _context
-                    .Employee
+                    .Call
                     .Find(filter)
                     .FirstOrDefaultAsync();
 
@@ -50,14 +51,13 @@ namespace TaskManagement.Repository
             {
                 throw ex;
             }
-          
         }
 
-        public async Task AddEmployee(Employee Employee)
+        public async Task AddCall(Call Call)
         {
             try
             {
-                await _context.Employee.InsertOneAsync(Employee);
+                await _context.Call.InsertOneAsync(Call);
             }
             catch (Exception ex)
             {
@@ -65,11 +65,11 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task UpdateEmployee(Employee emp)
+        public async Task UpdateCall(Call Call)
         {
             try
             {
-                await _context.Employee.ReplaceOneAsync(b => b._id == emp._id, emp);
+                await _context.Call.ReplaceOneAsync(b => b._id == Call._id, Call);
             }
             catch (Exception ex)
             {
@@ -77,12 +77,12 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task<bool> RemoveEmployee(string id)
+        public async Task<bool> RemoveCall(string id)
         {
             try
             {
-                DeleteResult actionResult = await _context.Employee.DeleteOneAsync(
-                Builders<Employee>.Filter.Eq("_id",ObjectId.Parse(id)));
+                DeleteResult actionResult = await _context.Call.DeleteOneAsync(
+                Builders<Call>.Filter.Eq("_id", ObjectId.Parse(id)));
                 return actionResult.IsAcknowledged
                 && actionResult.DeletedCount > 0;
             }
@@ -91,7 +91,6 @@ namespace TaskManagement.Repository
                 throw ex;
             }
         }
-
-     
+      
     }
 }

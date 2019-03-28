@@ -12,13 +12,8 @@ namespace TaskManagement.Models.ViewModels
     
     public class EmployeeVM
     {
-        
         public string _id { get; set; }
-
         public int age { get; set; }
-
         public string name { get; set; }
-       
-
     }
 }

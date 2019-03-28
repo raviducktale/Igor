@@ -30,7 +30,7 @@ namespace TaskManagement.Controllers
         }
 
 
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
 
@@ -47,8 +47,8 @@ namespace TaskManagement.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody]Employee emp)
         {
-            ObjectId obj = new ObjectId();
-            emp._id = obj;
+            //ObjectId obj = new ObjectId();
+            //emp._id = obj;
             await _employeeRepository.AddEmployee(emp);
             return new OkObjectResult(emp);
         }
