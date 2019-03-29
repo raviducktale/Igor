@@ -6,6 +6,16 @@ import { LeadService } from './lead.service';
 import { AddEditLeadComponent } from './add-edit-lead/add-edit-lead.component';
 import { FormsModule } from '@angular/forms';
 
+import { CallComponent } from './call/call.component';
+import { CallService } from './call/call.service';
+import { CommentComponent } from './comment/comment.component';
+import { CommentService } from './comment/comment.service';
+import { TaskComponent } from './task/task.component';
+import { TaskService } from './task/task.service';
+import { MeetingComponent } from './meeting/meeting.component';
+import { MeetingService } from './meeting/meeting.service';
+
+
 export const routes = [
   { path: '', component: LeadComponent, pathMatch: 'full', data: { title: 'Manage Lead' } },
   { path: 'add', component: AddEditLeadComponent, data: { title: 'Add' } },
@@ -20,10 +30,18 @@ export const routes = [
   ],
   declarations: [
     LeadComponent,
-    AddEditLeadComponent
+    AddEditLeadComponent,
+    CallComponent,
+    CommentComponent,
+    TaskComponent,
+    MeetingComponent,
   ],
   providers: [
     LeadService,
+    CallService,
+    CommentService,
+    TaskService,
+    MeetingService
   ],
   exports: [
     //LoaderComponent
