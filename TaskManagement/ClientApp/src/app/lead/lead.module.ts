@@ -19,7 +19,11 @@ import { MeetingService } from './meeting/meeting.service';
 export const routes = [
   { path: '', component: LeadComponent, pathMatch: 'full', data: { title: 'Manage Lead' } },
   { path: 'add', component: AddEditLeadComponent, data: { title: 'Add' } },
-  { path: 'add/:id', component: AddEditLeadComponent, data: { title: 'Edit' } }
+  { path: 'add/:id', component: AddEditLeadComponent, data: { title: 'Edit' } },
+  { path: 'task', component: TaskComponent, data: { title: 'Edit' } },
+  { path: 'comment', component: CommentComponent, data: { title: 'Edit' } },
+  { path: 'meeting', component: MeetingComponent, data: { title: 'Edit' } },
+  { path: 'call', component: CallComponent, data: { title: 'Edit' } }
 ];
 
 @NgModule({
