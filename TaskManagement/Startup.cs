@@ -50,8 +50,9 @@ namespace TaskManagement
             services.AddCors();
             services.AddRouting();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            
-           
+            services.AddScoped<IMeetingRepository, MeetingRepository>();
+            services.AddScoped<ICallRepository, CallRepository>();
+
         }
 
     
