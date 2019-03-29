@@ -14,18 +14,20 @@ namespace TaskManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskController : ControllerBase
+    public class CommentController : ControllerBase
     {
-        private readonly TaskRepository _taskRepository;
-        public TaskController(IOptions<MongoSetting> settings)
+
+
+        private readonly CommentRepository _commentRepository;
+        public CommentController(IOptions<MongoSetting> settings)
         {
-            _taskRepository = new TaskRepository(settings); ;
+            _commentRepository = new CommentRepository(settings); ;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTask()
+        public async Task<IActionResult> GetComment()
         {
-            IEnumerable<Models.Task> model = await _taskRepository.GetAllTasks();
+            IEnumerable<Comment> model = await _commentRepository.GetAllComments();
             return Ok(model);
         }
 
@@ -34,49 +36,43 @@ namespace TaskManagement.Controllers
         public async Task<IActionResult> GetById(string id)
         {
 
-            var task = await _taskRepository.GetTask(id);
-            if (task == null)
+            var Comment = await _commentRepository.GetComment(id);
+            if (Comment == null)
                 return new NotFoundResult();
-            return new ObjectResult(task);
+            return new ObjectResult(Comment);
 
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] Models.Task task)
+        public async Task<IActionResult> Add([FromBody]Comment cmt)
         {
             ObjectId obj = new ObjectId();
-            task._id = obj;
-            await _taskRepository.AddTask(task);
-            return new OkObjectResult(task);
+            cmt._id = obj;
+            await _commentRepository.AddComment(cmt);
+            return new OkObjectResult(cmt);
         }
 
         // PUT: api/Task/5
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] TaskVM model)
+        public async Task<IActionResult> Update([FromBody] CommentVM model)
         {
             try
             {
-                Models.Task tsk = new Models.Task()
+                Comment cmt = new Comment()
                 {
                     _id = ObjectId.Parse(model._id),
-                    TaskText = model.TaskText,
+                    CommentText = model.CommentText,
                     ResponsiblePerson = model.ResponsiblePerson,
-                    Priority = model.Priority,
                     CreatedBy = model.CreatedBy,
                     UpdatedBy = model.UpdatedBy,
                     CreatedOn = model.CreatedOn,
                     UpdatedOn = model.UpdatedOn,
-                    EventStartDate = model.EventStartDate,
-                    EventEndDate = model.EventEndDate,
-                    Completed = model.Completed,
-                    RepeatTaskId = model.RepeatTaskId,
-                    ReminderNotificationId = model.ReminderNotificationId
 
                 };
 
 
-        await _taskRepository.UpdateTask(tsk);
-                return new OkObjectResult(tsk);
+                await _commentRepository.UpdateComment(cmt);
+                return new OkObjectResult(cmt);
             }
             catch (Exception ex)
             {
@@ -94,8 +90,9 @@ namespace TaskManagement.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _taskRepository.RemoveTask(id);
+            await _commentRepository.RemoveComment(id);
             return new ObjectResult(id);
         }
     }
+
 }
