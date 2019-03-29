@@ -1,14 +1,16 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TaskManagement.Models.ViewModels
+namespace TaskManagement.Models
 {
-    public class TaskVM
+    public class Tasks
     {
-       
-        public string _id { get; set; }
+        [BsonId]
+        public ObjectId _id { get; set; }
         public int TaskId { get; set; }
         public string TaskText { get; set; }
         public int ResponsiblePerson { get; set; }
@@ -22,5 +24,6 @@ namespace TaskManagement.Models.ViewModels
         public Boolean Completed { get; set; }
         public int RepeatTaskId { get; set; }
         public int ReminderNotificationId { get; set; }
+
     }
 }
