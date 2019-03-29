@@ -9,8 +9,8 @@ namespace TaskManagement.Repository.IRepository
     {
         Task<List<Employee>> GetAllEmployees();
         Task<Employee> GetEmployee(string id);
-        Task AddEmployee(Employee item);
+        System.Threading.Tasks.Task AddEmployee(Employee item);
         Task<bool> RemoveEmployee(string id);
-        Task UpdateEmployee(Employee item);
+        System.Threading.Tasks.Task UpdateEmployee(Employee item);
     }
 }

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using TaskManagement.Models;
 using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository;
@@ -17,60 +16,69 @@ namespace TaskManagement.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly TaskRepository _taskRepository;
         public TaskController(IOptions<MongoSetting> settings)
         {
-            _employeeRepository = new EmployeeRepository(settings); ;
+            _taskRepository = new TaskRepository(settings); ;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetTask()
         {
-            IEnumerable<Employee> model = await _employeeRepository.GetAllEmployees();
+            IEnumerable<Models.Task> model = await _taskRepository.GetAllTasks();
             return Ok(model);
         }
 
 
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
 
-            var Employee = await _employeeRepository.GetEmployee(id);
-            if (Employee == null)
+            var task = await _taskRepository.GetTask(id);
+            if (task == null)
                 return new NotFoundResult();
-            return new ObjectResult(Employee);
-          
+            return new ObjectResult(task);
+
         }
 
-
-
-
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody]Employee emp)
+        public async Task<IActionResult> Add([FromBody] Models.Task task)
         {
             ObjectId obj = new ObjectId();
-            emp._id = obj;
-            await _employeeRepository.AddEmployee(emp);
-            return new OkObjectResult(emp);
+            task._id = obj;
+            await _taskRepository.AddTask(task);
+            return new OkObjectResult(task);
         }
 
         // PUT: api/Task/5
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] EmployeeVM model)
+        public async Task<IActionResult> Update([FromBody] TaskVM model)
         {
             try
             {
-                Employee emp = new Employee()
+                Models.Task tsk = new Models.Task()
                 {
                     _id = ObjectId.Parse(model._id),
-                    age = model.age,
-                    name = model.name
+                    TaskText = model.TaskText,
+                    ResponsiblePerson = model.ResponsiblePerson,
+                    Priority = model.Priority,
+                    CreatedBy = model.CreatedBy,
+                    UpdatedBy = model.UpdatedBy,
+                    CreatedOn = model.CreatedOn,
+                    UpdatedOn = model.UpdatedOn,
+                    EventStartDate = model.EventStartDate,
+                    EventEndDate = model.EventEndDate,
+                    Completed = model.Completed,
+                    RepeatTaskId = model.RepeatTaskId,
+                    ReminderNotificationId = model.ReminderNotificationId
+
                 };
 
 
-                await _employeeRepository.UpdateEmployee(emp);
-                return new OkObjectResult(emp);
+        await _taskRepository.UpdateTask(tsk);
+                return new OkObjectResult(tsk);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -86,10 +94,8 @@ namespace TaskManagement.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _employeeRepository.RemoveEmployee(id);
+            await _taskRepository.RemoveTask(id);
             return new ObjectResult(id);
         }
     }
-
-   
 }

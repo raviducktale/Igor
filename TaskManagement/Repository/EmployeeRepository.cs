@@ -32,7 +32,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task AddEmployee(Employee Employee)
+        public async System.Threading.Tasks.Task AddEmployee(Employee Employee)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task UpdateEmployee(Employee emp)
+        public async System.Threading.Tasks.Task UpdateEmployee(Employee emp)
         {
             try
             {
