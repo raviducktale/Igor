@@ -10,22 +10,22 @@ using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
 {
-    public class CallRepository : ICallRepository
+    public class CallsRepository : ICallsRepository
     {
         private readonly DBContext _context = null;
 
-        public CallRepository(IOptions<MongoSetting> settings)
+        public CallsRepository(IOptions<MongoSetting> settings)
         {
             _context = new DBContext(settings);
         }
 
 
 
-        public Task<List<Call>> GetAllCall()
+        public Task<List<Calls>> GetAllCall()
         {
             try
             {
-                return _context.Call.Find(_ => true).ToListAsync();
+                return _context.Calls.Find(_ => true).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -33,16 +33,16 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<Call> GetCall(string id)
+        public Task<Calls> GetCall(string id)
         {
             try
             {
 
-                FilterDefinition<Call> filter = Builders<Call>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = _context.Call.Find(filter).ToList();
+                FilterDefinition<Calls> filter = Builders<Calls>.Filter.Eq("_id", ObjectId.Parse(id));
+                var result = _context.Calls.Find(filter).ToList();
 
                 return _context
-                    .Call
+                    .Calls
                     .Find(filter)
                     .FirstOrDefaultAsync();
 
@@ -53,11 +53,11 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task AddCall(Call Call)
+        public async Task AddCall(Calls Call)
         {
             try
             {
-                await _context.Call.InsertOneAsync(Call);
+                await _context.Calls.InsertOneAsync(Call);
             }
             catch (Exception ex)
             {
@@ -65,11 +65,11 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task UpdateCall(Call Call)
+        public async Task UpdateCall(Calls Call)
         {
             try
             {
-                await _context.Call.ReplaceOneAsync(b => b._id == Call._id, Call);
+                await _context.Calls.ReplaceOneAsync(b => b._id == Call._id, Call);
             }
             catch (Exception ex)
             {
@@ -81,8 +81,8 @@ namespace TaskManagement.Repository
         {
             try
             {
-                DeleteResult actionResult = await _context.Call.DeleteOneAsync(
-                Builders<Call>.Filter.Eq("_id", ObjectId.Parse(id)));
+                DeleteResult actionResult = await _context.Calls.DeleteOneAsync(
+                Builders<Calls>.Filter.Eq("_id", ObjectId.Parse(id)));
                 return actionResult.IsAcknowledged
                 && actionResult.DeletedCount > 0;
             }

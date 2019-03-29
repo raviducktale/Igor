@@ -16,17 +16,17 @@ namespace TaskManagement.Controllers
     [ApiController]
     public class MeetingController : ControllerBase
     {
-        private readonly MeetingRepository _meetingRepository;
+        private readonly MeetingsRepository _meetingRepository;
         public MeetingController(IOptions<MongoSetting> settings)
         {
-            _meetingRepository = new MeetingRepository(settings); ;
+            _meetingRepository = new MeetingsRepository(settings); ;
         }
 
 
         [HttpGet]
         public async Task<IActionResult> GetMeeting()
         {
-            IEnumerable<Meeting> model = await _meetingRepository.GetAllMeetings();
+            IEnumerable<Meetings> model = await _meetingRepository.GetAllMeetings();
             return Ok(model);
         }
 
@@ -46,7 +46,7 @@ namespace TaskManagement.Controllers
 
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody]Meeting Meeting)
+        public async Task<IActionResult> Add([FromBody]Meetings Meeting)
         {
             //ObjectId obj = new ObjectId();
             //Meeting._id = obj;
@@ -56,11 +56,11 @@ namespace TaskManagement.Controllers
 
         // PUT: api/Task/5
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] MeetingVM model)
+        public async Task<IActionResult> Update([FromBody] MeetingsVM model)
         {
             try
             {
-                Meeting Meeting = new Meeting()
+                Meetings Meeting = new Meetings()
                 {
                     _id = ObjectId.Parse(model._id),
                     MeetingId = model.MeetingId,

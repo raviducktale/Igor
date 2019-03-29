@@ -6,12 +6,12 @@ using TaskManagement.Models;
 
 namespace TaskManagement.Repository.IRepository
 {
-   public interface ICallRepository
+   public interface ICallsRepository
     {
-        Task<List<Call>> GetAllCall();
-        Task<Call> GetCall(string id);
-        Task AddCall(Call item);
-        Task UpdateCall(Call item);
+        Task<List<Calls>> GetAllCall();
+        Task<Calls> GetCall(string id);
+        Task AddCall(Calls item);
+        Task UpdateCall(Calls item);
         Task<bool> RemoveCall(string id);
     }
 }
