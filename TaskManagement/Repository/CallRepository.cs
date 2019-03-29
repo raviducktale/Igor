@@ -53,7 +53,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task AddCall(Call Call)
+        public async System.Threading.Tasks.Task AddCall(Call Call)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task UpdateCall(Call Call)
+        public async System.Threading.Tasks.Task UpdateCall(Call Call)
         {
             try
             {

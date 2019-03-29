@@ -8,10 +8,10 @@ namespace TaskManagement.Repository.IRepository
 {
   public interface ITaskRepository
     {
-        Task<List<Models.Task>> GetAllTasks();
-        Task<Models.Task> GetTask(string id);
-        System.Threading.Tasks.Task AddTask(Models.Task item);
+        Task<List<Models.Tasks>> GetAllTasks();
+        Task<Models.Tasks> GetTask(string id);
+        System.Threading.Tasks.Task AddTask(Models.Tasks item);
         Task<bool> RemoveTask(string id);
-        System.Threading.Tasks.Task UpdateTask(Models.Task item);
+        System.Threading.Tasks.Task UpdateTask(Models.Tasks item);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TaskManagement.Models
 {
-    public class Comment
+    public class Comments
     {
 
         [BsonId]

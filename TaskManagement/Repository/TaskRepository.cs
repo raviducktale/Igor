@@ -21,7 +21,7 @@ namespace TaskManagement.Repository
         }
 
 
-        public async System.Threading.Tasks.Task AddTask(Models.Task task)
+        public async System.Threading.Tasks.Task AddTask(Models.Tasks task)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<List<Models.Task>> GetAllTasks()
+        public Task<List<Models.Tasks>> GetAllTasks()
         {
             try
             {
@@ -45,12 +45,12 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<Models.Task> GetTask(string id)
+        public Task<Models.Tasks> GetTask(string id)
         {
             try
             {
 
-                FilterDefinition<Models.Task> filter = Builders<Models.Task>.Filter.Eq("_id", ObjectId.Parse(id));
+                FilterDefinition<Models.Tasks> filter = Builders<Models.Tasks>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = _context.Task.Find(filter).ToList();
 
                 return _context
@@ -70,7 +70,7 @@ namespace TaskManagement.Repository
             try
             {
                 DeleteResult actionResult = await _context.Task.DeleteOneAsync(
-                Builders<Models.Task>.Filter.Eq("_id", ObjectId.Parse(id)));
+                Builders<Models.Tasks>.Filter.Eq("_id", ObjectId.Parse(id)));
                 return actionResult.IsAcknowledged
                 && actionResult.DeletedCount > 0;
             }
@@ -80,7 +80,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async System.Threading.Tasks.Task UpdateTask(Models.Task item)
+        public async System.Threading.Tasks.Task UpdateTask(Models.Tasks item)
         {
             try
             {

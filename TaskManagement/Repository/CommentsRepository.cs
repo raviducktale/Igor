@@ -10,17 +10,17 @@ using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
 {
-    public class CommentRepository : ICommentRepository
+    public class CommentsRepository : ICommentsRepository
     {
 
         private readonly DBContext _context = null;
 
-        public CommentRepository(IOptions<MongoSetting> settings)
+        public CommentsRepository(IOptions<MongoSetting> settings)
         {
             _context = new DBContext(settings);
         }
 
-        public async System.Threading.Tasks.Task AddComment(Comment comment)
+        public async System.Threading.Tasks.Task AddComment(Comments comment)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<List<Comment>> GetAllComments()
+        public Task<List<Comments>> GetAllComments()
         {
             try
             {
@@ -44,12 +44,12 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<Comment> GetComment(string id)
+        public Task<Comments> GetComment(string id)
         {
             try
             {
 
-                FilterDefinition<Comment> filter = Builders<Comment>.Filter.Eq("_id", ObjectId.Parse(id));
+                FilterDefinition<Comments> filter = Builders<Comments>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = _context.Comment.Find(filter).ToList();
 
                 return _context
@@ -69,7 +69,7 @@ namespace TaskManagement.Repository
             try
             {
                 DeleteResult actionResult = await _context.Comment.DeleteOneAsync(
-                Builders<Comment>.Filter.Eq("_id", ObjectId.Parse(id)));
+                Builders<Comments>.Filter.Eq("_id", ObjectId.Parse(id)));
                 return actionResult.IsAcknowledged
                 && actionResult.DeletedCount > 0;
             }
@@ -79,7 +79,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async System.Threading.Tasks.Task UpdateComment(Comment item)
+        public async System.Threading.Tasks.Task UpdateComment(Comments item)
         {
             try
             {

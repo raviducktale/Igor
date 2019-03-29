@@ -18,16 +18,16 @@ namespace TaskManagement.Controllers
     {
 
 
-        private readonly CommentRepository _commentRepository;
+        private readonly CommentsRepository _commentRepository;
         public CommentController(IOptions<MongoSetting> settings)
         {
-            _commentRepository = new CommentRepository(settings); ;
+            _commentRepository = new CommentsRepository(settings); ;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetComment()
-        {
-            IEnumerable<Comment> model = await _commentRepository.GetAllComments();
+       {
+            IEnumerable<Comments> model = await _commentRepository.GetAllComments();
             return Ok(model);
         }
 
@@ -44,21 +44,20 @@ namespace TaskManagement.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody]Comment cmt)
+        public async Task<IActionResult> Add([FromBody]Comments cmt)
         {
-            ObjectId obj = new ObjectId();
-            cmt._id = obj;
+           
             await _commentRepository.AddComment(cmt);
             return new OkObjectResult(cmt);
         }
 
         // PUT: api/Task/5
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] CommentVM model)
+        public async Task<IActionResult> Update([FromBody] CommentsVM model)
         {
             try
             {
-                Comment cmt = new Comment()
+                Comments cmt = new Comments()
                 {
                     _id = ObjectId.Parse(model._id),
                     CommentText = model.CommentText,

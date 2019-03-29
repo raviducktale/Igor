@@ -25,7 +25,7 @@ namespace TaskManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTask()
         {
-            IEnumerable<Models.Task> model = await _taskRepository.GetAllTasks();
+            IEnumerable<Models.Tasks> model = await _taskRepository.GetAllTasks();
             return Ok(model);
         }
 
@@ -42,21 +42,19 @@ namespace TaskManagement.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] Models.Task task)
+        public async Task<IActionResult> Add([FromBody] Models.Tasks task)
         {
-            ObjectId obj = new ObjectId();
-            task._id = obj;
             await _taskRepository.AddTask(task);
             return new OkObjectResult(task);
         }
 
         // PUT: api/Task/5
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] TaskVM model)
+        public async Task<IActionResult> Update([FromBody] TasksVM model)
         {
             try
             {
-                Models.Task tsk = new Models.Task()
+                Models.Tasks tsk = new Models.Tasks()
                 {
                     _id = ObjectId.Parse(model._id),
                     TaskText = model.TaskText,

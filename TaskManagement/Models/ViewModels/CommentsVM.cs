@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TaskManagement.Models.ViewModels
 {
-    public class CommentVM
+    public class CommentsVM
     {
        
         public string _id { get; set; }
