@@ -17,16 +17,16 @@ namespace TaskManagement.Controllers
     [ApiController]
     public class CallController : ControllerBase
     {
-        private readonly CallRepository _callRepository;
+        private readonly CallsRepository _callRepository;
         public CallController(IOptions<MongoSetting> settings)
         {
-            _callRepository = new CallRepository(settings); ;
+            _callRepository = new CallsRepository(settings); ;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCall()
         {
-            IEnumerable<Call> model = await _callRepository.GetAllCall();
+            IEnumerable<Calls> model = await _callRepository.GetAllCall();
             return Ok(model);
         }
 
@@ -40,7 +40,7 @@ namespace TaskManagement.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody]Call Call)
+        public async Task<IActionResult> Add([FromBody]Calls Call)
         {
             //ObjectId obj = new ObjectId();
             //Call._id = obj;
@@ -50,11 +50,11 @@ namespace TaskManagement.Controllers
 
         // PUT: api/Task/5
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] CallVM model)
+        public async Task<IActionResult> Update([FromBody] CallsVM model)
         {
             try
             {
-                Call Call = new Call()
+                Calls Call = new Calls()
                 {
                     _id = ObjectId.Parse(model._id),
                     CallId = model.CallId,

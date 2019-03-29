@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TaskManagement.Models.ViewModels
 {
-    public class CallVM
+    public class CallsVM
     {
        
         public string _id { get; set; }

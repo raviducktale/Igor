@@ -10,21 +10,22 @@ using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
 {
-    public class MeetingRepository : IMeetingRepository
+    public class CallsRepository : ICallsRepository
     {
         private readonly DBContext _context = null;
-        public MeetingRepository(IOptions<MongoSetting> settings)
+
+        public CallsRepository(IOptions<MongoSetting> settings)
         {
             _context = new DBContext(settings);
         }
 
-       
 
-        public Task<List<Meeting>> GetAllMeetings()
+
+        public Task<List<Calls>> GetAllCall()
         {
             try
             {
-                return _context.Meeting.Find(_ => true).ToListAsync();
+                return _context.Calls.Find(_ => true).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -32,16 +33,16 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<Meeting> GetMeeting(string id)
+        public Task<Calls> GetCall(string id)
         {
             try
             {
 
-                FilterDefinition<Meeting> filter = Builders<Meeting>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = _context.Meeting.Find(filter).ToList();
+                FilterDefinition<Calls> filter = Builders<Calls>.Filter.Eq("_id", ObjectId.Parse(id));
+                var result = _context.Calls.Find(filter).ToList();
 
                 return _context
-                    .Meeting
+                    .Calls
                     .Find(filter)
                     .FirstOrDefaultAsync();
 
@@ -50,14 +51,13 @@ namespace TaskManagement.Repository
             {
                 throw ex;
             }
-
         }
 
-        public async Task AddMeeting(Meeting Meeting)
+        public async Task AddCall(Calls Call)
         {
             try
             {
-                await _context.Meeting.InsertOneAsync(Meeting);
+                await _context.Calls.InsertOneAsync(Call);
             }
             catch (Exception ex)
             {
@@ -65,11 +65,11 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task UpdateMeeting(Meeting Meeting)
+        public async Task UpdateCall(Calls Call)
         {
             try
             {
-                await _context.Meeting.ReplaceOneAsync(b => b._id == Meeting._id, Meeting);
+                await _context.Calls.ReplaceOneAsync(b => b._id == Call._id, Call);
             }
             catch (Exception ex)
             {
@@ -77,12 +77,12 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task<bool> RemoveMeeting(string id)
+        public async Task<bool> RemoveCall(string id)
         {
             try
             {
-                DeleteResult actionResult = await _context.Meeting.DeleteOneAsync(
-                Builders<Meeting>.Filter.Eq("_id", ObjectId.Parse(id)));
+                DeleteResult actionResult = await _context.Calls.DeleteOneAsync(
+                Builders<Calls>.Filter.Eq("_id", ObjectId.Parse(id)));
                 return actionResult.IsAcknowledged
                 && actionResult.DeletedCount > 0;
             }
@@ -91,5 +91,6 @@ namespace TaskManagement.Repository
                 throw ex;
             }
         }
+      
     }
 }

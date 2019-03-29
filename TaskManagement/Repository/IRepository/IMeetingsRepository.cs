@@ -6,12 +6,12 @@ using TaskManagement.Models;
 
 namespace TaskManagement.Repository.IRepository
 {
-   public interface IMeetingRepository
+   public interface IMeetingsRepository
     {
-        Task<List<Meeting>> GetAllMeetings();
-        Task<Meeting> GetMeeting(string id);
-        Task AddMeeting(Meeting item);
+        Task<List<Meetings>> GetAllMeetings();
+        Task<Meetings> GetMeeting(string id);
+        Task AddMeeting(Meetings item);
         Task<bool> RemoveMeeting(string id);
-        Task UpdateMeeting(Meeting item);
+        Task UpdateMeeting(Meetings item);
     }
 }
