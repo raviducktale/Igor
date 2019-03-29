@@ -1,78 +1,26 @@
-<div class="container">
-  <div class="row py-1">
-    <div class="col-lg-3">
-      <div class="card b mb-2">
-        <div class="card-header bb">
-          <h4 class="card-title">Lead detail</h4>
-        </div>
-        <div class="card-body bt">
-          <h4 class="b0">Name: </h4>
-        </div>
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>Subtotal</td>
-              <td>
-                <div class="text-right text-bold">$400</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Estimated Tax</td>
-              <td>
-                <div class="text-right text-bold">$1.44</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Shiping</td>
-              <td>
-                <div class="text-right text-bold">$5</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="card-body">
-          <div class="clearfix">
-            <div class="float-right text-right">
-              <div class="text-bold">$406.44</div>
-            </div>
-            <div class="float-left text-bold text-dark">ORDER TOTAL</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <p>
-            <a class="btn btn-primary btn-block" [routerLink]="['/lead']">Back</a>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-9">
-      <div class="container-md">
+<section class="lead-add-list">
+  <div class="container">
+    <div class="row py-1">
+      <div class="col-lg-3">
         <div class="card b mb-2">
           <div class="card-header bb">
-            <h4 class="card-title">Actions - tabs</h4>
+            <h4 class="card-title">Lead detail</h4>
           </div>
           <div class="card-body bt">
-            <h4 class="b0">Call | Comment | Task | Meeting</h4>
+            <h4 class="b0">Name: </h4>
           </div>
           <table class="table">
             <tbody>
               <tr>
-                <td>Description</td>
+                <td>Subtotal</td>
                 <td>
-                  <div class="text-right text-bold">test test test description</div>
+                  <div class="text-right text-bold">$400</div>
                 </td>
               </tr>
               <tr>
-                <td>responsible person</td>
+                <td>Estimated Tax</td>
                 <td>
-                  <div class="text-right text-bold">test</div>
-                </td>
-              </tr>
-              <tr>
-                <td>responsible person</td>
-                <td>
-                  <div class="text-right text-bold">test</div>
+                  <div class="text-right text-bold">$1.44</div>
                 </td>
               </tr>
               <tr>
@@ -84,12 +32,320 @@
             </tbody>
           </table>
           <div class="card-body">
+            <div class="clearfix">
+              <div class="float-right text-right">
+                <div class="text-bold">$406.44</div>
+              </div>
+              <div class="float-left text-bold text-dark">ORDER TOTAL</div>
+            </div>
+          </div>
+          <div class="card-body">
             <p>
-              <button class="btn btn-primary btn-block" type="button">UPDATE</button>
+              <a class="btn btn-primary btn-block" [routerLink]="['/lead']">Back</a>
             </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-9">
+        <div class="container-md">
+          <div class="card b mb-2">
+            <div class="card-body bt mb-3">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="call-tab" data-toggle="tab" href="#call" role="tab" aria-controls="call" aria-selected="true">Call</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false">Comment</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="task-tab" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="false">Task</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="meeting-tab" data-toggle="tab" href="#meeting" role="tab" aria-controls="meeting" aria-selected="false">Meeting</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="call" role="tabpanel" aria-labelledby="call-tab">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <textarea class="form-control" rows="4" placeholder="Call"></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Text" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <select class="form-control">
+                          <option>Select Box</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-group">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                          <label class="form-check-label" for="defaultCheck1">
+                            Default checkbox
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>                  
+                </div>
+                <div class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <textarea class="form-control" rows="4" placeholder="Comment"></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Text" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <select class="form-control">
+                          <option>Select Box</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-group">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                          <label class="form-check-label" for="defaultCheck1">
+                            Default checkbox
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="task" role="tabpanel" aria-labelledby="task-tab">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <textarea class="form-control" rows="4" placeholder="Task"></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Text" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <select class="form-control">
+                          <option>Select Box</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-group">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                          <label class="form-check-label" for="defaultCheck1">
+                            Default checkbox
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <textarea class="form-control" rows="4" placeholder="Meeting"></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Text" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" />
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <select class="form-control">
+                          <option>Select Box</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-group">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                          <label class="form-check-label" for="defaultCheck1">
+                            Default checkbox
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--<div class="report-list-table">
+              <div class="row">
+                <div class="col-12 text-center">
+                  <div class="report-date"><span>14 march</span></div>
+                </div>
+              </div>
+            </div>-->
+            <div class="row m-0">
+              <div class="col-12">
+                <ul _ngcontent-c8="" class="timeline">
+                  <li _ngcontent-c8="" class="timeline-separator" data-datetime="Now"></li>
+                  <li _ngcontent-c8="">
+                    <div _ngcontent-c8="" class="timeline-badge primary"><em _ngcontent-c8="" class="fa fa-users"></em></div>
+                    <div _ngcontent-c8="" class="timeline-card">
+                      <div _ngcontent-c8="" class="popover left">
+                        <h4 _ngcontent-c8="" class="popover-header">Client Meeting</h4>
+                        <div _ngcontent-c8="" class="arrow"></div>
+                        <div _ngcontent-c8="" class="popover-body">
+                          <p _ngcontent-c8="">
+                            Av 123 St - Floor 2
+                            <br _ngcontent-c8=""><small _ngcontent-c8="">Pellentesque ut diam velit, eget porttitor risus. Nullam posuere euismod volutpat.</small>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li _ngcontent-c8="" class="timeline-inverted">
+                    <div _ngcontent-c8="" class="timeline-badge warning"><em _ngcontent-c8="" class="fa fa-phone"></em></div>
+                    <div _ngcontent-c8="" class="timeline-card">
+                      <div _ngcontent-c8="" class="popover right">
+                        <h4 _ngcontent-c8="" class="popover-header">Call</h4>
+                        <div _ngcontent-c8="" class="arrow"></div>
+                        <div _ngcontent-c8="" class="popover-body">
+                          <p _ngcontent-c8="">
+                            Michael <a _ngcontent-c8="" href="tel:+011654524578">(+011) 6545 24578 ext. 132</a>
+                            <br _ngcontent-c8=""><small _ngcontent-c8="">Pellentesque ut diam velit, eget porttitor risus. Nullam posuere euismod volutpat.</small>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li _ngcontent-c8="" class="timeline-separator" data-datetime="Yesterday"></li>
+                  <li _ngcontent-c8="">
+                    <div _ngcontent-c8="" class="timeline-badge danger"><em _ngcontent-c8="" class="fas fa-video"></em></div>
+                    <div _ngcontent-c8="" class="timeline-card">
+                      <div _ngcontent-c8="" class="popover left">
+                        <h4 _ngcontent-c8="" class="popover-header">Conference</h4>
+                        <div _ngcontent-c8="" class="arrow"></div>
+                        <div _ngcontent-c8="" class="popover-body">
+                          <p _ngcontent-c8="">Join development group</p><small _ngcontent-c8=""><a _ngcontent-c8="" href="skype:echo123?call"><em _ngcontent-c8="" class="fa fa-phone mr-2"></em>Call the Skype Echo</a></small>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li _ngcontent-c8="" class="timeline-inverted">
+                    <div _ngcontent-c8="" class="timeline-card">
+                      <div _ngcontent-c8="" class="popover right">
+                        <h4 _ngcontent-c8="" class="popover-header">Appointment</h4>
+                        <div _ngcontent-c8="" class="arrow"></div>
+                        <div _ngcontent-c8="" class="popover-body">
+                          <p _ngcontent-c8="">Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam.</p>
+                          <div _ngcontent-c8="" class="btn-group" dropdown="">
+                            <a _ngcontent-c8="" class="dropdown-toggle" dropdowntoggle="" href="#" aria-haspopup="true"><em _ngcontent-c8="" class="fa fa-paperclip"></em></a>
+                            <!---->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li _ngcontent-c8="">
+                    <div _ngcontent-c8="" class="timeline-badge info"><em _ngcontent-c8="" class="fa fa-plane"></em></div>
+                    <div _ngcontent-c8="" class="timeline-card">
+                      <div _ngcontent-c8="" class="popover left">
+                        <h4 _ngcontent-c8="" class="popover-header">Fly</h4>
+                        <div _ngcontent-c8="" class="arrow"></div>
+                        <div _ngcontent-c8="" class="popover-body">
+                          <p _ngcontent-c8="">Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li _ngcontent-c8="">
+                    <div _ngcontent-c8="" class="timeline-card">
+                      <div _ngcontent-c8="" class="popover left">
+                        <h4 _ngcontent-c8="" class="popover-header">Appointment</h4>
+                        <div _ngcontent-c8="" class="arrow"></div>
+                        <div _ngcontent-c8="" class="popover-body">
+                          <p _ngcontent-c8="">Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li _ngcontent-c8="" class="timeline-separator" data-datetime="2014-05-21"></li>
+                  <li _ngcontent-c8="" class="timeline-inverted">
+                    <div _ngcontent-c8="" class="timeline-badge success"><em _ngcontent-c8="" class="fa fa-music"></em></div>
+                    <div _ngcontent-c8="" class="timeline-card">
+                      <div _ngcontent-c8="" class="popover right">
+                        <h4 _ngcontent-c8="" class="popover-header">Relax</h4>
+                        <div _ngcontent-c8="" class="arrow"></div>
+                        <div _ngcontent-c8="" class="popover-body">
+                          <p _ngcontent-c8="">Listen some music</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li _ngcontent-c8="" class="timeline-end"><a _ngcontent-c8="" class="timeline-badge" href="#"><em _ngcontent-c8="" class="fa fa-plus"></em></a></li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
+
+</section>

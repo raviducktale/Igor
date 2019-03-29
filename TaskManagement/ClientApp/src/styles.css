@@ -1,3 +1,293 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import 'https://use.fontawesome.com/releases/v5.8.1/css/all.css';
+
+body {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+.lead-add-list {
+  padding: 40px 0;
+}
+
+  .lead-add-list .card-header {
+    background: #ececec;
+    padding: 6px 12px;
+  }
+
+  .lead-add-list .card-title {
+    margin: 0px;
+    padding: 5px 0px;
+    font-size: 19px;
+    color: #313131;
+    font-family: "Source Sans Pro", sans-serif;
+  }
+
+.nav-tabs .nav-link {
+  font-size: 14px;
+}
+
+  .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active,
+  .nav-tabs .nav-link:hover {
+    background: #fff;
+    border-color: #fff #fff #8490ff;
+    outline: none
+  }
+
+.tab-content {
+  border: 1px solid #ececec;
+  border-top: 0px;
+}
+
+.tab-pane {
+  padding: 15px;
+}
+
+.form-check {
+  position: relative;
+  display: block;
+  padding-left: 0;
+}
+
+.form-check input {
+  display: none
+}
+
+  .form-check label {
+    padding-left: 30px;
+    position: relative;
+    cursor: pointer;
+    font-family: "Source Sans Pro", sans-serif;
+    font-size:14px;
+  }
+
+    .form-check label:before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      border: 1px solid #ececec;
+      position: absolute;
+      left: 0px;
+      top: 50%;
+      transform: translate(0,-50%);
+    }
+  .form-check input:checked + label:after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: black;
+    display: inline-block;
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translate(0,-50%);
+  }
+
+.report-list-table {
+  width: 100%;
+  font-family: "Source Sans Pro", sans-serif;
+}
+.report-date{
+  padding:20px 0;
+  position:relative;
+  width:100%;
+}
+  .report-date:before {
+    content: '';
+    width: calc(100% - 30px);
+    height: 1px;
+    display: inline-block;
+    background: #ececec;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+  }
+  .report-date span {
+    display: inline-block;
+    background: #ececec;
+    padding: 2px 14px;
+    border-radius: 17px;
+    font-size: 12px;
+    color: #8c8c8c;
+    position:relative;
+    z-index:1
+  }
+.timeline, .timeline-alt {
+  list-style: none;
+  padding: 0 0 20px;
+  position: relative;
+  z-index: 0;
+}
+  .timeline-alt > li.timeline-separator:first-child,
+  .timeline > li.timeline-separator:first-child {
+    padding-top: 0;
+  }
+
+
+.timeline-alt > li, .timeline > li {
+    margin-bottom: 20px;
+  }
+.timeline-alt > li.timeline-separator, .timeline > li.timeline-separator {
+  position: relative;
+  float: none;
+  clear: both;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+  .timeline-alt:before, .timeline:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    content: " ";
+    width: 1px;
+    background-color: #d1d2d3;
+    left: 18px;
+  }
+  .timeline .timeline-end, .timeline-alt .timeline-end {
+    float: none;
+    clear: both;
+  }
+  .timeline-alt > li.timeline-separator:before, .timeline > li.timeline-separator:before {
+    content: attr(data-datetime);
+    display: inline-block;
+    width: 120px;
+    text-align: center;
+    padding: 0 20px;
+    line-height: 30px;
+    background-color: #b6c5da;
+    color: #fff;
+    font-size:14px;
+  }
+  .timeline-alt > li::after, .timeline > li::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+  .timeline-alt > li > .timeline-badge, .timeline > li > .timeline-badge {
+    position: absolute;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 500px;
+    line-height: 36px;
+    font-size: 1em;
+    text-align: center;
+    color: #fff;
+    background-color: #999;
+    z-index: 100;
+  }
+    .timeline-alt > li > .timeline-badge.primary, .timeline > li > .timeline-badge.primary {
+      background-color: #5d9cec;
+    }
+  .timeline-alt > li > .timeline-card, .timeline > li > .timeline-card {
+    margin-left: 60px;
+  }
+.popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1060;
+  display: block;
+  max-width: 276px;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.52857143;
+  text-align: left;
+  text-align: start;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  word-break: normal;
+  word-spacing: normal;
+  white-space: normal;
+  line-break: auto;
+  font-size: .875rem;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.2);
+}
+.popover {
+  box-shadow: 0 0 0 #000;
+  border-color: #eee;
+  border-bottom: 2px solid #e4eaec;
+  border-radius: .2rem;
+}
+.timeline-alt > li > .timeline-card .popover, .timeline > li > .timeline-card .popover {
+  position: relative;
+  display: block;
+  margin: 0;
+  width: 100%;
+  max-width: none;
+}
+.popover-header {
+  padding: .5rem .75rem;
+  margin-bottom: 0;
+  font-size: 1rem;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ebebeb;
+  border-top-left-radius: calc(.375rem - 1px);
+  border-top-right-radius: calc(.375rem - 1px);
+}
+.popover .arrow {
+  position: absolute;
+  display: block;
+  width: 1rem;
+  height: .5rem;
+  margin: 0 .375rem;
+}
+.timeline-alt > li > .timeline-card .popover .arrow, .timeline > li > .timeline-card .popover .arrow {
+  top: 18px;
+  display: none;
+}
+.popover-body {
+  padding: .5rem .75rem;
+  color: #656565;
+}
+.popover .arrow::after, .popover .arrow::before {
+  position: absolute;
+  display: block;
+  content: "";
+  border-color: transparent;
+  border-style: solid;
+}
+.timeline .popover.left > .arrow:after, .timeline-alt .popover.left > .arrow:after {
+  border-left-color: #fff;
+}
+@media (min-width: 992px) {
+  .timeline > li.timeline-separator {
+    text-align: center;
+  }
+  .timeline > li.timeline-inverted {
+    float: right;
+    clear: right;
+    margin-top: 50px;
+  }
+  .timeline:before {
+    left: 50%;
+    margin-left: 18px;
+  }
+  .timeline > li.timeline-separator:before {
+    margin-left: 36px;
+  }
+  .timeline > li > .timeline-badge {
+    left: 50%;
+    margin-left: 0;
+  }
+  .timeline > li > .timeline-card {
+    margin: 0;
+  }
+    .timeline > li > .timeline-card .popover .arrow {
+      display: block;
+    }
+}
+@media (min-width: 992px) {
+  .timeline > li {
+    float: left;
+    clear: left;
+    width: 45%;
+  }
+}
