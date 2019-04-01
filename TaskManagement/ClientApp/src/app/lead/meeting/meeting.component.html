@@ -1,3 +1,173 @@
-<p>
-  meeting works!
-</p>
+<div class="col-md-10">
+  <h3>Meetings</h3>
+  <table class="table table-bordered col-md-12">
+    <thead>
+      <tr>
+        <!--<th>Id</th>-->
+        <th>MeetingId  </th>
+        <th>MeetingSubject</th>
+        <th>Location </th>
+        <th>ResponsiblePerson </th>
+        <th>Priority </th>
+        <th>CreatedBy </th>
+        <th>UpdatedBy </th>
+        <th>CreatedDate </th>
+        <th>UpdatedDate </th>
+        <th>EventStartDate </th>
+        <th>EventEndDate </th>
+        <th>RepeatTask </th>
+        <th>ReminderNotification </th>
+        <th>Completed </th>
+        <th>Description  </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let Meeting of meetingList">
+
+        <!--<td>-->
+        <input type="hidden" class="form-control" name="id" [(ngModel)]="Meeting._id"> <!--</td>-->
+        <td> <input type="text" class="form-control" name="MeetingId" [(ngModel)]="Meeting.meetingId"> </td>
+        <td> <input type="text" class="form-control" name="MeetingSubject " [(ngModel)]="Meeting.meetingSubject "></td>
+        <td> <input type="text" class="form-control" name="Location " [(ngModel)]="Meeting.location"></td>
+        <td> <input type="text" class="form-control" name="ResponsiblePerson" [(ngModel)]="Meeting.responsiblePerson"> </td>
+        <td> <input type="text" class="form-control" name="Priority" [(ngModel)]="Meeting.priority"> </td>
+        <td> <input type="text" class="form-control" name="CreatedBy" [(ngModel)]="Meeting.createdBy"> </td>
+        <td> <input type="text" class="form-control" name="UpdatedBy" [(ngModel)]="Meeting.updatedBy"> </td>
+        <!--bsDatepicker-->
+        <td> <input type="text" class="form-control" name="CreatedDate" [(ngModel)]="Meeting.createdDate"></td>
+        <td> <input type="text" class="form-control" name="UpdatedDate" [(ngModel)]="Meeting.updatedDate"> </td>
+        <td> <input type="text" class="form-control" name="EventStartDate" [(ngModel)]="Meeting.eventStartDate"> </td>
+        <td> <input type="text" class="form-control" name="EventEndDate" [(ngModel)]="Meeting.eventEndDate"></td>
+        <td> <input type="text" class="form-control" name="RepeatTask" [(ngModel)]="Meeting.repeatTask"> </td>
+        <td> <input type="text" class="form-control" name="ReminderNotification" [(ngModel)]="Meeting.reminderNotification"></td>
+        <!--  <td> <input type="text" class="form-control" name="Completed" [(ngModel)]="Meeting.completed"></td>-->
+        <td><ui-switch [(ngModel)]="Meeting.completed"></ui-switch></td>
+        <td> <input type="text" class="form-control" name="Description" [(ngModel)]="Meeting.description"></td>
+        <td>
+          <button (click)="UpdateMeeting(Meeting)">Update</button>
+        </td>
+        <td>
+          <button (click)="DeleteMeeting(Meeting._id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="col-md-12">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label required">MeetingId<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control" name="MeetingId" [(ngModel)]="meeting.MeetingId">
+      </div>
+
+      <div class="form-group">
+        <label class="required">MeetingSubject </label>
+        <input type="text" class="form-control" name="MeetingSubject" [(ngModel)]="meeting.MeetingSubject" />
+      </div>
+
+      <div class="form-group">
+        <label class="required">Location</label>
+        <input type="text" class="form-control" name="Location" [(ngModel)]="meeting.Location" />
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">ResponsiblePerson <span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control" name="ResponsiblePerson" [(ngModel)]="meeting.ResponsiblePerson">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Priority<span class="error_mark text-danger"> *</span></label>
+        <select [(ngModel)]="meeting.Priority" class="form-control Priority" required [value]="meeting.Priority">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="c.value" *ngFor="let c of priorities">{{c.name}}</option>
+        </select>
+        {{meeting.Priority}}
+      </div>
+
+      <div class="form-group">
+        <label class="required">CreatedBy </label>
+        <input type="text" class="form-control" name="CreatedBy" [(ngModel)]="meeting.CreatedBy" />
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">UpdatedBy<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control" name="UpdatedBy" [(ngModel)]="meeting.UpdatedBy">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Created On<span class="error_mark text-danger"> *</span></label>
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="meeting.CreatedDate"
+               bsDatepicker>
+        {{meeting.CreatedDate}}
+      </div>
+    </div>
+    <div class="col-md-6">
+
+      <div class="form-group">
+        <label class="control-label required">Updated On<span class="error_mark text-danger"> *</span></label>
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="meeting.UpdatedDate"
+               bsDatepicker>
+        {{meeting.UpdatedDate}}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Event Start Date<span class="error_mark text-danger"> *</span></label>
+        <input type="text"
+               placeh lde="Datepicker"
+               class="form-control"
+               [(ngModel)]="meeting.EventStartDate"
+               bsDatepicker>
+        {{meeting.EventStartDate}}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Event End Date<span class="error_mark text-danger"> *</span></label>
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="meeting.EventEndDate"
+               bsDatepicker>
+        {{meeting.EventEndDate}}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Repeat Task<span class="error_mark text-danger"> *</span></label>
+        <select [(ngModel)]="meeting.RepeatTask" class="form-control Priority" required [value]="meeting.RepeatTask">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="c.value" *ngFor="let c of repeattaskoptions">{{c.name}}</option>
+        </select>
+        {{meeting.RepeatTask}}
+      </div>
+
+      <div class="form-group">
+        <label class="required">Reminder Notification</label>
+        <input type="text" class="form-control" name="ReminderNotification" [(ngModel)]="meeting.ReminderNotification" />
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Completed<span class="error_mark text-danger"> *</span></label>
+        <select [(ngModel)]="meeting.Completed" class="form-control Priority" required [value]="meeting.Completed">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="c.value" *ngFor="let c of completes">{{c.name}}</option>
+        </select>
+        {{meeting.Completed}}
+      </div>
+
+      <div class="form-group">
+        <label class="required">Description</label>
+        <input type="text" class="form-control" name="Description" [(ngModel)]="meeting.Description" />
+      </div>
+
+      <div class="form-group">
+        <button (click)="AddMeeting(meeting)">Add Meeting</button>
+      </div>
+
+    </div>
+  </div>
+</div>

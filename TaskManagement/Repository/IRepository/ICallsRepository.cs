@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskManagement.Models;
+using TaskManagement.Models.ViewModels;
 
 namespace TaskManagement.Repository.IRepository
 {
@@ -10,7 +11,7 @@ namespace TaskManagement.Repository.IRepository
     {
         Task<List<Calls>> GetAllCall();
         Task<Calls> GetCall(string id);
-        Task AddCall(Calls item);
+        Task<Calls> AddCall(CallsVM item);
         Task UpdateCall(Calls item);
         Task<bool> RemoveCall(string id);
     }

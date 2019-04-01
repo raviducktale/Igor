@@ -14,10 +14,10 @@ namespace TaskManagement.Models.ViewModels
         public int ResponsiblePerson { get; set; }
         public int Priority { get; set; }
         public int Type { get; set; }
-        public int CreatedBy { get; set; }
-        public int UpdatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        //public int CreatedBy { get; set; }
+        //public int UpdatedBy { get; set; }
+        //public DateTime CreatedDate { get; set; }
+        //public DateTime UpdatedDate { get; set; }
         public DateTime EventStartDate { get; set; }
         public DateTime EventEndDate { get; set; }
         public int RepeatTask { get; set; }

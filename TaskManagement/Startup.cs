@@ -49,10 +49,10 @@ namespace TaskManagement
             // Configurations
             services.AddCors();
             services.AddRouting();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IMeetingRepository, MeetingRepository>();
-            services.AddScoped<ICallRepository, CallRepository>();
-
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<IMeetingsRepository, MeetingsRepository>();
+            services.AddScoped<ICallsRepository, CallsRepository>();
+            services.AddScoped<ISchedulerRepository, SchedulerRepository>();
         }
 
     

@@ -12,13 +12,9 @@ namespace TaskManagement.Models
     
     public class Employee
     {
-
-
         [BsonId]
         public ObjectId _id { get; set; }
-
         public int age { get; set; }
-
         public string name { get; set; }
        
 

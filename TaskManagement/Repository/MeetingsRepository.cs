@@ -17,7 +17,6 @@ namespace TaskManagement.Repository
         {
             _context = new DBContext(settings);
         }
-
        
 
         public Task<List<Meetings>> GetAllMeetings()

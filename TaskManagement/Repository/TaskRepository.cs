@@ -25,7 +25,7 @@ namespace TaskManagement.Repository
         {
             try
             {
-                await _context.Task.InsertOneAsync(task);
+                await _context.Tasks.InsertOneAsync(task);
             }
             catch (Exception ex)
             {
@@ -37,7 +37,7 @@ namespace TaskManagement.Repository
         {
             try
             {
-                return _context.Task.Find(_ => true).ToListAsync();
+                return _context.Tasks.Find(_ => true).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -51,10 +51,10 @@ namespace TaskManagement.Repository
             {
 
                 FilterDefinition<Models.Tasks> filter = Builders<Models.Tasks>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = _context.Task.Find(filter).ToList();
+                var result = _context.Tasks.Find(filter).ToList();
 
                 return _context
-                    .Task
+                    .Tasks
                     .Find(filter)
                     .FirstOrDefaultAsync();
 
@@ -69,7 +69,7 @@ namespace TaskManagement.Repository
         {
             try
             {
-                DeleteResult actionResult = await _context.Task.DeleteOneAsync(
+                DeleteResult actionResult = await _context.Tasks.DeleteOneAsync(
                 Builders<Models.Tasks>.Filter.Eq("_id", ObjectId.Parse(id)));
                 return actionResult.IsAcknowledged
                 && actionResult.DeletedCount > 0;
@@ -84,7 +84,7 @@ namespace TaskManagement.Repository
         {
             try
             {
-                await _context.Task.ReplaceOneAsync(b => b._id == item._id, item);
+                await _context.Tasks.ReplaceOneAsync(b => b._id == item._id, item);
             }
             catch (Exception ex)
             {

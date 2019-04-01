@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskManagement.Models;
+using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
@@ -39,7 +40,7 @@ namespace TaskManagement.Repository
             {
 
                 FilterDefinition<Calls> filter = Builders<Calls>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = _context.Calls.Find(filter).ToList();
+                //var result = _context.Calls.Find(filter).ToList();
 
                 return _context
                     .Calls
@@ -53,11 +54,44 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async Task AddCall(Calls Call)
+        public async Task<Calls> AddCall(CallsVM model)
         {
             try
             {
-                await _context.Calls.InsertOneAsync(Call);
+                Calls _call = new Calls()
+                {
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = 1,
+                    Type = model.Type,
+                    CallId = model.CallId,
+                    CallSubject = model.CallSubject,
+                    ResponsiblePerson = model.ResponsiblePerson,
+                    Priority = model.Priority,
+                    EventStartDate = model.EventStartDate,
+                    EventEndDate = model.EventEndDate,
+                    RepeatTask = model.RepeatTask,
+                    ReminderNotification = model.ReminderNotification,
+                    Completed = model.Completed,
+                    Description = model.Description
+                };
+                await _context.Calls.InsertOneAsync(_call);
+                return _call;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<Calls> SetPriority(CallsVM model)
+        {
+            try
+            {
+                FilterDefinition<Calls> filter = Builders<Calls>.Filter.Eq("_id", ObjectId.Parse(model._id));
+                var result = _context.Calls.Find(filter).FirstOrDefaultAsync().Result;
+
+                //await _context.Calls.InsertOneAsync(_call);
+                return result;
             }
             catch (Exception ex)
             {
@@ -69,6 +103,8 @@ namespace TaskManagement.Repository
         {
             try
             {
+                Call.UpdatedDate = DateTime.Now;
+                Call.UpdatedBy = 1;
                 await _context.Calls.ReplaceOneAsync(b => b._id == Call._id, Call);
             }
             catch (Exception ex)

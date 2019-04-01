@@ -24,7 +24,7 @@ namespace TaskManagement.Repository
         {
             try
             {
-                await _context.Comment.InsertOneAsync(comment);
+                await _context.Comments.InsertOneAsync(comment);
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace TaskManagement.Repository
         {
             try
             {
-                return _context.Comment.Find(_ => true).ToListAsync();
+                return _context.Comments.Find(_ => true).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -50,10 +50,10 @@ namespace TaskManagement.Repository
             {
 
                 FilterDefinition<Comments> filter = Builders<Comments>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = _context.Comment.Find(filter).ToList();
+                var result = _context.Comments.Find(filter).ToList();
 
                 return _context
-                    .Comment
+                    .Comments
                     .Find(filter)
                     .FirstOrDefaultAsync();
 
@@ -68,7 +68,7 @@ namespace TaskManagement.Repository
         {
             try
             {
-                DeleteResult actionResult = await _context.Comment.DeleteOneAsync(
+                DeleteResult actionResult = await _context.Comments.DeleteOneAsync(
                 Builders<Comments>.Filter.Eq("_id", ObjectId.Parse(id)));
                 return actionResult.IsAcknowledged
                 && actionResult.DeletedCount > 0;
@@ -83,7 +83,7 @@ namespace TaskManagement.Repository
         {
             try
             {
-                await _context.Comment.ReplaceOneAsync(b => b._id == item._id, item);
+                await _context.Comments.ReplaceOneAsync(b => b._id == item._id, item);
             }
             catch (Exception ex)
             {

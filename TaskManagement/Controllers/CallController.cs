@@ -9,7 +9,7 @@ using MongoDB.Bson;
 using TaskManagement.Models;
 using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository;
-
+using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Controllers
 {
@@ -17,10 +17,10 @@ namespace TaskManagement.Controllers
     [ApiController]
     public class CallController : ControllerBase
     {
-        private readonly CallsRepository _callRepository;
-        public CallController(IOptions<MongoSetting> settings)
+        private readonly ICallsRepository _callRepository;
+        public CallController(ICallsRepository callRepository)
         {
-            _callRepository = new CallsRepository(settings); ;
+            _callRepository = callRepository;
         }
 
         [HttpGet]
@@ -40,12 +40,15 @@ namespace TaskManagement.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody]Calls Call)
+        public async Task<IActionResult> Add([FromBody]CallsVM Call)
         {
-            //ObjectId obj = new ObjectId();
-            //Call._id = obj;
-            await _callRepository.AddCall(Call);
-            return new OkObjectResult(Call);
+            return  Ok(await _callRepository.AddCall(Call));
+        }
+
+        [HttpPost("priority")]
+        public async Task<IActionResult> priority([FromBody]CallsVM Call)
+        {
+            return Ok(await _callRepository.AddCall(Call));
         }
 
         // PUT: api/Task/5
@@ -61,10 +64,10 @@ namespace TaskManagement.Controllers
                     CallSubject = model.CallSubject,
                     ResponsiblePerson = model.ResponsiblePerson,
                     Priority = model.Priority,
-                    CreatedBy = model.CreatedBy,
-                    UpdatedBy = model.UpdatedBy,
-                    CreatedDate = model.CreatedDate,
-                    UpdatedDate = model.UpdatedDate,
+                    //CreatedBy = model.CreatedBy,
+                    //UpdatedBy = model.UpdatedBy,
+                    //CreatedDate = model.CreatedDate,
+                    //UpdatedDate = model.UpdatedDate,
                     EventStartDate = model.EventStartDate,
                     EventEndDate = model.EventEndDate,
                     RepeatTask = model.RepeatTask,

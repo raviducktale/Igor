@@ -9,6 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { EmpService } from './services/emp.service';
 import { HomeComponent } from './home/home.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { UiSwitchModule } from 'ngx-toggle-switch';
 
 
 @NgModule({
@@ -18,6 +20,8 @@ import { HomeComponent } from './home/home.component';
   ],
   imports: [
     BrowserModule,
+    BsDatepickerModule.forRoot(),
+    UiSwitchModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,

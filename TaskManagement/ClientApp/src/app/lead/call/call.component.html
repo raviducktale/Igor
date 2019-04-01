@@ -1,3 +1,171 @@
-<p>
-  call works!
-</p>
+<div class="col-md-12">
+  <h3>Calls</h3>
+  <table class="table table-bordered col-md-12">
+    <thead>
+      <tr>
+        <!--<th>Id</th>-->
+        <th>CallId </th>
+        <th>CallSubject </th>
+        <th>ResponsiblePerson </th>
+        <th>Priority </th>
+        <th>Type </th>
+        <th>CreatedBy </th>
+        <th>UpdatedBy </th>
+        <th>CreatedDate </th>
+        <th>UpdatedDate </th>
+        <th>EventStartDate </th>
+        <th>EventEndDate </th>
+        <th>RepeatTask </th>
+        <th>ReminderNotification </th>
+        <th>Completed </th>
+        <th>Description  </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr *ngFor="let call of callList">
+        <!--<td>-->
+        <input type="hidden" class="form-control" name="id" [(ngModel)]="call._id"> <!--</td>-->
+        <td> <input type="text" class="form-control" name="CallId" [(ngModel)]="call.callId"> </td>
+        <td> <input type="text" class="form-control" name="CallSubject" [(ngModel)]="call.callSubject "></td>
+        <td> <input type="text" class="form-control" name="ResponsiblePerson" [(ngModel)]="call.responsiblePerson"> </td>
+        <td> <input type="text" class="form-control" name="Priority" [(ngModel)]="call.priority"> </td>
+        <td> <input type="text" class="form-control" name="Type" [(ngModel)]="call.type "></td>
+        <td> <input type="text" class="form-control" name="CreatedBy" [(ngModel)]="call.createdBy"> </td>
+        <td> <input type="text" class="form-control" name="UpdatedBy" [(ngModel)]="call.updatedBy"> </td>
+        <td> <input type="text" class="form-control" name="CreatedDate" [(ngModel)]="call.createdDate"></td>
+        <td> <input type="text" class="form-control" name="UpdatedDate" [(ngModel)]="call.updatedDate"> </td>
+        <td> <input type="text" class="form-control" name="EventStartDate" [(ngModel)]="call.eventStartDate"> </td>
+        <td> <input type="text" class="form-control" name="EventEndDate" [(ngModel)]="call.eventEndDate"></td>
+        <td> <input type="text" class="form-control" name="RepeatTask" [(ngModel)]="call.repeatTask"> </td>
+        <td> <input type="text" class="form-control" name="ReminderNotification" [(ngModel)]="call.reminderNotification"></td>
+        <td><ui-switch [(ngModel)]="call.completed"></ui-switch></td>
+        <td> <input type="text" class="form-control" name="Description" [(ngModel)]="call.description"></td>
+        <td><button (click)="UpdateCall(call)">Update</button></td>
+        <td>
+          <button (click)="DeleteCall(call._id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="col-md-12">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label required">CallId <span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control" name="CallId" [(ngModel)]="call.CallId">
+      </div>
+      <div class="form-group">
+        <label class="required">CallSubject </label>
+        <input type="text" class="form-control" name="CallSubject" [(ngModel)]="call.CallSubject" />
+      </div>
+      <div class="form-group">
+        <label class="control-label required">ResponsiblePerson <span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control" name="ResponsiblePerson" [(ngModel)]="call.ResponsiblePerson">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Priority<span class="error_mark text-danger"> *</span></label>
+        <select [(ngModel)]="call.Priority" class="form-control Priority" required [value]="call.Priority">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="c.value" *ngFor="let c of priorities">{{c.name}}</option>
+        </select>
+        {{call.Priority}}
+      </div>
+
+
+
+      <div class="form-group">
+        <label class="control-label required">Type<span class="error_mark text-danger"> *</span></label>
+        <select [(ngModel)]="call.Type" class="form-control type" required [value]="call.Type">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="c.value" *ngFor="let c of types">{{c.name}}</option>
+        </select>
+        {{call.Type}}
+      </div>
+
+      <div class="form-group">
+        <label class="required">CreatedBy </label>
+        <input type="text" class="form-control" name="CreatedBy" [(ngModel)]="call.CreatedBy" />
+      </div>
+      <div class="form-group">
+        <label class="control-label required">UpdatedBy<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control" name="UpdatedBy" [(ngModel)]="call.UpdatedBy">
+      </div>
+      <div class="form-group">
+        <label class="control-label required">Created On<span class="error_mark text-danger"> *</span></label>
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="call.CreatedDate"
+               bsDatepicker>
+        {{call.CreatedDate}}
+      </div>
+
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label required">Updated On<span class="error_mark text-danger"> *</span></label>
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="call.UpdatedDate"
+               bsDatepicker>
+        {{call.UpdatedDate}}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Event Start Date<span class="error_mark text-danger"> *</span></label>
+        <input type="text"
+               placeh lde="Datepicker"
+               class="form-control"
+               [(ngModel)]="call.EventStartDate"
+               bsDatepicker>
+        {{call.EventStartDate}}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Event End Date<span class="error_mark text-danger"> *</span></label>
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="call.EventEndDate"
+               bsDatepicker>
+        {{call.EventEndDate}}
+      </div>
+
+
+
+
+      <div class="form-group">
+        <label class="control-label required">Repeat Task<span class="error_mark text-danger"> *</span></label>
+        <select [(ngModel)]="call.RepeatTask" class="form-control Priority" required [value]="call.RepeatTask">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="c.value" *ngFor="let c of repeattaskoptions">{{c.name}}</option>
+        </select>
+        {{call.RepeatTask}}
+      </div>
+
+      <div class="form-group">
+        <label class="required">ReminderNotification</label>
+        <input type="text" class="form-control" name="ReminderNotification" [(ngModel)]="call.ReminderNotification" />
+      </div>
+      <div class="form-group">
+        <label class="control-label required">Completed<span class="error_mark text-danger"> *</span></label>
+        <select [(ngModel)]="call.Completed" class="form-control Priority" required [value]="call.Completed">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="c.value" *ngFor="let c of completes">{{c.name}}</option>
+        </select>
+        {{call.Completed}}
+      </div>
+      <div class="form-group">
+        <label class="required">Description</label>
+        <input type="text" class="form-control" name="Description" [(ngModel)]="call.Description" />
+      </div>
+      <div class="form-group">
+        <button (click)="AddCall(call)">Add Call</button>
+      </div>
+
+    </div>
+  </div>
+</div>

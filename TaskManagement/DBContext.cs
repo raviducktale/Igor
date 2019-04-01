@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using TaskManagement.Models;
 
 namespace TaskManagement  
@@ -26,21 +24,43 @@ namespace TaskManagement
             }
         }
 
-        public IMongoCollection<Meeting> Meeting
+        public IMongoCollection<Meetings> Meetings
         {
             get
             {
-                return _database.GetCollection<Meeting>("Meeting");
+                return _database.GetCollection<Meetings>("Meetings");
             }
         }
 
-        public IMongoCollection<Call> Call
+        public IMongoCollection<Calls> Calls
         {
             get
             {
-                return _database.GetCollection<Call>("Call");
+                return _database.GetCollection<Calls>("Calls");
             }
         }
+        public IMongoCollection<Comments> Comments
+        {
+            get
+            {
+                return _database.GetCollection<Comments>("Comments");
+            }
+        }
+        public IMongoCollection<Tasks> Tasks
+        {
+            get
+            {
+                return _database.GetCollection<Tasks>("Tasks");
+            }
+        }
+        public IMongoCollection<Scheduler> Scheduler
+        {
+            get
+            {
+                return _database.GetCollection<Scheduler>("Scheduler");
+            }
+        }
+
     }
 }
 
