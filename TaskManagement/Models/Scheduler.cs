@@ -12,10 +12,11 @@ namespace TaskManagement.Models
         [BsonId]
         public ObjectId _id { get; set; }
         public string Subject { get; set; }
+        public int? Id { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public string startTimezone { get; set; }
-        public string endTimezone { get; set; }
+        public string StartTimezone { get; set; }
+        public string EndTimezone { get; set; }
         public string Location { get; set; }
         public string Description { get; set; }
         public bool IsAllDay { get; set; }

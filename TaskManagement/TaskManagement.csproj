@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.8.0" />
+    <PackageReference Include="System.Json" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,9 +32,36 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="obj\Debug\netcoreapp2.1\TaskManagement.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\TaskManagement.RazorAssemblyInfo.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="obj\Debug\netcoreapp2.1\TaskManagement.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\project.assets.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\src\app\contact\" />
     <Folder Include="ClientApp\src\app\deal\" />
     <Folder Include="ClientApp\src\app\company\" />
+    <Folder Include="ClientApp\src\app\shared\" />
+    <Folder Include="Enums\" />
+    <Folder Include="obj\Debug\netcoreapp2.1\Razor\Pages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="obj\Debug\netcoreapp2.1\TaskManagement.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\TaskManagement.assets.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\TaskManagement.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\TaskManagement.csprojAssemblyReference.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\TaskManagement.RazorAssemblyInfo.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\TaskManagement.Views.dll" />
+    <None Include="obj\TaskManagement.csproj.nuget.g.props" />
+    <None Include="obj\TaskManagement.csproj.nuget.g.targets" />
   </ItemGroup>
 
   <ItemGroup>

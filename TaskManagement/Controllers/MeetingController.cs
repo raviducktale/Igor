@@ -9,6 +9,7 @@ using MongoDB.Bson;
 using TaskManagement.Models;
 using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository;
+using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Controllers
 {
@@ -16,11 +17,13 @@ namespace TaskManagement.Controllers
     [ApiController]
     public class MeetingController : ControllerBase
     {
-        private readonly MeetingsRepository _meetingRepository;
-        public MeetingController(IOptions<MongoSetting> settings)
+        private readonly IMeetingsRepository _meetingRepository;
+        public MeetingController(IMeetingsRepository meetingRepository)
         {
-            _meetingRepository = new MeetingsRepository(settings); ;
+            _meetingRepository = meetingRepository; 
         }
+
+      
 
 
         [HttpGet]
@@ -46,12 +49,10 @@ namespace TaskManagement.Controllers
 
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody]Meetings Meeting)
+        public async Task<IActionResult> Add([FromBody]MeetingsVM Meeting)
         {
-            //ObjectId obj = new ObjectId();
-            //Meeting._id = obj;
-            await _meetingRepository.AddMeeting(Meeting);
-            return new OkObjectResult(Meeting);
+            return Ok(await _meetingRepository.AddMeeting(Meeting));
+            
         }
 
         // PUT: api/Task/5
@@ -68,10 +69,10 @@ namespace TaskManagement.Controllers
                     Location = model.Location,
                     ResponsiblePerson = model.ResponsiblePerson,
                     Priority = model.Priority,
-                    CreatedBy = model.CreatedBy,
-                    UpdatedBy = model.UpdatedBy,
-                    CreatedDate = model.CreatedDate,
-                    UpdatedDate = model.UpdatedDate,
+                    //CreatedBy = model.CreatedBy,
+                    //UpdatedBy = model.UpdatedBy,
+                    //CreatedDate = model.CreatedDate,
+                    //UpdatedDate = model.UpdatedDate,
                     EventStartDate = model.EventStartDate,
                     EventEndDate = model.EventEndDate,
                     RepeatTask = model.RepeatTask,

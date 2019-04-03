@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TaskManagement.Models;
 using TaskManagement.Models.ViewModels;
@@ -58,11 +59,13 @@ namespace TaskManagement.Repository
         {
             try
             {
+
+                model.Description=Regex.Replace(model.Description, @"<[^>]+>| ", "").TrimStart();
                 Calls _call = new Calls()
                 {
                     CreatedDate = DateTime.Now,
                     CreatedBy = 1,
-                    Type = model.Type,
+                    Types = model.Types,
                     CallId = model.CallId,
                     CallSubject = model.CallSubject,
                     ResponsiblePerson = model.ResponsiblePerson,

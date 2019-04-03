@@ -5,6 +5,13 @@ import { LeadComponent } from './lead.component';
 import { LeadService } from './lead.service';
 import { AddEditLeadComponent } from './add-edit-lead/add-edit-lead.component';
 import { FormsModule } from '@angular/forms';
+import { ScheduleModule } from '@syncfusion/ej2-angular-schedule';
+import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { DateTimePickerModule } from "@syncfusion/ej2-angular-calendars";
+import { ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
+import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
+
 
 import { CallComponent } from './call/call.component';
 import { CallService } from './call/call.service';
@@ -19,8 +26,8 @@ import { MeetingService } from './meeting/meeting.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { UiSwitchModule } from 'ngx-toggle-switch';
-import { ScheduleModule } from '@syncfusion/ej2-angular-schedule';
 import { SchedulerComponent } from './scheduler/scheduler.component';
+import { SharedModule } from '../shared/shared.module';
 
 export const routes = [
   { path: '', component: LeadComponent, pathMatch: 'full', data: { title: 'Manage Lead' } },
@@ -38,8 +45,11 @@ export const routes = [
     FormsModule,
     BsDatepickerModule.forRoot(),
     UiSwitchModule,
-    HttpClientModule,ScheduleModule,
+    HttpClientModule,
     RouterModule.forChild(routes),
+    SharedModule,
+    ScheduleModule,
+    MultiSelectModule, DropDownListModule, DateTimePickerModule, RichTextEditorAllModule
   ],
   declarations: [
     LeadComponent,
@@ -55,7 +65,7 @@ export const routes = [
     CallService,
     CommentService,
     TaskService,
-    MeetingService
+    MeetingService, ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService,
   ],
   exports: [
     //LoaderComponent

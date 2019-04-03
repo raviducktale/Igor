@@ -8,7 +8,7 @@ using MongoDB.Bson;
 using TaskManagement.Models;
 using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository.IRepository;
-
+using System.Json;
 
 namespace TaskManagement.Controllers
 {
@@ -22,12 +22,12 @@ namespace TaskManagement.Controllers
             _schedulerRepository = schedulerRepository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetScheduler()
-        {
-            IEnumerable<Scheduler> model = await _schedulerRepository.GetAllScheduler();
-            return Ok(model);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetScheduler()
+        //{
+        //    IEnumerable<Scheduler> model = await _schedulerRepository.GetAllScheduler();
+        //    return Ok(model);
+        //}
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSchedulerById(string id)
@@ -54,10 +54,11 @@ namespace TaskManagement.Controllers
                 {
                     _id = ObjectId.Parse(model._id),
                     Subject = model.Subject,
+                    Id=model.Id,
                     StartTime = model.StartTime,
                     EndTime = model.EndTime,
-                    startTimezone = model.startTimezone,
-                    endTimezone = model.endTimezone,
+                    StartTimezone = model.StartTimezone,
+                    EndTimezone = model.EndTimezone,
                     Location = model.Location,
                     Description = model.Description,
                     IsAllDay = model.IsAllDay,
@@ -97,8 +98,13 @@ namespace TaskManagement.Controllers
             return new ObjectResult(id);
         }
 
-
-
-
+        [HttpGet]
+        public JsonResult GetData()
+        {
+            var  model =  _schedulerRepository.getList();
+            var list = model.Result.ToList();
+            return new JsonResult(list);
+        }
     }
+  
 }

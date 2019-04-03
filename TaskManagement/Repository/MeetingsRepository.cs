@@ -4,8 +4,10 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TaskManagement.Models;
+using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
@@ -52,22 +54,43 @@ namespace TaskManagement.Repository
 
         }
 
-        public async Task AddMeeting(Meetings Meeting)
+        public async Task<Meetings> AddMeeting(MeetingsVM model)
         {
             try
             {
-                await _context.Meetings.InsertOneAsync(Meeting);
+                model.Description = Regex.Replace(model.Description, @"<[^>]+>| ", "").TrimStart();
+                Meetings _meeting = new Meetings()
+                {
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = 1,
+                    MeetingId = model.MeetingId,
+                    MeetingSubject = model.MeetingSubject,
+                    Location=model.Location,
+                    ResponsiblePerson = model.ResponsiblePerson,
+                    Priority = model.Priority,
+                    EventStartDate = model.EventStartDate,
+                    EventEndDate = model.EventEndDate,
+                    RepeatTask = model.RepeatTask,
+                    ReminderNotification = model.ReminderNotification,
+                    Completed = model.Completed,
+                    Description = model.Description
+                };
+                await _context.Meetings.InsertOneAsync(_meeting);
+                return _meeting;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            
         }
 
         public async Task UpdateMeeting(Meetings Meeting)
         {
             try
             {
+                Meeting.UpdatedDate = DateTime.Now;
+                Meeting.UpdatedBy = 1;
                 await _context.Meetings.ReplaceOneAsync(b => b._id == Meeting._id, Meeting);
             }
             catch (Exception ex)

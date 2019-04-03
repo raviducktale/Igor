@@ -29,10 +29,11 @@ namespace TaskManagement.Repository
                 {
                    
                     Subject = model.Subject,
+                    Id=model.Id,
                     StartTime = model.StartTime,
                     EndTime = model.EndTime,
-                    startTimezone = model.startTimezone,
-                    endTimezone = model.endTimezone,
+                    StartTimezone = model.StartTimezone,
+                    EndTimezone = model.EndTimezone,
                     Location = model.Location,
                     Description = model.Description,
                     IsAllDay = model.IsAllDay,
@@ -119,5 +120,16 @@ namespace TaskManagement.Repository
             }
         }
 
+        public async Task<List<Scheduler>> getList()
+        {
+            try
+            {
+                return  await _context.Scheduler.Find(_ => true).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

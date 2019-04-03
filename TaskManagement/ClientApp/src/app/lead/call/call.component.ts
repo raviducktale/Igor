@@ -14,17 +14,17 @@ export class CallComponent implements OnInit {
     CallId: "",
     CallSubject: "",
     ResponsiblePerson: "",
-    Priority: -1,
-    Type: -1,
+    Priority: "",
+    Type: "",
     CreatedBy: "",
     UpdatedBy: "",
     CreatedDate: "",
     UpdatedDate: "",
     EventStartDate: "",
     EventEndDate: "",
-    RepeatTask: -1,
+    RepeatTask: "",
     ReminderNotification: "",
-    Completed: true,
+    Completed: "",
     Description: ""
   }
   callList: any;

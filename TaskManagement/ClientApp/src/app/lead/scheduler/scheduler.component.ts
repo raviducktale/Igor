@@ -34,29 +34,12 @@ export class SchedulerComponent implements OnInit {
   }
   schedulerList: any;
 
-  //priorities: any;
-  //types: any;
-  //repeattaskoptions: any;
-  //completes: any;
-  //title = 'Scheduler';
-
   constructor(protected service: SchedulerService) {
     this.GetAllScheduler();
   }
 
   ngOnInit() {
 
-    //this.priorities = [{ name: "High", value: 1 },
-    //{ name: "Medium", value: 2 },
-    //{ name: "Low", value: 3 }]
-    //this.types = [{ name: "Inbound", value: 1 },
-    //{ name: "Outbound", value: 2 }]
-    //this.repeattaskoptions = [{ name: "Day", value: 1 },
-    //{ name: "Week", value: 2 },
-    //{ name: "Month", value: 3 },
-    //{ name: "Year", value: 4 }]
-    //this.completes = [{ name: "Yes", value: true },
-    //{ name: "No", value: false }]
   }
 
   //Methods

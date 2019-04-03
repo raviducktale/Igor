@@ -14,5 +14,6 @@ namespace TaskManagement.Repository.IRepository
         Task<Scheduler> AddScheduler(SchedulerVM item);
         Task<bool> RemoveScheduler(string id);
         Task UpdateScheduler(Scheduler item);
+        Task<List<Scheduler>> getList();
     }
 }

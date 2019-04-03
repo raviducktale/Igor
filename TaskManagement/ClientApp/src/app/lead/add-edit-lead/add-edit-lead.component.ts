@@ -1,52 +1,116 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Query, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CallService } from '../call/call.service';
+import { MeetingService } from '../meeting/meeting.service';
 import { SchedulerService } from '../scheduler/scheduler.service';
-import { EventSettingsModel, View } from '@syncfusion/ej2-schedule';
-import { DataManager, ODataV4Adaptor, Query, UrlAdaptor } from '@syncfusion/ej2-data';
+import { EventSettingsModel, View, PopupOpenEventArgs, ActionEventArgs,  } from '@syncfusion/ej2-schedule';
 import { DayService, WeekService, MonthService } from '@syncfusion/ej2-angular-schedule';
+import { ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService  } from '@syncfusion/ej2-angular-richtexteditor';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-add-edit-lead',
   templateUrl: './add-edit-lead.component.html',
   styleUrls: ['./add-edit-lead.component.css'],
-  providers: [DayService, WeekService, MonthService]
+  providers: [DayService, WeekService, MonthService, ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService ],
 })
 
 export class AddEditLeadComponent implements OnInit {
 
+  public value: string = '';
+  public tools: object = {
+    items: ['Undo', 'Redo', '|',
+      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
+      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
+      'SubScript', 'SuperScript', '|',
+      'LowerCase', 'UpperCase', '|',
+      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
+      'Indent', 'Outdent', '|', 'CreateLink',
+      'Image', '|', 'ClearFormat', 'Print', 'SourceCode', '|', 'FullScreen']
+  };
+  public quickTools: object = {
+    image: [
+      'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
+  };
+
+  public value2: string = '';
+  public tools2: object = {
+    items: ['Undo', 'Redo', '|',
+      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
+      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
+      'SubScript', 'SuperScript', '|',
+      'LowerCase', 'UpperCase', '|',
+      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
+      'Indent', 'Outdent', '|', 'CreateLink',
+      'Image', '|', 'ClearFormat', 'Print', 'SourceCode', '|', 'FullScreen']
+  };
+  public quickTools2: object = {
+    image: [
+      'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
+  };
+
+  public iframe: object = { enable: true };
+  public height: number = 500;
+  
   //Call
   call: any = {
     id: "",
     CallId: "",
     CallSubject: "",
     ResponsiblePerson: "",
-    Priority: -1,
-    Type: -1,
+    Priority: "",
+    Type: "",
     CreatedBy: "",
     UpdatedBy: "",
     CreatedDate: "",
     UpdatedDate: "",
     EventStartDate: "",
     EventEndDate: "",
-    RepeatTask: -1,
+    RepeatTask: "",
     ReminderNotification: "",
     Completed: true,
     Description: ""
   }
+
+  meeting: any = {
+    id: "",
+    MeetingId: "",
+    MeetingSubject: "",
+    Location:"",
+    ResponsiblePerson: "",
+    Priority: "",
+    CreatedBy: "",
+    UpdatedBy: "",
+    CreatedDate: "",
+    UpdatedDate: "",
+    EventStartDate: "",
+    EventEndDate: "",
+    RepeatTask: "",
+    ReminderNotification: "",
+    Completed: true,
+    Description: ""
+  }
+
   leads: any;
   selectedLead: any;
   selectedId: number;
-  priorities: any;
-  types: any;
-  repeattaskoptions: any;
-  completes: any;  
+  ResponsiblePersondata: Object[];
+  ResponsiblePersonfields: Object;
+  priorities: { [key: string]: Object }[];
+  prioritiesfields: Object;
+  types: { [key: string]: Object }[];
+  typesfields: Object;
+  completes: { [key: string]: Object }[];
+  completesfields: Object;
+  repeattaskoptions: { [key: string]: Object }[];
+  repeattaskoptionsfields: Object;
   callVM: any;
-
-  //Scheduler
+  meetingVM: any;
+  tabledata: any;
+  meetingtabledata: any;
   scheduler: any = {
     _id: "",
-    Id:"",
+    id: "",
     Subject: "",
     StartTime: "",
     EndTime: "",
@@ -68,102 +132,88 @@ export class AddEditLeadComponent implements OnInit {
     BYMonth: "",
     BYSetPOS: ""
   }
-
-  ds: any = {
-    Id: "",
-    Subject: "",
-    StartTime: "",
-    EndTime: "",
-    StartTimezone: "",
-    EndTimezone: "",
-    Location: "",
-    Description: "",
-    IsAllDay: false    
-  }
-  schedulerList: any;
-  currentView:'Month'
+  ds: any;
+  public currentView: View = 'Month';
   public selectedDate: Date = new Date();
   public eventSettings: EventSettingsModel = {
-    dataSource: [{}]
-      //{
-        //  //Id: 1,
-        //  //Subject: 'Explosion of Betelgeuse Star',
-        //  //StartTime: new Date(2019, 4, 4, 9, 30),
-        //  //EndTime: new Date(2019, 4, 4, 11, 0),
-        //  //Location: 'Bilaspur',
-        //  //IsAllDay: true,
-        //  //Description: 'jkakfdafjkfdjkfjkfdfjkda skdjaslkadas',
-        //  //RecurrenceID:3,
-        //  //RecurrenceRule: 'FREQ=DAILY;INTERVAL=1;COUNT=8'
-        //  //Frequency:
-        //  //  Interval:
-        //  //Untill:
-        //  //  Count:
-        //  //ByDay:
-        //  //  BYMonthDay:
-        //  //BYMonth:
-        //  //  BYSetPOS:
+    dataSource: [{
+      Description: "Description1",
+      EndTime: "2019-04-03T22:00:00.000Z",
+      EndTimezone: "",
+      Id: 1,
+      IsAllDay: false,
+      Location: "",
+      StartTime: "2019-04-03T18:30:00.000Z",
+      StartTimezone: "",
+      Subject: "subject1",
+    },
+      {
+        Description: "Description2",
+        EndTime: "2019-04-07T22:00:00.000Z",
+        EndTimezone: "",
+        Id: 2,
+        IsAllDay: false,
+        Location: "",
+        StartTime: "2019-04-07T18:30:00.000Z",
+        StartTimezone: "",
+        Subject: "subject2",
+      },
+    ]
+  };
 
-        // // FREQ=NEVER,MONTHLY, YEARLY, WEEKLY, DAILY
-        ////BYDAY=MO; BYSETPOS=2; COUNT=10,UNTIL=20180530T041343Z;
-        // //BYMONTHDAY=16; BYMONTH=6; INTERVAL=1; COUNT=10
-
-        //},
-        //{
-        //  Id: 2,
-        //  Subject: 'Thule Air Crash Report',
-        //  StartTime: new Date(2019, 4, 4, 12, 0),
-        //  EndTime: new Date(2019, 4, 4, 14, 0),
-        //  Location: 'Bilaspur2',
-        //  IsAllDay: false,
-        //  Description: 'fffffffffffffffffffffffff',
-        //},
-        //{
-        //  Id: 3,
-        //  Subject: 'Blue Moon Eclipse',
-        //  StartTime: new Date(2019, 4, 4, 9, 30),
-        //  EndTime: new Date(2019, 4, 4, 11, 0),
-        //  Location: 'Bilaspur3',
-        //  IsAllDay: true,
-        //  Description: 'qqqqqqqqqqqqqqqqqqqqqqqqqq',
-        //},
-        //{
-        //  Id: 4,
-        //  Subject: 'Meteor Showers in 2019',
-        //  StartTime: new Date(2019, 4, 14, 13, 0),
-        //  EndTime: new Date(2019, 4, 15, 14, 30),
-        //  Location: 'Bilaspur4',
-        //  IsAllDay: true,
-        //  Description: 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu',
-        //}]
-
-
-      }
-
-  constructor(private router: ActivatedRoute, protected service: CallService, protected schedulerService: SchedulerService) {
+  constructor(private router: ActivatedRoute, protected service: CallService, protected meetingService: MeetingService, protected schedulerService: SchedulerService) {
     this.GetAllScheduler();
-    //this.AddScheduler(this.scheduler);
+    this.GetAllCall();
+    this.GetAllMeeting();
     this.router.params.subscribe(params => { this.selectedId = +params['id']; });
   }
 
   ngOnInit() {
-    this.ds = [];
-    this.priorities = [{ name: "High", value: 1 },
-    { name: "Medium", value: 2 },
-    { name: "Low", value: 3 }]
-    this.types = [{ name: "Inbound", value: 1 },
-    { name: "Outbound", value: 2 }]
-    this.repeattaskoptions = [{ name: "Day", value: 1 },
-    { name: "Week", value: 2 },
-    { name: "Month", value: 3 },
-    { name: "Year", value: 4 }]
-    this.completes = [{ name: "Yes", value: true },
-    { name: "No", value: false }]
+    this.tabledata = [];
+    this.meetingtabledata = [];
+  this.ds = [];
+    this.ResponsiblePersondata = [
+      { id: 'Game1', sports: 'Asley Thomas' },
+      { id: 'Game2', sports: 'Mithun' },
+      { id: 'Game3', sports: 'Abhiram Thomas' },
+      { id: 'Game4', sports: 'Sanjeev Kumar' },
+      { id: 'Game5', sports: 'Baljeet' }
+    ],
+      this.ResponsiblePersonfields = { text: 'sports', value: 'sports' },
+
+      this.priorities = [
+      { prioritiesName: 'High', prioritiesId: 1  },
+      { prioritiesName: 'Medium', prioritiesId: 2  },
+      { prioritiesName: 'Low',  prioritiesId: 3 },
+      ],
+      this.prioritiesfields = { text: 'prioritiesName', value: 'prioritiesId' },
+
+      this.types = [
+      { typesName: 'Inbound',  typesId: 1 },
+      { typesName: 'Outbound', typesId: 2 },
+      ],
+      this.typesfields = { text: 'typesName', value: 'typesId' },
+
+
+      this.repeattaskoptions = [
+      { repeattaskoptionsName: 'Day',  repeattaskoptionsId: 1  },
+      { repeattaskoptionsName: 'Week', repeattaskoptionsId: 2  },
+      { repeattaskoptionsName: 'Month', repeattaskoptionsId: 3  },
+      { repeattaskoptionsName: 'Year', repeattaskoptionsId: 4  },
+      ],
+      this.repeattaskoptionsfields = { text: 'repeattaskoptionsName', value: 'repeattaskoptionsId' },
+
+
+      this.completes = [
+      { completesName: 'Yes',  completesId: true  },
+      { completesName: 'No',  completesId: false },
+      ],
+      this.completesfields = { text: 'completesName', value: 'completesId' },
+   
     this.leads = [{ id: 1, name: "test1", description: "test sdf test description1", date: "01-01-2019" },
     { id: 2, name: "test2", description: "test test2 sara description2", date: "01-05-2019" },
     { id: 3, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
     { id: 4, name: "test4", description: "test 4444 dfytr description3", date: "03-02-2019" }]
-
     if (this.selectedId)
       this.selectedLead = this.leads.find(x => x.id == this.selectedId);
     else
@@ -171,75 +221,37 @@ export class AddEditLeadComponent implements OnInit {
 
   }
 
-  //Calls Methods
-  GetAllCall() {
-    this.service.getCall<any>()
-      .subscribe(data => {
-        //this.callList = data;
-        //console.log(this.data);
-      }, error => {
-      }, () => { });
-  }
-  AddCall(call) {
-    console.log(call);
-    this.service.addCall<any>(call)
-      .subscribe(data => {
-        this.callVM = data;
-        console.log(data);
-      }, error => {
-      }, () => { });
-  }
-  EditCall(call) {
-    alert(call);
-
-  }
-  UpdateCall(call) {
-    alert(call);
-    this.service.updateCall<any>(call)
-      .subscribe(data => {
-        this.GetAllCall();
-        console.log(data);
-      }, error => {
-      }, () => { });
-  }
-  DeleteCall(id) {
-    alert(id);
-    this.service.deleteCall<any>(id)
-      .subscribe(data => {
-        this.GetAllCall();
-        console.log(data);
-      }, error => {
-      }, () => { });
-  }
+ 
 
 
   //Scheduler Methods
-  GetAllScheduler() {
-    this.schedulerService.getScheduler<any>()
-      .subscribe(data => {
-        this.schedulerList = data;
-        this.ds = [];
-        debugger
-        data.map((x, i) => {
-          this.ds.push({
-            Subject: x.subject,
-            StartTime: x.startTime,
-          })
-          //this.ds[i].Subject = x.subject,      
-          //this.ds[i].StartTime = x.startTime,   
-          //this.ds[i].EndTime = x.endTime ,      
-          //this.ds[i].StartTimezone = x.startTimezone,
-          //this.ds[i].EndTimezone= x.endTimezone, 
-          //this.ds[i].Location = x.location,  
-          //this.ds[i].Description= x.description, 
-          //this.ds[i].IsAllDay =  false
-        });
-    this.eventSettings.dataSource = this.ds;
-        console.log(this.schedulerList);
+   GetAllScheduler() {
+    this.ds = [];
+     this.schedulerService.getScheduler<any>()
+    .subscribe(data => {
+      data.map((x) => {
+
+        this.ds.push({
+          Description: x.description,
+          EndTime: new Date(x.endTime).toISOString(),
+          EndTimezone: x.endTimezone,
+          Id: x.id,
+          IsAllDay: x.isAllDay,
+          Location: x.location,
+          StartTime: new Date(x.startTime).toISOString(),
+          Subject: x.subject,
+          StartTimezone: x.startTimezone,
+        })
+        this.eventSettings.dataSource = this.ds;
+        console.log("dataSource", this.ds);
+      });
+       
+        
       }, error => {
       }, () => { });
+    console.log("ds", this.ds)
+    return this.ds;
   }
-
 
   AddScheduler(scheduler) {
     console.log(scheduler);
@@ -260,6 +272,7 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
+
   DeleteScheduler(id) {
     alert(id);
     this.schedulerService.deleteScheduler<any>(id)
@@ -270,4 +283,63 @@ export class AddEditLeadComponent implements OnInit {
       }, () => { });
   }
 
+  //Calls Methods
+  GetAllCall() {
+    this.tabledata = [];
+    this.service.getCall<any>()
+      .subscribe(data => {
+        data.map((x) => {
+          this.tabledata.push({
+            Description: x.description,
+            Subject: x.callSubject,
+            ResponsiblePerson: x.responsiblePerson,
+            RepeatTask: x.repeatTask
+          })
+        
+        });
+        console.log("tabledata", this.tabledata)
+      }, error => {
+      }, () => { });
+  }
+
+  AddCall(call) {
+    console.log(call);
+    this.service.addCall<any>(call)
+      .subscribe(data => {
+        this.callVM = data;
+        console.log(data);
+        this.GetAllCall();
+      }, error => {
+      }, () => { });
+   
+  }
+
+  GetAllMeeting() {
+    this.meetingtabledata = [];
+    this.meetingService.getMeeting<any>()
+      .subscribe(data => {
+        data.map((x) => {
+          this.meetingtabledata.push({
+            Description: x.description,
+            Subject: x.meetingSubject,
+            ResponsiblePerson: x.responsiblePerson,
+            RepeatTask: x.repeatTask
+          })
+
+        });
+        console.log("meetingtabledata", this.meetingtabledata)
+      }, error => {
+      }, () => { });
+  }
+  AddMeeting(meeting) {
+    console.log(meeting);
+
+    this.meetingService.addMeeting<any>(meeting)
+      .subscribe(data => {
+        this.meetingVM = data;
+        this.GetAllMeeting();
+        console.log(data);
+      }, error => {
+      }, () => { });
+  }
 }

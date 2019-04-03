@@ -42,6 +42,7 @@ namespace TaskManagement.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody]CallsVM Call)
         {
+           
             return  Ok(await _callRepository.AddCall(Call));
         }
 
@@ -64,10 +65,6 @@ namespace TaskManagement.Controllers
                     CallSubject = model.CallSubject,
                     ResponsiblePerson = model.ResponsiblePerson,
                     Priority = model.Priority,
-                    //CreatedBy = model.CreatedBy,
-                    //UpdatedBy = model.UpdatedBy,
-                    //CreatedDate = model.CreatedDate,
-                    //UpdatedDate = model.UpdatedDate,
                     EventStartDate = model.EventStartDate,
                     EventEndDate = model.EventEndDate,
                     RepeatTask = model.RepeatTask,

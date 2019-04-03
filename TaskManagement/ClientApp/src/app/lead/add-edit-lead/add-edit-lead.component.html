@@ -65,100 +65,41 @@
                 </li>
 
               </ul>
+
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="call" role="tabpanel" aria-labelledby="call-tab">
                   <div class="row">
 
-
-
                     <div class="col-12">
                       <div class="form-group">
+                        <ejs-richtexteditor id='defaultRTE' [(value)]='value'  [toolbarSettings]='tools' [quickToolbarSettings]='quickTools' [(ngModel)]="call.Description"></ejs-richtexteditor>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
                         <input type="hidden" class="form-control" name="id" [(ngModel)]="call._id">
-                        <textarea class="form-control" rows="4" placeholder="Description" [(ngModel)]="call.Description"></textarea>
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-sm-6">
-                      <div class="form-group">
-                        <input type="text" class="form-control" placeholder="CallId" [(ngModel)]="call.CallId" />
+                        <input class="e-input" type="text" placeholder="Call Id" [(ngModel)]="call.CallId" />
                       </div>
                     </div>
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Call Subject" [(ngModel)]="call.CallSubject" />
+                        <input class="e-input" type="text" placeholder="Call Subject" [(ngModel)]="call.CallSubject" />
                       </div>
                     </div>
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Responsible Person" [(ngModel)]="call.ResponsiblePerson" />
+                        <ejs-multiselect id='multiselectelement' [dataSource]='ResponsiblePersondata' [fields]='ResponsiblePersonfields' placeholder="Responsible Person" [(ngModel)]="call.ResponsiblePerson"></ejs-multiselect>
                       </div>
                     </div>
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <select [(ngModel)]="call.Priority" class="form-control Priority" required [value]="call.Priority">
-                          <option [value]="-1" selected="selected">--Select Priority--</option>
-                          <option [value]="c.value" *ngFor="let c of priorities">{{c.name}}</option>
-                        </select>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='priorities' [value]='value' [fields]='prioritiesfields' placeholder="Priority" [(ngModel)]="call.Priority"></ejs-dropdownlist>
                       </div>
                     </div>
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <select [(ngModel)]="call.Type" class="form-control Type" required [value]="call.Type">
-                          <option [value]="-1" selected="selected">--Select Type--</option>
-                          <option [value]="c.value" *ngFor="let c of types">{{c.name}}</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <!--<div class="col-12 col-sm-6">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="CreatedBy" [(ngModel)]="call.CreatedBy" />
-        </div>
-      </div>
-      <div class="col-12 col-sm-6">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="UpdatedBy" [(ngModel)]="call.UpdatedBy" />
-        </div>
-      </div>-->
-                    <!--<div class="col-12 col-sm-6">
-        <div class="form-group">
-          <input type="text"
-                 placeholder="Created Date"
-                 class="form-control"
-                 [(ngModel)]="call.CreatedDate"
-                 bsDatepicker>
-
-        </div>
-      </div>
-      <div class="col-12 col-sm-6">
-        <div class="form-group">
-          <input type="text"
-                 placeholder="Updated Date"
-                 class="form-control"
-                 [(ngModel)]="call.UpdatedDate"
-                 bsDatepicker>
-
-        </div>
-      </div>-->
-
-                    <div class="col-12 col-sm-6">
-                      <div class="form-group">
-                        <input type="text"
-                               placeholder="Event Start Date"
-                               class="form-control"
-                               [(ngModel)]="call.EventStartDate"
-                               bsDatepicker>
-
-                      </div>
-                    </div>
-                    <div class="col-12 col-sm-6">
-                      <div class="form-group">
-                        <input type="text"
-                               placeholder="Event End Date"
-                               class="form-control"
-                               [(ngModel)]="call.EventEndDate"
-                               bsDatepicker>
-
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='types' [value]='value' [fields]='typesfields' placeholder="Types" [(ngModel)]="call.Types"></ejs-dropdownlist>
                       </div>
                     </div>
 
@@ -166,25 +107,34 @@
 
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <select [(ngModel)]="call.RepeatTask" class="form-control Type" required [value]="call.RepeatTask">
-                          <option [value]="-1" selected="selected">--Select Repeat Task--</option>
-                          <option [value]="c.value" *ngFor="let c of repeattaskoptions">{{c.name}}</option>
-                        </select>
+                        <ejs-datetimepicker [(ngModel)]="call.EventStartDate" placeholder="Event Start Date"></ejs-datetimepicker>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <ejs-datetimepicker [(ngModel)]="call.EventEndDate" placeholder="Event End Date"></ejs-datetimepicker>
+                      </div>
+                    </div>
+
+
+
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='repeattaskoptions' [value]='value' [fields]='repeattaskoptionsfields' placeholder="Repeat Task" [(ngModel)]="call.RepeatTask"></ejs-dropdownlist>
                       </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Reminder Notification" [(ngModel)]="call.ReminderNotification" />
+                        <input class="e-input" type="text" placeholder="Reminder Notification" [(ngModel)]="call.ReminderNotification" />
                       </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <select [(ngModel)]="call.Completed" class="form-control Type" required [value]="call.Completed">
-                          <option [value]="-1" selected="selected">--Completed--</option>
-                          <option [value]="c.value" *ngFor="let c of completes">{{c.name}}</option>
-                        </select>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='completes' [fields]='completesfields' placeholder="Completed" [(ngModel)]="call.Completed"></ejs-dropdownlist>
+
+
                       </div>
                     </div>
 
@@ -197,9 +147,62 @@
                     <div class="col-12 col-sm-12" *ngIf="callVM?.createdDate">
                       <div class="form-group">
                         Created On : {{callVM?.createdDate | date : 'MMM d, y, h:mm:ss a'}}
+
+                        <br />
+
                       </div>
                     </div>
 
+                    <div class="col-12 col-sm-12" *ngIf="tabledata?.length">
+                      <div class="form-group">
+                        <table class="table">
+                          <thead>
+                            <tr>
+
+                              
+                              <th>Subject </th>
+                              <th>Description  </th>
+                              <th>ResponsiblePerson </th>
+                              <!--<th>Priority </th>
+                <th>Type </th>
+                <th>CreatedBy </th>
+                <th>UpdatedBy </th>
+                <th>CreatedDate </th>
+                <th>UpdatedDate </th>
+                <th>EventStartDate </th>
+                <th>EventEndDate </th>-->
+                              <th>RepeatTask </th>
+                              <!--<th>ReminderNotification </th>
+                <th>Completed </th>-->
+
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let dd of tabledata">
+                              <td>
+                                <div>{{dd.Subject}}</div>
+                              </td>
+
+
+                              <td>
+                                <div>{{dd.Description}}</div>
+                              </td>
+
+
+                              <td>
+                                <div>{{dd.ResponsiblePerson}}</div>
+                              </td>
+
+
+                              <td>
+                                <div>{{dd.RepeatTask}}</div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
 
                   </div>
                 </div>
@@ -278,70 +281,162 @@
                     </div>
                   </div>
                 </div>
-
+                <!--meeting-->
                 <div class="tab-pane fade" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
+                 
                   <div class="row">
                     <div class="col-12">
                       <div class="form-group">
-                        <textarea class="form-control" rows="4" placeholder="Meeting"></textarea>
+                        <ejs-richtexteditor id='defaultRTE2' [(value)]='value2' [toolbarSettings]='tools2' [quickToolbarSettings]='quickTools2' [(ngModel)]="meeting.Description"></ejs-richtexteditor>
                       </div>
                     </div>
+
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Text" />
+                        <input type="hidden" class="form-control" name="id" [(ngModel)]="meeting._id">
+                        <input class="e-input" type="text" placeholder="Meeting Id" [(ngModel)]="meeting.MeetingId" />
                       </div>
                     </div>
+
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Email" />
+                        <input class="e-input" type="text" placeholder="Meeting Subject" [(ngModel)]="meeting.MeetingSubject" />
                       </div>
                     </div>
+
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password" />
+                        <ejs-multiselect id='multiselectelement' [dataSource]='ResponsiblePersondata' [fields]='ResponsiblePersonfields' placeholder="Responsible Person" [(ngModel)]="meeting.ResponsiblePerson"></ejs-multiselect>
                       </div>
                     </div>
+
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <select class="form-control">
-                          <option>Select Box</option>
-                        </select>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='priorities' [value]='value' [fields]='prioritiesfields' placeholder="Priority" [(ngModel)]="meeting.Priority"></ejs-dropdownlist>
                       </div>
                     </div>
-                    <div class="col-12">
+
+                    <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                          <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                          </label>
-                        </div>
+                        <ejs-datetimepicker [(ngModel)]="meeting.EventStartDate" placeholder="Event Start Date"></ejs-datetimepicker>
                       </div>
                     </div>
+
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <ejs-datetimepicker [(ngModel)]="meeting.EventEndDate" placeholder="Event End Date"></ejs-datetimepicker>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='repeattaskoptions' [value]='value' [fields]='repeattaskoptionsfields' placeholder="Repeat Task" [(ngModel)]="meeting.RepeatTask"></ejs-dropdownlist>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <input class="e-input" type="text" placeholder="Reminder Notification" [(ngModel)]="meeting.ReminderNotification" />
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='completes' [fields]='completesfields' placeholder="Completed" [(ngModel)]="meeting.Completed"></ejs-dropdownlist>
+
+
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                        <button (click)="AddMeeting(meeting)" class="btn btn-sm btn-primary btn-block">Update</button>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12" *ngIf="meetingVM?.createdDate">
+                      <div class="form-group">
+                        Created On : {{meetingVM?.createdDate | date : 'MMM d, y, h:mm:ss a'}}
+                        <br />
+
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12" *ngIf="meetingtabledata?.length">
+                      <div class="form-group">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Subject </th>
+                              <th>Description  </th>
+                              <th>ResponsiblePerson </th>
+                              <th>RepeatTask </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let dd of meetingtabledata">
+                              <td>
+                                <div>{{dd.Subject}}</div>
+                              </td>
+
+
+                              <td>
+                                <div>{{dd.Description}}</div>
+                              </td>
+
+
+                              <td>
+                                <div>{{dd.ResponsiblePerson}}</div>
+                              </td>
+
+
+                              <td>
+                                <div>{{dd.RepeatTask}}</div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
                   </div>
+                 
                 </div>
 
                 <div class="tab-pane fade" id="scheduler" role="tabpanel" aria-labelledby="scheduler-tab">
-                <div class="row">
+                  <div class="row">
                     <div class="col-12">
                       <div class="form-group">
+                        <!--<app-ejs-schedule [selectedDate]="selectedDate"
+          [eventSettings]="eventSettings"
+          [currentView]="currentView">
 
-                        <ejs-schedule width='100%' height='500px'
-                                      [selectedDate]="selectedDate"
-                                      [eventSettings]="eventSettings"
-                                      [currentView]="currentView">
-                        </ejs-schedule>
-
-
-                        <!--<ejs-schedule></ejs-schedule>-->
-
+            </app-ejs-schedule>-->
+                        <!--<ejs-schedule #schedule width='100%' height='500px'
+                    [selectedDate]="selectedDate"
+                    [eventSettings]="eventSettings"
+                        (popupOpen)="onPopupOpen($event)"
+                        (ActionBegin)="onActionBegin($event)"
+                    [currentView]="currentView">
+          </ejs-schedule>-->
+                        <!--<ejs-schedule [ng-class]="form-group" width='100%' height='550px'
+                        [enableLoadOnDemand]="true"
+                        [currentView]="currentView"
+                        [selectedDate]="selectedDate"
+                        [showQuickInfo]="showQuickInfo"
+                        [eventSettings]="eventSettings"
+                        (popupOpen)="onPopupOpen($event)">
+            <e-views>
+                <e-view option="Day"></e-view>
+                <e-view option="Week"></e-view>
+                <e-view option="WorkWeek"></e-view>
+                <e-view option="Month"></e-view>
+            </e-views>
+          </ejs-schedule>-->
+                        <ejs-schedule width='100%' height='550px' timezone="UTC" [selectedDate]="selectedDate" [eventSettings]="eventSettings" [currentView]="currentView"></ejs-schedule>
                       </div>
                     </div>
-                   
-                    
-                   
 
-                 
 
                   </div>
                 </div>
@@ -349,7 +444,7 @@
               </div>
             </div>
 
-            <div class="report-list-table">
+            <!--<div class="report-list-table">
           <div class="row">
             <div class="col-12 text-center">
               <div class="report-date"><span>14 march</span></div>
@@ -412,7 +507,7 @@
                           <p _ngcontent-c8="">Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam.</p>
                           <div _ngcontent-c8="" class="btn-group" dropdown="">
                             <a _ngcontent-c8="" class="dropdown-toggle" dropdowntoggle="" href="#" aria-haspopup="true"><em _ngcontent-c8="" class="fa fa-paperclip"></em></a>
-                            <!---->
+                            
                           </div>
                         </div>
                       </div>
@@ -457,7 +552,7 @@
                   <li _ngcontent-c8="" class="timeline-end"><a _ngcontent-c8="" class="timeline-badge" href="#"><em _ngcontent-c8="" class="fa fa-plus"></em></a></li>
                 </ul>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
