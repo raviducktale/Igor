@@ -1,3 +1,167 @@
-<p>
-  task works!
-</p>
+<br />
+<h3>Task List</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Id</th>
+
+      <th>Task Text</th>
+      <th>Responsible Person</th>
+      <th>Priority</th>
+      <th>Created By</th>
+      <th>Updated By</th>
+      <th>Created On</th>
+      <th>Updated On</th>
+      <th>Event Start Date</th>
+      <th>Event End Date On</th>
+      <th>Completed</th>
+
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+    <tr *ngFor="let emp of empList">
+      <td> <input type="text" class="form-control id" name="id" [(ngModel)]="emp._id"> </td>
+
+      <td> <input type="text" class="form-control TaskText" name="TaskText" [(ngModel)]="emp.taskText"> </td>
+      <td> <input type="text" class="form-control ResponsiblePerson" name="ResponsiblePerson" [(ngModel)]="emp.responsiblePerson"> </td>
+      <td> <input type="text" class="form-control Priority" name="Priority" [(ngModel)]="emp.priority"> </td>
+      <td> <input type="text" class="form-control CreatedBy" name="CreatedBy" [(ngModel)]="emp.createdBy"> </td>
+      <td> <input type="text" class="form-control UpdatedBy" name="UpdatedBy" [(ngModel)]="emp.updatedBy"> </td>
+      <td>
+        <input type="text" class="form-control CreatedOn" name="CreatedOn" [(ngModel)]="emp.createdOn">
+      </td>
+      <td> <input type="text" class="form-control UpdatedOn" name="UpdatedOn" [(ngModel)]="emp.updatedOn"> </td>
+      <td> <input type="text" class="form-control EventStartDate" name="EventStartDate" [(ngModel)]="emp.eventStartDate"> </td>
+      <td> <input type="text" class="form-control EventEndDate" name="EventEndDate" [(ngModel)]="emp.eventEndDate"> </td>
+      <td>
+        <!--<input type="text" class="form-control Completed" name="Completed" [(ngModel)]="emp.completed">-->
+        <ui-switch id="Completed" name="Completed" [(ngModel)]="emp.completed" (click)="toggleComplete(emp)"></ui-switch>
+      </td>
+
+
+      <td>
+        <button (click)="Update(emp)">Update</button>
+        <button (click)="Delete(emp._id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="col-md-6">
+
+
+
+
+      <div class="form-group">
+        <label class="control-label required">Task Id<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control TaskId" name="TaskId" [(ngModel)]="emp.TaskId">
+      </div>
+      <div class="form-group">
+        <label class="control-label required">Task Text<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control TaskText" name="TaskText" [(ngModel)]="emp.TaskText">
+      </div>
+      <div class="form-group">
+        <label class="control-label required">Responsible Person<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control ResponsiblePerson" name="ResponsiblePerson" [(ngModel)]="emp.ResponsiblePerson">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Priority<span class="error_mark text-danger"> *</span></label>
+        <!--<input type="text" class="form-control Priority" name="Priority" [(ngModel)]="emp.Priority">-->
+        <select [(ngModel)]="emp.Priority" class="form-control Priority" required [value]="emp.Priority">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="p.value" *ngFor="let p of priorities">{{p.name}}</option>
+        </select>
+        {{emp.Priority}}
+      </div>
+      <div class="form-group">
+        <label class="control-label required">Created By<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control CreatedBy" name="CreatedBy" [(ngModel)]="emp.CreatedBy">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Updated By<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control UpdatedBy" name="UpdatedBy" [(ngModel)]="emp.UpdatedBy">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Created On<span class="error_mark text-danger"> *</span></label>
+        <!--<input type="text" class="form-control CreatedOn" name="CreatedOn" [(ngModel)]="emp.CreatedOn">-->
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="emp.CreatedOn"
+               value="{{ emp.CreatedOn | date:'yyyy-MM-dd'}}"
+               bsDatepicker>
+        {{emp.CreatedOn}}
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+      <div class="form-group">
+        <label class="control-label required">Updated On<span class="error_mark text-danger"> *</span></label>
+        <!--<input type="text" class="form-control UpdatedOn" name="UpdatedOn" [(ngModel)]="emp.UpdatedOn">-->
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="emp.UpdatedOn"
+               value="{{ emp.UpdatedOn | date:'yyyy-MM-dd'}}"
+               bsDatepicker>
+        {{emp.UpdatedOn}}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Event Start Date<span class="error_mark text-danger"> *</span></label>
+        <!--<input type="text" class="form-control EventStartDate" name="EventStartDate" [(ngModel)]="emp.EventStartDate">-->
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="emp.EventStartDate"
+               value="{{ emp.EventStartDate | date:'yyyy-MM-dd'}}"
+               bsDatepicker>
+        {{emp.EventStartDate}}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Event End Date<span class="error_mark text-danger"> *</span></label>
+        <!--<input type="text" class="form-control EventEndDate" name="EventEndDate" [(ngModel)]="emp.EventEndDate">-->
+        <input type="text"
+               placeholder="Datepicker"
+               class="form-control"
+               [(ngModel)]="emp.EventEndDate"
+               value="{{ emp.EventEndDate | date:'yyyy-MM-dd'}}"
+               bsDatepicker>
+        {{emp.EventEndDate}}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label required">Completed<span class="error_mark text-danger"> *</span></label>
+        <!--<input type="text" class="form-control Completed" name="Completed" [(ngModel)]="emp.Completed">-->
+        <select [(ngModel)]="emp.Completed" class="form-control Completed" required [value]="emp.Completed">
+          <option [value]="-1" selected="selected">--Select--</option>
+          <option [value]="c.value" *ngFor="let c of completeds">{{c.name}}</option>
+        </select>
+        {{emp.Completed}}
+      </div>
+      <div class="form-group">
+        <label class="control-label required">Repeat Task Id<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control RepeatTaskId" name="RepeatTaskId" [(ngModel)]="emp.RepeatTaskId">
+      </div>
+      <div class="form-group">
+        <label class="control-label required">Reminder Notification Id<span class="error_mark text-danger"> *</span></label>
+        <input type="text" class="form-control ReminderNotificationId" name="ReminderNotificationId" [(ngModel)]="emp.ReminderNotificationId">
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <button (click)="Add(emp)">Add Task</button>
+  </div>
+</div>

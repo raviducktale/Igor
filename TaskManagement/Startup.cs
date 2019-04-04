@@ -53,6 +53,7 @@ namespace TaskManagement
             services.AddScoped<IMeetingsRepository, MeetingsRepository>();
             services.AddScoped<ICallsRepository, CallsRepository>();
             services.AddScoped<ISchedulerRepository, SchedulerRepository>();
+            services.AddScoped<IHistoryRepository, HistoryRepository>();
         }
 
     

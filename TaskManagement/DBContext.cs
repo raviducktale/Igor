@@ -60,6 +60,13 @@ namespace TaskManagement
                 return _database.GetCollection<Scheduler>("Scheduler");
             }
         }
+        public IMongoCollection<History> History
+        {
+            get
+            {
+                return _database.GetCollection<History>("History");
+            }
+        }
 
     }
 }

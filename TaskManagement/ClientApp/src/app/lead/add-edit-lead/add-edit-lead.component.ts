@@ -3,10 +3,20 @@ import { ActivatedRoute } from '@angular/router';
 import { CallService } from '../call/call.service';
 import { MeetingService } from '../meeting/meeting.service';
 import { SchedulerService } from '../scheduler/scheduler.service';
+import { HistoryService } from '../history/history.service';
+import { TaskService } from '../task/task.service';
 import { EventSettingsModel, View, PopupOpenEventArgs, ActionEventArgs,  } from '@syncfusion/ej2-schedule';
 import { DayService, WeekService, MonthService } from '@syncfusion/ej2-angular-schedule';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService  } from '@syncfusion/ej2-angular-richtexteditor';
 import { debug } from 'util';
+
+enum ACTIONS {
+  Call,
+  Meeting,
+  Task,
+  Comment,
+  Email
+}
 
 @Component({
   selector: 'app-add-edit-lead',
@@ -16,7 +26,9 @@ import { debug } from 'util';
 })
 
 export class AddEditLeadComponent implements OnInit {
-
+  ACTIONS = ACTIONS;
+  selectedAction: any;
+  limit = 4;
   public value: string = '';
   public tools: object = {
     items: ['Undo', 'Redo', '|',
@@ -32,27 +44,7 @@ export class AddEditLeadComponent implements OnInit {
     image: [
       'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
   };
-
-  public value2: string = '';
-  public tools2: object = {
-    items: ['Undo', 'Redo', '|',
-      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
-      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
-      'SubScript', 'SuperScript', '|',
-      'LowerCase', 'UpperCase', '|',
-      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
-      'Indent', 'Outdent', '|', 'CreateLink',
-      'Image', '|', 'ClearFormat', 'Print', 'SourceCode', '|', 'FullScreen']
-  };
-  public quickTools2: object = {
-    image: [
-      'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
-  };
-
-  public iframe: object = { enable: true };
-  public height: number = 500;
-  
-  //Call
+ 
   call: any = {
     id: "",
     CallId: "",
@@ -91,23 +83,24 @@ export class AddEditLeadComponent implements OnInit {
     Description: ""
   }
 
-  leads: any;
-  selectedLead: any;
-  selectedId: number;
-  ResponsiblePersondata: Object[];
-  ResponsiblePersonfields: Object;
-  priorities: { [key: string]: Object }[];
-  prioritiesfields: Object;
-  types: { [key: string]: Object }[];
-  typesfields: Object;
-  completes: { [key: string]: Object }[];
-  completesfields: Object;
-  repeattaskoptions: { [key: string]: Object }[];
-  repeattaskoptionsfields: Object;
-  callVM: any;
-  meetingVM: any;
-  tabledata: any;
-  meetingtabledata: any;
+  task: any = {
+    id: "",
+    TaskId: "",
+    TaskSubject: "",
+    ResponsiblePerson: "",
+    Priority: "",
+    CreatedBy: "",
+    UpdatedBy: "",
+    CreatedDate: "",
+    UpdatedDate: "",
+    EventStartDate: "",
+    EventEndDate: "",
+    RepeatTask: "",
+    ReminderNotification: "",
+    Completed: true,
+    Description: ""
+  }
+
   scheduler: any = {
     _id: "",
     id: "",
@@ -132,7 +125,41 @@ export class AddEditLeadComponent implements OnInit {
     BYMonth: "",
     BYSetPOS: ""
   }
+
+  history: any = {
+    id: "",
+    Action: "",
+    Panel: "",
+    CreatedBy: "",
+    CreatedDate: "",
+    Button: "",
+  }
+
+  leads: any;
+  selectedLead: any;
+  selectedId: number;
+
+  ResponsiblePersondata: Object[];
+  ResponsiblePersonfields: Object;
+  priorities: { [key: string]: Object }[];
+  prioritiesfields: Object;
+  types: { [key: string]: Object }[];
+  typesfields: Object;
+  completes: { [key: string]: Object }[];
+  completesfields: Object;
+  repeattaskoptions: { [key: string]: Object }[];
+  repeattaskoptionsfields: Object;
+
+  callVM: any;
+  meetingVM: any;
+  taskVM: any;
+
+  tabledata: any;
+  meetingtabledata: any;
+  tasktabledata: any;
+  historytabledata: any;
   ds: any;
+
   public currentView: View = 'Month';
   public selectedDate: Date = new Date();
   public eventSettings: EventSettingsModel = {
@@ -161,18 +188,29 @@ export class AddEditLeadComponent implements OnInit {
     ]
   };
 
-  constructor(private router: ActivatedRoute, protected service: CallService, protected meetingService: MeetingService, protected schedulerService: SchedulerService) {
+  constructor(private router: ActivatedRoute,
+    protected service: CallService,
+    protected meetingService: MeetingService,
+    protected schedulerService: SchedulerService,
+    protected historyService: HistoryService,
+    protected taskService: TaskService)
+  {
     this.GetAllScheduler();
     this.GetAllCall();
     this.GetAllMeeting();
+    this.GetAllTask();
+    this.GetAllHistory();
     this.router.params.subscribe(params => { this.selectedId = +params['id']; });
   }
 
   ngOnInit() {
     this.tabledata = [];
     this.meetingtabledata = [];
-  this.ds = [];
-    this.ResponsiblePersondata = [
+    this.ds = [];
+    this.tasktabledata = [];
+    this.historytabledata=[];
+
+      this.ResponsiblePersondata = [
       { id: 'Game1', sports: 'Asley Thomas' },
       { id: 'Game2', sports: 'Mithun' },
       { id: 'Game3', sports: 'Abhiram Thomas' },
@@ -210,19 +248,26 @@ export class AddEditLeadComponent implements OnInit {
       ],
       this.completesfields = { text: 'completesName', value: 'completesId' },
    
-    this.leads = [{ id: 1, name: "test1", description: "test sdf test description1", date: "01-01-2019" },
-    { id: 2, name: "test2", description: "test test2 sara description2", date: "01-05-2019" },
-    { id: 3, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
-    { id: 4, name: "test4", description: "test 4444 dfytr description3", date: "03-02-2019" }]
-    if (this.selectedId)
+      this.leads = [{ id: 1, name: "test1", description: "test sdf test description1", date: "01-01-2019" },
+        { id: 2, name: "test2", description: "test test2 sara description2", date: "01-05-2019" },
+        { id: 3, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
+        { id: 4, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
+        { id: 5, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
+        { id: 6, name: "test4", description: "test 4444 dfytr description3", date: "03-02-2019" }]
+
+      if (this.selectedId)
       this.selectedLead = this.leads.find(x => x.id == this.selectedId);
-    else
+      else
       this.selectedLead = { id: 0, name: "", description: "", date: "" }
 
   }
 
- 
-
+  selectAction(action) {
+    this.selectedAction = action;
+  }
+  showAll(_limit) {
+    this.limit = _limit;
+  }
 
   //Scheduler Methods
    GetAllScheduler() {
@@ -262,7 +307,6 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
-
   UpdateScheduler(scheduler) {
     alert(scheduler);
     this.schedulerService.updateScheduler<any>(scheduler)
@@ -272,7 +316,6 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
-
   DeleteScheduler(id) {
     alert(id);
     this.schedulerService.deleteScheduler<any>(id)
@@ -301,7 +344,6 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
-
   AddCall(call) {
     console.log(call);
     this.service.addCall<any>(call)
@@ -309,11 +351,18 @@ export class AddEditLeadComponent implements OnInit {
         this.callVM = data;
         console.log(data);
         this.GetAllCall();
+        this.history.Action = "Call",
+          this.history.Panel = "Lead",
+          this.history.CreatedBy = "1",
+          this.history.CreatedDate = new Date(),
+          this.history.Button = "Add Call"
+        this.AddHistory(this.history);
       }, error => {
       }, () => { });
    
   }
 
+  //Meeting Methods
   GetAllMeeting() {
     this.meetingtabledata = [];
     this.meetingService.getMeeting<any>()
@@ -325,7 +374,6 @@ export class AddEditLeadComponent implements OnInit {
             ResponsiblePerson: x.responsiblePerson,
             RepeatTask: x.repeatTask
           })
-
         });
         console.log("meetingtabledata", this.meetingtabledata)
       }, error => {
@@ -333,7 +381,6 @@ export class AddEditLeadComponent implements OnInit {
   }
   AddMeeting(meeting) {
     console.log(meeting);
-
     this.meetingService.addMeeting<any>(meeting)
       .subscribe(data => {
         this.meetingVM = data;
@@ -342,4 +389,62 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
-}
+
+  //Task Methods
+  GetAllTask() {
+    this.tasktabledata = [];
+    this.taskService.getTask<any>()
+      .subscribe(data => {
+        data.map((x) => {
+          this.tasktabledata.push({
+            Description: x.description,
+            Subject: x.taskSubject,
+            ResponsiblePerson: x.responsiblePerson,
+            RepeatTask: x.repeatTask
+          })
+        });
+        console.log("tasktabledata", this.tasktabledata)
+      }, error => {
+      }, () => { });
+  }
+  AddTask(task) {
+    console.log(task);
+    this.taskService.addTask<any>(task)
+      .subscribe(data => {
+        this.taskVM = data;
+        this.GetAllTask();
+        console.log(data);
+      }, error => {
+      }, () => { });
+  }
+
+  //Task Methods
+  GetAllHistory() {
+    this.historytabledata = [];
+    this.historyService.getHistory<any>()
+      .subscribe(data => {
+        data.map((x) => {
+          this.historytabledata.push({
+            Action: x.action,
+            Panel: x.panel,
+            CreatedBy: x.createdBy,
+            CreatedDate: new Date(x.createdDate).toDateString(),
+            Button:x.button
+          })
+        });
+        console.log("historytabledata", this.historytabledata)
+      }, error => {
+      }, () => { });
+  }
+  AddHistory(history) {
+    console.log(history);
+    this.historyService.addHistory<any>(history)
+      .subscribe(data => {
+       
+        this.GetAllHistory();
+        console.log(data);
+      }, error => {
+      }, () => { });
+  }
+  }
+

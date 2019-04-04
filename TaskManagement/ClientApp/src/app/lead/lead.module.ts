@@ -28,6 +28,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { UiSwitchModule } from 'ngx-toggle-switch';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { SharedModule } from '../shared/shared.module';
+import { HistoryComponent } from './history/history.component';
 
 export const routes = [
   { path: '', component: LeadComponent, pathMatch: 'full', data: { title: 'Manage Lead' } },
@@ -59,6 +60,7 @@ export const routes = [
     TaskComponent,
     MeetingComponent,
     SchedulerComponent,
+    HistoryComponent,
   ],
   providers: [
     LeadService,
