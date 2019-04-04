@@ -11,7 +11,6 @@ export class CallComponent implements OnInit {
  
   call: any = {
     id: "",
-    CallId: "",
     CallSubject: "",
     ResponsiblePerson: "",
     Priority: "",

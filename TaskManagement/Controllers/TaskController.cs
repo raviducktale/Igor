@@ -42,10 +42,9 @@ namespace TaskManagement.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] Models.Tasks task)
+        public async Task<IActionResult> Add([FromBody] TasksVM task)
         {
-            await _taskRepository.AddTask(task);
-            return new OkObjectResult(task);
+            return Ok(await _taskRepository.AddTask(task));
         }
 
         // PUT: api/Task/5
@@ -57,23 +56,29 @@ namespace TaskManagement.Controllers
                 Models.Tasks tsk = new Models.Tasks()
                 {
                     _id = ObjectId.Parse(model._id),
-                    TaskText = model.TaskText,
+                    Subject = model.Subject,
                     ResponsiblePerson = model.ResponsiblePerson,
                     Priority = model.Priority,
-                    CreatedBy = model.CreatedBy,
-                    UpdatedBy = model.UpdatedBy,
-                    CreatedOn = model.CreatedOn,
-                    UpdatedOn = model.UpdatedOn,
+                    //CreatedBy = model.CreatedBy,
+                    ////UpdatedBy = model.UpdatedBy,
+                    //CreatedDate = model.CreatedDate,
+                    //UpdatedDate = model.UpdatedDate,
                     EventStartDate = model.EventStartDate,
                     EventEndDate = model.EventEndDate,
                     Completed = model.Completed,
-                    RepeatTaskId = model.RepeatTaskId,
-                    ReminderNotificationId = model.ReminderNotificationId
-
+                    ReminderNotification = model.ReminderNotification,
+                    Description = model.Description,
+                    RepeatTask = model.RepeatTask,
+                    Interval = model.Interval,
+                    RepeatAfter = model.RepeatAfter,
+                    Untill = model.Untill,
+                    UntillDate = model.UntillDate,
+                    UntillCompile = model.UntillCompile,
+                    RemindUsing = model.RemindUsing,
+                    RemindTo = model.RemindTo
                 };
 
-
-        await _taskRepository.UpdateTask(tsk);
+            await _taskRepository.UpdateTask(tsk);
                 return new OkObjectResult(tsk);
             }
             catch (Exception ex)

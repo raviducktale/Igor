@@ -23,16 +23,12 @@ namespace TaskManagement.Controllers
             _meetingRepository = meetingRepository; 
         }
 
-      
-
-
         [HttpGet]
         public async Task<IActionResult> GetMeeting()
         {
             IEnumerable<Meetings> model = await _meetingRepository.GetAllMeetings();
             return Ok(model);
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMeetingById(string id)
@@ -44,9 +40,6 @@ namespace TaskManagement.Controllers
             return new ObjectResult(Meeting);
 
         }
-
-
-
 
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody]MeetingsVM Meeting)
@@ -64,8 +57,7 @@ namespace TaskManagement.Controllers
                 Meetings Meeting = new Meetings()
                 {
                     _id = ObjectId.Parse(model._id),
-                    MeetingId = model.MeetingId,
-                    MeetingSubject = model.MeetingSubject,
+                    Subject = model.Subject,
                     Location = model.Location,
                     ResponsiblePerson = model.ResponsiblePerson,
                     Priority = model.Priority,
@@ -75,10 +67,17 @@ namespace TaskManagement.Controllers
                     //UpdatedDate = model.UpdatedDate,
                     EventStartDate = model.EventStartDate,
                     EventEndDate = model.EventEndDate,
-                    RepeatTask = model.RepeatTask,
                     ReminderNotification = model.ReminderNotification,
                     Completed = model.Completed,
-                    Description = model.Description
+                    Description = model.Description,
+                    RepeatTask = model.RepeatTask,
+                    Interval = model.Interval,
+                    RepeatAfter = model.RepeatAfter,
+                    Untill = model.Untill,
+                    UntillDate = model.UntillDate,
+                    UntillCompile = model.UntillCompile,
+                    RemindUsing = model.RemindUsing,
+                    RemindTo = model.RemindTo
                 };
                 await _meetingRepository.UpdateMeeting(Meeting);
                 return new OkObjectResult(Meeting);

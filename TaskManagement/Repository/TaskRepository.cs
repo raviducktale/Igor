@@ -4,8 +4,10 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TaskManagement.Models;
+using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
@@ -21,11 +23,38 @@ namespace TaskManagement.Repository
         }
 
 
-        public async System.Threading.Tasks.Task AddTask(Models.Tasks task)
+        public async Task<Tasks> AddTask(TasksVM model)
         {
             try
             {
-                await _context.Tasks.InsertOneAsync(task);
+
+                model.Description = Regex.Replace(model.Description, @"<[^>]+>| ", "").TrimStart();
+                Tasks _tasks = new Tasks()
+                {
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = 1,
+                    Subject = model.Subject,
+                    ResponsiblePerson = model.ResponsiblePerson,
+                    Priority = model.Priority,
+                    EventStartDate = model.EventStartDate,
+                    EventEndDate = model.EventEndDate,
+                    ReminderNotification = model.ReminderNotification,
+                    Completed = model.Completed,
+                    Description = model.Description,
+                    RepeatTask = model.RepeatTask,
+                    Interval = model.Interval,
+                    RepeatAfter = model.RepeatAfter,
+                    Untill = model.Untill,
+                    UntillDate = model.UntillDate,
+                    UntillCompile = model.UntillCompile,
+                    RemindUsing = model.RemindUsing,
+                    RemindTo = model.RemindTo
+
+                };
+
+
+                await _context.Tasks.InsertOneAsync(_tasks);
+                return _tasks;
             }
             catch (Exception ex)
             {
@@ -33,7 +62,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<List<Models.Tasks>> GetAllTasks()
+        public Task<List<Tasks>> GetAllTasks()
         {
             try
             {
@@ -45,7 +74,7 @@ namespace TaskManagement.Repository
             }
         }
 
-        public Task<Models.Tasks> GetTask(string id)
+        public Task<Tasks> GetTask(string id)
         {
             try
             {
@@ -80,10 +109,12 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async System.Threading.Tasks.Task UpdateTask(Models.Tasks item)
+        public async Task UpdateTask(Models.Tasks item)
         {
             try
             {
+                item.UpdatedDate = DateTime.Now;
+                item.UpdatedBy = 1;
                 await _context.Tasks.ReplaceOneAsync(b => b._id == item._id, item);
             }
             catch (Exception ex)

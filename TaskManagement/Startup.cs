@@ -54,6 +54,7 @@ namespace TaskManagement
             services.AddScoped<ICallsRepository, CallsRepository>();
             services.AddScoped<ISchedulerRepository, SchedulerRepository>();
             services.AddScoped<IHistoryRepository, HistoryRepository>();
+            services.AddScoped<ICommentsRepository, CommentsRepository>();
         }
 
     

@@ -9,6 +9,7 @@ using MongoDB.Bson;
 using TaskManagement.Models;
 using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository;
+using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Controllers
 {
@@ -16,12 +17,12 @@ namespace TaskManagement.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
+     
 
-
-        private readonly CommentsRepository _commentRepository;
-        public CommentController(IOptions<MongoSetting> settings)
+        private readonly ICommentsRepository _commentRepository;
+        public CommentController(ICommentsRepository commentRepository)
         {
-            _commentRepository = new CommentsRepository(settings); ;
+            _commentRepository = commentRepository;
         }
 
         [HttpGet]
@@ -44,11 +45,10 @@ namespace TaskManagement.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody]Comments cmt)
+        public async Task<IActionResult> Add([FromBody]CommentsVM cmt)
         {
-           
-            await _commentRepository.AddComment(cmt);
-            return new OkObjectResult(cmt);
+            return Ok(await _commentRepository.AddComment(cmt));
+
         }
 
         // PUT: api/Task/5
@@ -60,13 +60,8 @@ namespace TaskManagement.Controllers
                 Comments cmt = new Comments()
                 {
                     _id = ObjectId.Parse(model._id),
-                    CommentText = model.CommentText,
-                    ResponsiblePerson = model.ResponsiblePerson,
-                    CreatedBy = model.CreatedBy,
-                    UpdatedBy = model.UpdatedBy,
-                    CreatedOn = model.CreatedOn,
-                    UpdatedOn = model.UpdatedOn,
-
+                    Subject = model.Subject,
+                    ResponsiblePerson = model.ResponsiblePerson
                 };
 
 
@@ -92,6 +87,7 @@ namespace TaskManagement.Controllers
             await _commentRepository.RemoveComment(id);
             return new ObjectResult(id);
         }
+
     }
 
 }

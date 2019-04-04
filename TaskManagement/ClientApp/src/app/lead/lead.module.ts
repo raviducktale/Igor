@@ -11,7 +11,7 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { DateTimePickerModule } from "@syncfusion/ej2-angular-calendars";
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
-
+import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
 
 import { CallComponent } from './call/call.component';
 import { CallService } from './call/call.service';
@@ -50,7 +50,7 @@ export const routes = [
     RouterModule.forChild(routes),
     SharedModule,
     ScheduleModule,
-    MultiSelectModule, DropDownListModule, DateTimePickerModule, RichTextEditorAllModule
+    MultiSelectModule, DropDownListModule, DateTimePickerModule, RichTextEditorAllModule, NumericTextBoxModule
   ],
   declarations: [
     LeadComponent,

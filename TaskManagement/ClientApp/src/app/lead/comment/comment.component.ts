@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { CommentService } from '../comment/comment.service';
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -13,3 +13,9 @@ export class CommentComponent implements OnInit {
   }
 
 }
+
+
+
+
+
+

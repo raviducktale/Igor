@@ -63,17 +63,23 @@ namespace TaskManagement.Repository
                 {
                     CreatedDate = DateTime.Now,
                     CreatedBy = 1,
-                    MeetingId = model.MeetingId,
-                    MeetingSubject = model.MeetingSubject,
-                    Location=model.Location,
+                    Subject = model.Subject,
+                    Location = model.Location,
                     ResponsiblePerson = model.ResponsiblePerson,
                     Priority = model.Priority,
                     EventStartDate = model.EventStartDate,
                     EventEndDate = model.EventEndDate,
-                    RepeatTask = model.RepeatTask,
                     ReminderNotification = model.ReminderNotification,
                     Completed = model.Completed,
-                    Description = model.Description
+                    Description = model.Description,
+                    RepeatTask = model.RepeatTask,
+                    Interval = model.Interval,
+                    RepeatAfter = model.RepeatAfter,
+                    Untill = model.Untill,
+                    UntillDate = model.UntillDate,
+                    UntillCompile = model.UntillCompile,
+                    RemindUsing = model.RemindUsing,
+                    RemindTo = model.RemindTo,
                 };
                 await _context.Meetings.InsertOneAsync(_meeting);
                 return _meeting;

@@ -61,16 +61,23 @@ namespace TaskManagement.Controllers
                 Calls Call = new Calls()
                 {
                     _id = ObjectId.Parse(model._id),
-                    CallId = model.CallId,
-                    CallSubject = model.CallSubject,
+                    Subject = model.Subject,
                     ResponsiblePerson = model.ResponsiblePerson,
                     Priority = model.Priority,
+                    Types = model.Types,
                     EventStartDate = model.EventStartDate,
                     EventEndDate = model.EventEndDate,
-                    RepeatTask = model.RepeatTask,
                     ReminderNotification = model.ReminderNotification,
                     Completed = model.Completed,
-                    Description = model.Description
+                    Description = model.Description,
+                    RepeatTask = model.RepeatTask,
+                    Interval = model.Interval,
+                    RepeatAfter = model.RepeatAfter,
+                    Untill = model.Untill,
+                    UntillDate = model.UntillDate,
+                    UntillCompile = model.UntillCompile,
+                    RemindUsing = model.RemindUsing,
+                    RemindTo = model.RemindTo
                 };
                 await _callRepository.UpdateCall(Call);
                 return new OkObjectResult(Call);

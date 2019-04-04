@@ -7,20 +7,27 @@ namespace TaskManagement.Models.ViewModels
 {
     public class TasksVM
     {
-       
         public string _id { get; set; }
-        public int TaskId { get; set; }
-        public string TaskText { get; set; }
-        public int ResponsiblePerson { get; set; }
-        public int Priority { get; set; }
-        public int CreatedBy { get; set; }
-        public int UpdatedBy { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public DateTime? UpdatedOn { get; set; }
+        public string Subject { get; set; }
+        public string[] ResponsiblePerson { get; set; }
+        public int? Priority { get; set; }
+        //public int? CreatedBy { get; set; }
+        //public int? UpdatedBy { get; set; }
+        //public DateTime? CreatedDate { get; set; }
+        //public DateTime? UpdatedDate { get; set; }
         public DateTime? EventStartDate { get; set; }
         public DateTime? EventEndDate { get; set; }
-        public Boolean Completed { get; set; }
-        public int RepeatTaskId { get; set; }
-        public int ReminderNotificationId { get; set; }
+        public bool Completed { get; set; }
+        public int? ReminderNotification { get; set; }
+        public string Description { get; set; }
+        public int? RepeatTask { get; set; }
+        public int? Interval { get; set; }
+        public DateTime? RepeatAfter { get; set; }
+        public string Untill { get; set; }
+        public DateTime? UntillDate { get; set; }
+        public int? UntillCompile { get; set; }
+        public DateTime? RemindUsing { get; set; }
+        public string RemindTo { get; set; }
+
     }
 }

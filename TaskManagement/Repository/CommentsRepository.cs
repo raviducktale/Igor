@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskManagement.Models;
+using TaskManagement.Models.ViewModels;
 using TaskManagement.Repository.IRepository;
 
 namespace TaskManagement.Repository
@@ -20,11 +21,19 @@ namespace TaskManagement.Repository
             _context = new DBContext(settings);
         }
 
-        public async System.Threading.Tasks.Task AddComment(Comments comment)
+        public async Task<Comments> AddComment(CommentsVM model)
         {
             try
             {
-                await _context.Comments.InsertOneAsync(comment);
+                Comments _comment = new Comments()
+                {
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = 1,
+                    Subject = model.Subject,
+                    ResponsiblePerson = model.ResponsiblePerson,
+                };
+                await _context.Comments.InsertOneAsync(_comment);
+                return _comment;
             }
             catch (Exception ex)
             {
@@ -79,10 +88,12 @@ namespace TaskManagement.Repository
             }
         }
 
-        public async System.Threading.Tasks.Task UpdateComment(Comments item)
+        public async Task UpdateComment(Comments item)
         {
             try
             {
+                item.UpdatedDate = DateTime.Now;
+                item.UpdatedBy = 1;
                 await _context.Comments.ReplaceOneAsync(b => b._id == item._id, item);
             }
             catch (Exception ex)

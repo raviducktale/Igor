@@ -10,7 +10,6 @@ export class TaskComponent implements OnInit {
 
   emp: any = {
     id: "",
-    TaskId: "",
     TaskText: "",
     ResponsiblePerson: "",
     Priority: -1,

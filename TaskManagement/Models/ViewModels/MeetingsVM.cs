@@ -9,8 +9,7 @@ namespace TaskManagement.Models.ViewModels
     {
        
         public string _id { get; set; }
-        public int? MeetingId { get; set; }
-        public string MeetingSubject { get; set; }
+        public string Subject { get; set; }
         public string[] ResponsiblePerson { get; set; }
         public int? Priority { get; set; }
         public string Location { get; set; }
@@ -20,9 +19,18 @@ namespace TaskManagement.Models.ViewModels
         //public DateTime? UpdatedDate { get; set; }
         public DateTime? EventStartDate { get; set; }
         public DateTime? EventEndDate { get; set; }
-        public int? RepeatTask { get; set; }
+       
         public int? ReminderNotification { get; set; }
         public bool Completed { get; set; }
         public string Description { get; set; }
+        public int? RepeatTask { get; set; }
+
+        public int? Interval { get; set; }
+        public DateTime? RepeatAfter { get; set; }
+        public string Untill { get; set; }
+        public DateTime? UntillDate { get; set; }
+        public int? UntillCompile { get; set; }
+        public DateTime? RemindUsing { get; set; }
+        public string RemindTo { get; set; }
     }
 }

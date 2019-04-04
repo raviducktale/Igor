@@ -12,12 +12,11 @@ namespace TaskManagement.Models
 
         [BsonId]
         public ObjectId _id { get; set; }
-        public int CommentId { get; set; }
-        public string CommentText { get; set; }
-        public int ResponsiblePerson { get; set; }
-        public int CreatedBy { get; set; }
-        public int UpdatedBy { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public DateTime? UpdatedOn { get; set; }
+        public string Subject { get; set; }
+        public string[] ResponsiblePerson { get; set; }
+        public int? CreatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }

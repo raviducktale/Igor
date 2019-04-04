@@ -5,6 +5,8 @@ import { MeetingService } from '../meeting/meeting.service';
 import { SchedulerService } from '../scheduler/scheduler.service';
 import { HistoryService } from '../history/history.service';
 import { TaskService } from '../task/task.service';
+import { CommentService } from '../comment/comment.service';
+
 import { EventSettingsModel, View, PopupOpenEventArgs, ActionEventArgs,  } from '@syncfusion/ej2-schedule';
 import { DayService, WeekService, MonthService } from '@syncfusion/ej2-angular-schedule';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService  } from '@syncfusion/ej2-angular-richtexteditor';
@@ -47,8 +49,7 @@ export class AddEditLeadComponent implements OnInit {
  
   call: any = {
     id: "",
-    CallId: "",
-    CallSubject: "",
+    Subject: "",
     ResponsiblePerson: "",
     Priority: "",
     Type: "",
@@ -66,8 +67,7 @@ export class AddEditLeadComponent implements OnInit {
 
   meeting: any = {
     id: "",
-    MeetingId: "",
-    MeetingSubject: "",
+    Subject: "",
     Location:"",
     ResponsiblePerson: "",
     Priority: "",
@@ -85,8 +85,7 @@ export class AddEditLeadComponent implements OnInit {
 
   task: any = {
     id: "",
-    TaskId: "",
-    TaskSubject: "",
+    Subject: "",
     ResponsiblePerson: "",
     Priority: "",
     CreatedBy: "",
@@ -126,8 +125,36 @@ export class AddEditLeadComponent implements OnInit {
     BYSetPOS: ""
   }
 
+  actionModel: any = {
+    _id: "",
+    Subject: "",
+    Location: "",
+    ResponsiblePerson : "",
+    Priority: "",
+    Types: "",
+    CreatedBy: "",
+    UpdatedBy: "",
+    CreatedDate: "",
+    UpdatedDate: "",
+    EventStartDate: "",
+    EventEndDate: "",
+    ReminderNotification: "",
+    Completed: true,
+    Description: "",
+    RepeatTask: "",
+    Interval: "",
+    RepeatAfter: "",
+    Untill: "",
+    UntillDate: "",
+    UntillCompile:"",
+    RemindUsing: "",
+    RemindTo:""
+
+  }
+
   history: any = {
     id: "",
+    Subject: "",
     Action: "",
     Panel: "",
     CreatedBy: "",
@@ -149,15 +176,20 @@ export class AddEditLeadComponent implements OnInit {
   completesfields: Object;
   repeattaskoptions: { [key: string]: Object }[];
   repeattaskoptionsfields: Object;
+  untills: { [key: string]: Object }[];
+  untillsfields: Object;
+  reminds: { [key: string]: Object }[];
+  remindsfields: Object;
 
   callVM: any;
   meetingVM: any;
   taskVM: any;
-
+  actionModelVM: any;
   tabledata: any;
   meetingtabledata: any;
   tasktabledata: any;
   historytabledata: any;
+  commenttabledata: any;
   ds: any;
 
   public currentView: View = 'Month';
@@ -193,12 +225,13 @@ export class AddEditLeadComponent implements OnInit {
     protected meetingService: MeetingService,
     protected schedulerService: SchedulerService,
     protected historyService: HistoryService,
+    protected commentService: CommentService,
     protected taskService: TaskService)
   {
-    this.GetAllScheduler();
-    this.GetAllCall();
-    this.GetAllMeeting();
-    this.GetAllTask();
+   
+    //this.GetAllCall();
+    //this.GetAllMeeting();
+    //this.GetAllTask();
     this.GetAllHistory();
     this.router.params.subscribe(params => { this.selectedId = +params['id']; });
   }
@@ -208,7 +241,8 @@ export class AddEditLeadComponent implements OnInit {
     this.meetingtabledata = [];
     this.ds = [];
     this.tasktabledata = [];
-    this.historytabledata=[];
+    this.historytabledata = [];
+    this.commenttabledata = [];
 
       this.ResponsiblePersondata = [
       { id: 'Game1', sports: 'Asley Thomas' },
@@ -233,7 +267,8 @@ export class AddEditLeadComponent implements OnInit {
       this.typesfields = { text: 'typesName', value: 'typesId' },
 
 
-      this.repeattaskoptions = [
+        this.repeattaskoptions = [
+        { repeattaskoptionsName: 'Never', repeattaskoptionsId: 0 },
       { repeattaskoptionsName: 'Day',  repeattaskoptionsId: 1  },
       { repeattaskoptionsName: 'Week', repeattaskoptionsId: 2  },
       { repeattaskoptionsName: 'Month', repeattaskoptionsId: 3  },
@@ -247,6 +282,21 @@ export class AddEditLeadComponent implements OnInit {
       { completesName: 'No',  completesId: false },
       ],
       this.completesfields = { text: 'completesName', value: 'completesId' },
+
+        this.untills = [
+        { untillsName: 'No End', untillsId: 1 },
+        { untillsName: 'End Date', untillsId: 2 },
+        { untillsName: 'Compile After', untillsId: 3 },
+        ],
+        this.untillsfields = { text: 'untillsName', value: 'untillsId' },
+
+        this.reminds = [
+        { remindsName: 'Ashley Aldon', remindsId: 1 },
+        { remindsName: 'Mithun Thomas', remindsId: 2 },
+        { remindsName: 'David Backom', remindsId: 3 },
+        { remindsName: 'Raja Thomas', remindsId: 4 },
+        ],
+        this.remindsfields = { text: 'remindsName', value: 'remindsId' },
    
       this.leads = [{ id: 1, name: "test1", description: "test sdf test description1", date: "01-01-2019" },
         { id: 2, name: "test2", description: "test test2 sara description2", date: "01-05-2019" },
@@ -344,19 +394,21 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
-  AddCall(call) {
-    console.log(call);
-    this.service.addCall<any>(call)
+  AddCall(actionModel) {
+    console.log(actionModel);
+    this.service.addCall<any>(actionModel)
       .subscribe(data => {
-        this.callVM = data;
-        console.log(data);
+        this.actionModelVM = data;
         this.GetAllCall();
         this.history.Action = "Call",
+          this.history.Subject = actionModel.Subject,
           this.history.Panel = "Lead",
           this.history.CreatedBy = "1",
           this.history.CreatedDate = new Date(),
-          this.history.Button = "Add Call"
+          this.history.Button = "Added"
         this.AddHistory(this.history);
+
+
       }, error => {
       }, () => { });
    
@@ -379,12 +431,20 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
-  AddMeeting(meeting) {
-    console.log(meeting);
-    this.meetingService.addMeeting<any>(meeting)
+  AddMeeting(actionModel) {
+    console.log(actionModel);
+    this.meetingService.addMeeting<any>(actionModel)
       .subscribe(data => {
-        this.meetingVM = data;
+        this.actionModelVM = data;
+        console.log(data);
         this.GetAllMeeting();
+        this.history.Action = "Meeting",
+          this.history.Subject = actionModel.Subject,
+          this.history.Panel = "Lead",
+          this.history.CreatedBy = "2",
+          this.history.CreatedDate = new Date(),
+          this.history.Button = "Added"
+        this.AddHistory(this.history);
         console.log(data);
       }, error => {
       }, () => { });
@@ -407,18 +467,59 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
-  AddTask(task) {
-    console.log(task);
-    this.taskService.addTask<any>(task)
+  AddTask(actionModel) {
+    this.taskService.addTask<any>(actionModel)
       .subscribe(data => {
-        this.taskVM = data;
+        this.actionModelVM = data;
         this.GetAllTask();
+        this.history.Action = "Task",
+          this.history.Subject = actionModel.Subject,
+          this.history.Panel = "Lead",
+          this.history.CreatedBy = "3",
+          this.history.CreatedDate = new Date(),
+          this.history.Button = "Added"
+        this.AddHistory(this.history);
         console.log(data);
       }, error => {
       }, () => { });
   }
 
-  //Task Methods
+  GetAllComment() {
+    this.commenttabledata = [];
+    this.commentService.getComment<any>()
+      .subscribe(data => {
+        data.map((x) => {
+          this.commenttabledata.push({
+            Description: x.description,
+            Subject: x.taskSubject,
+            ResponsiblePerson: x.responsiblePerson,
+            RepeatTask: x.repeatTask
+          })
+        });
+        console.log("commenttabledata", this.commenttabledata)
+      }, error => {
+      }, () => { });
+  }
+
+
+  AddComment(actionModel) {
+    this.commentService.addComment<any>(actionModel)
+      .subscribe(data => {
+        this.actionModelVM = data;
+        this.GetAllComment();
+        this.history.Action = "Comment",
+          this.history.Subject = actionModel.Subject,
+          this.history.Panel = "Lead",
+          this.history.CreatedBy = "4",
+          this.history.CreatedDate = new Date(),
+          this.history.Button = "Added"
+        this.AddHistory(this.history);
+        console.log(data);
+      }, error => {
+      }, () => { });
+  }
+
+  //History Methods
   GetAllHistory() {
     this.historytabledata = [];
     this.historyService.getHistory<any>()
@@ -427,6 +528,7 @@ export class AddEditLeadComponent implements OnInit {
           this.historytabledata.push({
             Action: x.action,
             Panel: x.panel,
+            Subject:x.subject,
             CreatedBy: x.createdBy,
             CreatedDate: new Date(x.createdDate).toDateString(),
             Button:x.button
@@ -436,11 +538,11 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
+
   AddHistory(history) {
     console.log(history);
     this.historyService.addHistory<any>(history)
       .subscribe(data => {
-       
         this.GetAllHistory();
         console.log(data);
       }, error => {

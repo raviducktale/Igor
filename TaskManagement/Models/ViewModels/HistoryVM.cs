@@ -9,6 +9,7 @@ namespace TaskManagement.Models
     {
         public string _id { get; set; }
         public string Action { get; set; }
+        public string Subject { get; set; }
         public string Panel { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }

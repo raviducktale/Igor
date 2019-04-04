@@ -16,7 +16,7 @@ export class TaskService {
   _config: any;
   constructor(protected http: HttpClient) { }
 
-  private readonly BASE_URL = "http://localhost:53366/api";
+  private readonly BASE_URL  = "https://localhost:44369/api";
 
   private readonly _AddUrl: string = this.BASE_URL + "/Task/Add";
   private readonly _AllUrl: string = this.BASE_URL + "/Task";
@@ -36,8 +36,8 @@ export class TaskService {
     //);
   }
 
-  addTask<T>(emp): Observable<T> {
-    return this.http.post<T>(this._AddUrl, emp, this.getRequestHeaders())
+  addTask<T>(actionModel): Observable<T> {
+    return this.http.post<T>(this._AddUrl, actionModel, this.getRequestHeaders())
     //.catch(error => {
     //  return Observable.throw(error);
     //}

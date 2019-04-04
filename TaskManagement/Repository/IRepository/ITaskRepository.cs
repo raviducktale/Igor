@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskManagement.Models;
+using TaskManagement.Models.ViewModels;
 
 namespace TaskManagement.Repository.IRepository
 {
-  public interface ITaskRepository
+    public interface ITaskRepository
     {
-        Task<List<Models.Tasks>> GetAllTasks();
-        Task<Models.Tasks> GetTask(string id);
-        System.Threading.Tasks.Task AddTask(Models.Tasks item);
+        Task<List<Tasks>> GetAllTasks();
+        Task<Tasks> GetTask(string id);
+        Task<Tasks> AddTask(TasksVM item);
         Task<bool> RemoveTask(string id);
-        System.Threading.Tasks.Task UpdateTask(Models.Tasks item);
+        Task UpdateTask(Tasks item);
     }
 }

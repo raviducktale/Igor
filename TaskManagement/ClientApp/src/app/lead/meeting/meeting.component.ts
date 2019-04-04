@@ -11,7 +11,6 @@ export class MeetingComponent implements OnInit {
  
   meeting: any = {
     id: "",
-    MeetingId: "",
     MeetingSubject: "",
     Location: "",
     ResponsiblePerson: "",

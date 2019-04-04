@@ -27,6 +27,7 @@ namespace TaskManagement.Repository
                 {
                     CreatedDate = DateTime.Now,
                     CreatedBy = 1,
+                    Subject=model.Subject,
                     Action=model.Action,
                     Panel=model.Panel,
                     Button=model.Button,
