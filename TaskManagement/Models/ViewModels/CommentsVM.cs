@@ -15,5 +15,7 @@ namespace TaskManagement.Models.ViewModels
         public int? UpdatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public bool Completed { get; set; }
+
     }
 }

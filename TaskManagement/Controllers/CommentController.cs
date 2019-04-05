@@ -61,7 +61,9 @@ namespace TaskManagement.Controllers
                 {
                     _id = ObjectId.Parse(model._id),
                     Subject = model.Subject,
-                    ResponsiblePerson = model.ResponsiblePerson
+                    ResponsiblePerson = model.ResponsiblePerson,
+                    Completed=model.Completed
+                    
                 };
 
 

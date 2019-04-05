@@ -21,6 +21,12 @@ body {
   font-family: "Source Sans Pro", sans-serif;
 }
 
+.historystyle {
+  border-style: double;
+  border-color: red;
+}
+
+
 .lead-add-list {
   padding: 40px 0;
 }

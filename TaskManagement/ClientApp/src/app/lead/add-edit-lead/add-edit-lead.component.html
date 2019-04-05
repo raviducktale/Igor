@@ -45,21 +45,22 @@
           <div class="card b mb-2">
             <div class="card-body bt mb-3">
               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link" (click)="selectAction(ACTIONS?.Call)" id="call-tab" data-toggle="tab" href="#call" role="tab" aria-controls="call" aria-selected="true">Call</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" (click)="selectAction(ACTIONS?.Comment)" id="comment-tab" data-toggle="tab" href="#call" role="tab" aria-controls="comment" aria-selected="false">Comment</a>
-                </li>
+
                 <li class="nav-item">
                   <a class="nav-link" (click)="selectAction(ACTIONS?.Task)" id="task-tab" data-toggle="tab" href="#call" role="tab" aria-controls="task" aria-selected="false">Task</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" (click)="selectAction(ACTIONS?.Meeting)" id="meeting-tab" data-toggle="tab" href="#call" role="tab" aria-controls="meeting" aria-selected="false">Meeting</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" (click)="selectAction(ACTIONS?.Call)" id="call-tab" data-toggle="tab" href="#call" role="tab" aria-controls="call" aria-selected="true">Call</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" (click)="selectAction(ACTIONS?.Comment)" id="comment-tab" data-toggle="tab" href="#call" role="tab" aria-controls="comment" aria-selected="false">Comment</a>
+                </li>
                 <!--<li class="nav-item">
-                  <a class="nav-link"  id="scheduler-tab" data-toggle="tab" href="#scheduler" role="tab" aria-controls="scheduler" aria-selected="false">Scheduler</a>
-                </li>-->
+    <a class="nav-link"  id="scheduler-tab" data-toggle="tab" href="#scheduler" role="tab" aria-controls="scheduler" aria-selected="false">Scheduler</a>
+  </li>-->
 
               </ul>
 
@@ -67,21 +68,24 @@
                 <div class="tab-pane fade show" id="call" role="tabpanel" aria-labelledby="call-tab" *ngIf="selectedAction!==undefined">
                   <div class="row">
 
-                    <div class="col-12" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task " >
+                    <div class="col-12" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task ">
                       <div class="form-group">
                         <ejs-richtexteditor id='defaultRTE' [(value)]='value' [toolbarSettings]='tools' [quickToolbarSettings]='quickTools' [(ngModel)]="actionModel.Description"></ejs-richtexteditor>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task || selectedAction===ACTIONS?.Comment">
+                    <div class="col-12" data-toggle="tooltip" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task || selectedAction===ACTIONS?.Comment">
                       <div class="form-group">
-                        <input class="e-input" required type="text" placeholder="Subject" [(ngModel)]="actionModel.Subject" />
+                        <input type="hidden" id="_id" [(ngModel)]="actionModel._id" />
+                        <ejs-tooltip id='tooltip' content={{actionModel.Subject}} target="#subject">
+                          <input class="e-input" id="subject" required type="text" placeholder="Subject" [(ngModel)]="actionModel.Subject" />
+                        </ejs-tooltip>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6"   *ngIf="selectedAction===ACTIONS?.Meeting" >
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Meeting">
                       <div class="form-group">
-                        <input class="e-input" type="text" placeholder="Location" [(ngModel)]="actionModel.Location"  />
+                        <input class="e-input" type="text" placeholder="Location" [(ngModel)]="actionModel.Location" />
                       </div>
                     </div>
 
@@ -105,11 +109,11 @@
 
                     <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
                       <div class="form-group">
-                        <ejs-datetimepicker [(ngModel)]="actionModel.EventStartDate"  placeholder="Event Start Date"></ejs-datetimepicker>
+                        <ejs-datetimepicker [(ngModel)]="actionModel.EventStartDate" placeholder="Event Start Date" (ngModelChange)="SetEndDate(actionModel)"></ejs-datetimepicker>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6"  *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
                       <div class="form-group">
                         <ejs-datetimepicker [(ngModel)]="actionModel.EventEndDate" placeholder="Event End Date"></ejs-datetimepicker>
                       </div>
@@ -121,69 +125,114 @@
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
+                    <!-- <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">-->
+                    <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <ejs-dropdownlist id='ddlelement' [dataSource]='completes' [fields]='completesfields'  placeholder="Completed" [(ngModel)]="actionModel.Completed"></ejs-dropdownlist>
+                        <input type="radio" name="season" [value]="true" checked="checked" [(ngModel)]="actionModel.Completed">Completed
+                        <input type="radio" name="season" [value]="false" [(ngModel)]="actionModel.Completed"> Not-Completed
                       </div>
                     </div>
 
                     <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting  || selectedAction===ACTIONS?.Task">
                       <div class="form-group">
-                        <ejs-dropdownlist id='ddlelement' [dataSource]='repeattaskoptions' [value]='value' [fields]='repeattaskoptionsfields'  placeholder="Repeat Task" [(ngModel)]="actionModel.RepeatTask"></ejs-dropdownlist>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='repeattaskoptions' [value]='value' [fields]='repeattaskoptionsfields' placeholder="Repeat Task" [(ngModel)]="actionModel.RepeatTask"></ejs-dropdownlist>
                       </div>
                     </div>
 
-                    <!--<div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
+                    <!--////////////////////////////////////////////////////////-->
+
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0">
                       <div class="form-group">
-                        <ejs-numerictextbox value='0' format='###.##' [(ngModel)]="actionModel.Interval" ></ejs-numerictextbox>
+                        <ejs-numerictextbox placeholder="Repeat Every" format='###.##' [(ngModel)]="actionModel.RepeatEvery"></ejs-numerictextbox>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 && actionModel.RepeatTask ===2 || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 && actionModel.RepeatTask ===2   || selectedAction===ACTIONS?.Task  && actionModel.RepeatTask !==0 && actionModel.RepeatTask ===2">
                       <div class="form-group">
-                        <ejs-datetimepicker [(ngModel)]="actionModel.RepeatAfter" placeholder="Repeat After" ></ejs-datetimepicker>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='repeatOnWeekDays' [value]='value' [fields]='repeatOnWeekfields' placeholder="Repeat On Week Day" [(ngModel)]="actionModel.RepeatOnWeekDay"></ejs-dropdownlist>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
+
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4)|| selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4) || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4)">
                       <div class="form-group">
-                        <ejs-dropdownlist id='ddlelement' [dataSource]='untills' [value]='value' [fields]='untillsfields'  placeholder="Untill" [(ngModel)]="actionModel.Untill"></ejs-dropdownlist>
+                        <ejs-numerictextbox placeholder="Repeat On Day" format='###.##' [(ngModel)]="actionModel.RepeatOnDay"></ejs-numerictextbox>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4) || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4) || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4)">
                       <div class="form-group">
-                        <ejs-datetimepicker [(ngModel)]="actionModel.UntillDate"  placeholder="Untill Date"></ejs-datetimepicker>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='willRepeats' [value]='value' [fields]='willRepeatsfields' placeholder="Will Repeat On" [(ngModel)]="actionModel.WillRepeat"></ejs-dropdownlist>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4) || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4)   || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0 && (actionModel.RepeatTask ===3|| actionModel.RepeatTask ===4)">
                       <div class="form-group">
-                        <ejs-numerictextbox value='0' format='###.##'  [(ngModel)]="actionModel.UntillCompile"></ejs-numerictextbox>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='willRepeatOnWeekDays' [value]='value' [fields]='willRepeatOnWeekDaysfields' placeholder="Will Repeat On Week day" [(ngModel)]="actionModel.WillRepeatWeekDay"></ejs-dropdownlist>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting || selectedAction===ACTIONS?.Task">
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 && actionModel.RepeatTask ===4 || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 && actionModel.RepeatTask ===4 || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0 && actionModel.RepeatTask ===4">
                       <div class="form-group">
-                        <ejs-datetimepicker [(ngModel)]="actionModel.RemindUsing"  placeholder="Remind Using"></ejs-datetimepicker>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='repeatonmonths' [value]='value' [fields]='repeatonmonthsfields' placeholder="Will Repeat On Month" [(ngModel)]="actionModel.RepeatOnMonth"></ejs-dropdownlist>
                       </div>
                     </div>
 
-                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call || selectedAction===ACTIONS?.Meeting|| selectedAction===ACTIONS?.Task">
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call  && actionModel.RepeatTask !==0  || selectedAction===ACTIONS?.Meeting  && actionModel.RepeatTask !==0  || selectedAction===ACTIONS?.Task  && actionModel.RepeatTask !==0 ">
                       <div class="form-group">
-                        <ejs-dropdownlist id='ddlelement' [dataSource]='reminds' [value]='value' [fields]='remindsfields' placeholder="Remind To"  [(ngModel)]="actionModel.RemindTo"></ejs-dropdownlist>
+                        <ejs-numerictextbox placeholder="Interval" format='###.##' [(ngModel)]="actionModel.Interval"></ejs-numerictextbox>
                       </div>
-                    </div>-->
+                    </div>
+
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call  && actionModel.RepeatTask !==0 || selectedAction===ACTIONS?.Meeting  && actionModel.RepeatTask !==0  || selectedAction===ACTIONS?.Task  && actionModel.RepeatTask !==0 ">
+                      <div class="form-group">
+                        <ejs-datetimepicker [(ngModel)]="actionModel.RepeatAfter" placeholder="Repeat After"></ejs-datetimepicker>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call  && actionModel.RepeatTask !==0 || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0  || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0">
+                      <div class="form-group">
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='untills' [value]='value' [fields]='untillsfields' placeholder="Untill" [(ngModel)]="actionModel.Untill"></ejs-dropdownlist>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0  && actionModel.Untill ===2  || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 && actionModel.Untill ===2 || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0 && actionModel.Untill ===2">
+                      <div class="form-group">
+                        <ejs-datetimepicker [(ngModel)]="actionModel.UntillDate" placeholder="Untill Date"></ejs-datetimepicker>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 && actionModel.Untill ===3 || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 && actionModel.Untill ===3  || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0 && actionModel.Untill ===3">
+                      <div class="form-group">
+                        <ejs-numerictextbox placeholder="Untill Compile After" format='###.##' [(ngModel)]="actionModel.UntillCompile"></ejs-numerictextbox>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0">
+                      <div class="form-group">
+                        <ejs-datetimepicker [(ngModel)]="actionModel.RemindUsing" placeholder="Remind Using"></ejs-datetimepicker>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6" *ngIf="selectedAction===ACTIONS?.Call && actionModel.RepeatTask !==0 || selectedAction===ACTIONS?.Meeting && actionModel.RepeatTask !==0 || selectedAction===ACTIONS?.Task && actionModel.RepeatTask !==0">
+                      <div class="form-group">
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='reminds' [value]='value' [fields]='remindsfields' placeholder="Remind To" [(ngModel)]="actionModel.RemindTo"></ejs-dropdownlist>
+                      </div>
+                    </div>
 
                     <div class="col-12 col-sm-6">
                       <div class="form-group">
-                        <button (click)="AddCall(actionModel)" *ngIf="selectedAction===ACTIONS?.Call" class="btn btn-sm btn-primary btn-block">Add Call</button>
-                        <button (click)="AddMeeting(actionModel)" *ngIf="selectedAction===ACTIONS?.Meeting" class="btn btn-sm btn-primary btn-block">Add Meeting</button>
-                        <button (click)="AddTask(actionModel)" *ngIf="selectedAction===ACTIONS?.Task" class="btn btn-sm btn-primary btn-block">Add Task</button>
-                        <button (click)="AddComment(actionModel)" *ngIf="selectedAction===ACTIONS?.Comment" class="btn btn-sm btn-primary btn-block">Add Comment</button>
+                        <button (click)="AddCall(actionModel)" *ngIf="selectedAction===ACTIONS?.Call && ButtonEvent ==='Save'" class="btn btn-sm btn-primary btn-block">Add Call</button>
+                        <button (click)="UpdateCall(actionModel)" *ngIf="selectedAction===ACTIONS?.Call && ButtonEvent ==='Update'" class="btn btn-sm btn-primary btn-block">Update Call</button>
+                        <button (click)="AddMeeting(actionModel)" *ngIf="selectedAction===ACTIONS?.Meeting && ButtonEvent ==='Save'" class="btn btn-sm btn-primary btn-block">Add Meeting</button>
+                        <button (click)="UpdateMeeting(actionModel)" *ngIf="selectedAction===ACTIONS?.Meeting && ButtonEvent ==='Update'" class="btn btn-sm btn-primary btn-block">Update Meeting</button>
+                        <button (click)="AddTask(actionModel)" *ngIf="selectedAction===ACTIONS?.Task && ButtonEvent ==='Save'" class="btn btn-sm btn-primary btn-block">Add Task</button>
+                        <button (click)="UpdateTask(actionModel)" *ngIf="selectedAction===ACTIONS?.Task && ButtonEvent ==='Update'" class="btn btn-sm btn-primary btn-block">Update Task</button>
+                        <button (click)="AddComment(actionModel)" *ngIf="selectedAction===ACTIONS?.Comment && ButtonEvent ==='Save'" class="btn btn-sm btn-primary btn-block">Add Comment</button>
+                        <button (click)="UpdateComment(actionModel)" *ngIf="selectedAction===ACTIONS?.Comment && ButtonEvent ==='Update'" class="btn btn-sm btn-primary btn-block">Update Comment</button>
 
                       </div>
-                     
+
 
                     </div>
 
@@ -296,14 +345,26 @@
                   <ng-container *ngFor="let historydata of historytabledata;let i=index">
                     <!--<li class="timeline-separator">{{historydata?.CreatedDate}}</li>-->
                     <li [ngClass]="[(i%2) === 0 ? '' : 'timeline-inverted']" *ngIf="i<limit">
-                      <div class="timeline-badge primary"><em [ngClass]="[historydata.Action === 'Call' ? 'fa fa-phone' : 'fa fa-user']"></em></div>
-                      <div class="timeline-card">
+                      <div class="timeline-badge primary">
+                        <em *ngIf="historydata.Action==='Call'" class="fa fa-phone"></em>
+                        <em *ngIf="historydata.Action==='Meeting'" class="fa fa-user"></em>
+                        <em *ngIf="historydata.Action==='Task'" class="fa fa-list"></em>
+                        <em *ngIf="historydata.Action==='Comment'" class="fa fa-comments"></em>
+                      </div>
+                      <div [ngClass]="[historydata.Completed === false ? 'timeline-card historystyle' : 'timeline-card']" class="timeline-card">
                         <div [ngClass]="[(i%2) === 0 ? 'popover left' : 'popover right']">
-                          <h4 class="popover-header">{{historydata?.Action}}</h4>
+                          <h4 class="popover-header">
+                            {{historydata?.Action}}
+
+                            <input type="checkbox" *ngIf="historydata.Completed===true"  (click)="updateComplete(historydata.ActionId,historydata.Action,historydata._id,false)" checked  style="float:right; height:22px; width:22px" />
+                            <input type="checkbox" *ngIf="historydata.Completed===false"   (click)="updateComplete(historydata.ActionId,historydata.Action,historydata._id,true)" style="float:right; height:22px; width:22px" />
+
+                            <button (click)="EditAction(historydata.ActionId,historydata.Action,historydata._id)" class="fa fa-edit"></button>
+                          </h4>
                           <div class="arrow"></div>
                           <div class="popover-body">
                             <p>
-                              <br><small>User Added a {{historydata?.Action}} with {{historydata?.Subject}}</small>
+                              <br><small>User {{historydata?.Button}} a {{historydata?.Action}} with {{historydata?.Subject}}</small>
                             </p>
                             <p>Created On: {{historydata?.CreatedDate | date: 'MM-dd-yyy hh:mm:ss'}}</p>
                           </div>

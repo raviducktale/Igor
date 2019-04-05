@@ -11,6 +11,7 @@ import { EventSettingsModel, View, PopupOpenEventArgs, ActionEventArgs,  } from 
 import { DayService, WeekService, MonthService } from '@syncfusion/ej2-angular-schedule';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService  } from '@syncfusion/ej2-angular-richtexteditor';
 import { debug } from 'util';
+import { fn } from '@angular/compiler/src/output/output_ast';
 
 enum ACTIONS {
   Call,
@@ -24,7 +25,7 @@ enum ACTIONS {
   selector: 'app-add-edit-lead',
   templateUrl: './add-edit-lead.component.html',
   styleUrls: ['./add-edit-lead.component.css'],
-  providers: [DayService, WeekService, MonthService, ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService ],
+  providers: [DayService, WeekService, MonthService, ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService],
 })
 
 export class AddEditLeadComponent implements OnInit {
@@ -46,7 +47,7 @@ export class AddEditLeadComponent implements OnInit {
     image: [
       'Replace', 'Align', 'Caption', 'Remove', 'InsertLink', '-', 'Display', 'AltText', 'Dimension']
   };
- 
+
   call: any = {
     id: "",
     Subject: "",
@@ -68,7 +69,7 @@ export class AddEditLeadComponent implements OnInit {
   meeting: any = {
     id: "",
     Subject: "",
-    Location:"",
+    Location: "",
     ResponsiblePerson: "",
     Priority: "",
     CreatedBy: "",
@@ -125,38 +126,15 @@ export class AddEditLeadComponent implements OnInit {
     BYSetPOS: ""
   }
 
-  actionModel: any = {
-    _id: "",
-    Subject: "",
-    Location: "",
-    ResponsiblePerson : "",
-    Priority: "",
-    Types: "",
-    CreatedBy: "",
-    UpdatedBy: "",
-    CreatedDate: "",
-    UpdatedDate: "",
-    EventStartDate: "",
-    EventEndDate: "",
-    ReminderNotification: "",
-    Completed: true,
-    Description: "",
-    RepeatTask: "",
-    Interval: "",
-    RepeatAfter: "",
-    Untill: "",
-    UntillDate: "",
-    UntillCompile:"",
-    RemindUsing: "",
-    RemindTo:""
-
-  }
+  actionModel: any = this.fnActionModel();
 
   history: any = {
     id: "",
     Subject: "",
     Action: "",
+    ActionId: "",
     Panel: "",
+    Completed:"",
     CreatedBy: "",
     CreatedDate: "",
     Button: "",
@@ -166,6 +144,9 @@ export class AddEditLeadComponent implements OnInit {
   selectedLead: any;
   selectedId: number;
 
+  ButtonEvent: string = 'Save';
+  Editedhistoryid: string;
+  historyBox: string;
   ResponsiblePersondata: Object[];
   ResponsiblePersonfields: Object;
   priorities: { [key: string]: Object }[];
@@ -174,12 +155,22 @@ export class AddEditLeadComponent implements OnInit {
   typesfields: Object;
   completes: { [key: string]: Object }[];
   completesfields: Object;
+  completes1: string[];
   repeattaskoptions: { [key: string]: Object }[];
   repeattaskoptionsfields: Object;
   untills: { [key: string]: Object }[];
   untillsfields: Object;
   reminds: { [key: string]: Object }[];
   remindsfields: Object;
+
+  repeatOnWeekDays: { [key: string]: Object }[];
+  repeatOnWeekfields: Object;
+  willRepeats: { [key: string]: Object }[];
+  willRepeatsfields: Object;
+  willRepeatOnWeekDays: { [key: string]: Object }[];
+  willRepeatOnWeekDaysfields: Object;
+  repeatonmonths: { [key: string]: Object }[];
+  repeatonmonthsfields: Object;
 
   callVM: any;
   meetingVM: any;
@@ -206,29 +197,28 @@ export class AddEditLeadComponent implements OnInit {
       StartTimezone: "",
       Subject: "subject1",
     },
-      {
-        Description: "Description2",
-        EndTime: "2019-04-07T22:00:00.000Z",
-        EndTimezone: "",
-        Id: 2,
-        IsAllDay: false,
-        Location: "",
-        StartTime: "2019-04-07T18:30:00.000Z",
-        StartTimezone: "",
-        Subject: "subject2",
-      },
+    {
+      Description: "Description2",
+      EndTime: "2019-04-07T22:00:00.000Z",
+      EndTimezone: "",
+      Id: 2,
+      IsAllDay: false,
+      Location: "",
+      StartTime: "2019-04-07T18:30:00.000Z",
+      StartTimezone: "",
+      Subject: "subject2",
+    },
     ]
   };
 
   constructor(private router: ActivatedRoute,
-    protected service: CallService,
+    protected callService: CallService,
     protected meetingService: MeetingService,
     protected schedulerService: SchedulerService,
     protected historyService: HistoryService,
     protected commentService: CommentService,
-    protected taskService: TaskService)
-  {
-   
+    protected taskService: TaskService) {
+
     //this.GetAllCall();
     //this.GetAllMeeting();
     //this.GetAllTask();
@@ -237,6 +227,7 @@ export class AddEditLeadComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.tabledata = [];
     this.meetingtabledata = [];
     this.ds = [];
@@ -244,7 +235,7 @@ export class AddEditLeadComponent implements OnInit {
     this.historytabledata = [];
     this.commenttabledata = [];
 
-      this.ResponsiblePersondata = [
+    this.ResponsiblePersondata = [
       { id: 'Game1', sports: 'Asley Thomas' },
       { id: 'Game2', sports: 'Mithun' },
       { id: 'Game3', sports: 'Abhiram Thomas' },
@@ -252,102 +243,394 @@ export class AddEditLeadComponent implements OnInit {
       { id: 'Game5', sports: 'Baljeet' }
     ],
       this.ResponsiblePersonfields = { text: 'sports', value: 'sports' },
-
       this.priorities = [
-      { prioritiesName: 'High', prioritiesId: 1  },
-      { prioritiesName: 'Medium', prioritiesId: 2  },
-      { prioritiesName: 'Low',  prioritiesId: 3 },
+        { prioritiesName: 'High', prioritiesId: 1 },
+        { prioritiesName: 'Medium', prioritiesId: 2 },
+        { prioritiesName: 'Low', prioritiesId: 3 },
       ],
       this.prioritiesfields = { text: 'prioritiesName', value: 'prioritiesId' },
-
       this.types = [
-      { typesName: 'Inbound',  typesId: 1 },
-      { typesName: 'Outbound', typesId: 2 },
+        { typesName: 'Inbound', typesId: 1 },
+        { typesName: 'Outbound', typesId: 2 },
       ],
       this.typesfields = { text: 'typesName', value: 'typesId' },
-
-
-        this.repeattaskoptions = [
+      this.repeattaskoptions = [
         { repeattaskoptionsName: 'Never', repeattaskoptionsId: 0 },
-      { repeattaskoptionsName: 'Day',  repeattaskoptionsId: 1  },
-      { repeattaskoptionsName: 'Week', repeattaskoptionsId: 2  },
-      { repeattaskoptionsName: 'Month', repeattaskoptionsId: 3  },
-      { repeattaskoptionsName: 'Year', repeattaskoptionsId: 4  },
+        { repeattaskoptionsName: 'Daily', repeattaskoptionsId: 1 },
+        { repeattaskoptionsName: 'Week', repeattaskoptionsId: 2 },
+        { repeattaskoptionsName: 'Month', repeattaskoptionsId: 3 },
+        { repeattaskoptionsName: 'Year', repeattaskoptionsId: 4 },
       ],
       this.repeattaskoptionsfields = { text: 'repeattaskoptionsName', value: 'repeattaskoptionsId' },
-
-
       this.completes = [
-      { completesName: 'Yes',  completesId: true  },
-      { completesName: 'No',  completesId: false },
+        { completesName: 'Yes', completesId: true },
+        { completesName: 'No', completesId: false },
       ],
       this.completesfields = { text: 'completesName', value: 'completesId' },
-
-        this.untills = [
+      this.untills = [
         { untillsName: 'No End', untillsId: 1 },
         { untillsName: 'End Date', untillsId: 2 },
         { untillsName: 'Compile After', untillsId: 3 },
-        ],
-        this.untillsfields = { text: 'untillsName', value: 'untillsId' },
-
-        this.reminds = [
+      ],
+      this.untillsfields = { text: 'untillsName', value: 'untillsId' },
+      this.reminds = [
         { remindsName: 'Ashley Aldon', remindsId: 1 },
         { remindsName: 'Mithun Thomas', remindsId: 2 },
         { remindsName: 'David Backom', remindsId: 3 },
         { remindsName: 'Raja Thomas', remindsId: 4 },
-        ],
-        this.remindsfields = { text: 'remindsName', value: 'remindsId' },
-   
+      ],
+      this.remindsfields = { text: 'remindsName', value: 'remindsId' },
+
+      this.completes1 = ['Yes', 'No'];
+
+      this.repeatOnWeekDays = [
+        { repeatOnWeekDaysName: 'Sunday', repeatOnWeekDaysId: 1 },
+        { repeatOnWeekDaysName: 'Monday', repeatOnWeekDaysId: 2 },
+        { repeatOnWeekDaysName: 'Tuesday', repeatOnWeekDaysId: 3 },
+        { repeatOnWeekDaysName: 'Wednesday', repeatOnWeekDaysId: 4 },
+      ],
+      this.repeatOnWeekfields = { text: 'repeatOnWeekDaysName', value: 'repeatOnWeekDaysId' },
+      this.willRepeats = [
+        { willRepeatsName: 'First', willRepeatsId: 1 },
+        { willRepeatsName: 'Second', willRepeatsId: 2 },
+        { willRepeatsName: 'Third', willRepeatsId: 3 },
+        { willRepeatsName: 'Forth', willRepeatsId: 4 },
+      ],
+      this.willRepeatsfields = { text: 'willRepeatsName', value: 'willRepeatsId' },
+      this.willRepeatOnWeekDays = [
+        { willRepeatOnWeekDaysName: 'Sund', willRepeatOnWeekDaysId: 1 },
+        { willRepeatOnWeekDaysName: 'Mond', willRepeatOnWeekDaysId: 2 },
+        { willRepeatOnWeekDaysName: 'Tue', willRepeatOnWeekDaysId: 3 },
+        { willRepeatOnWeekDaysName: 'Wed', willRepeatOnWeekDaysId: 4 },
+      ],
+      this.willRepeatOnWeekDaysfields = { text: 'willRepeatOnWeekDaysName', value: 'willRepeatOnWeekDaysId' },
+      this.repeatonmonths = [
+        { repeatonmonthsName: 'Jan', repeatonmonthsId: 1 },
+        { repeatonmonthsName: 'Feb', repeatonmonthsId: 2 },
+        { repeatonmonthsName: 'Mar', repeatonmonthsId: 3 },
+        { repeatonmonthsName: 'Apr', repeatonmonthsId: 4 },
+      ],
+      this.repeatonmonthsfields = { text: 'repeatonmonthsName', value: 'repeatonmonthsId' },
+
       this.leads = [{ id: 1, name: "test1", description: "test sdf test description1", date: "01-01-2019" },
-        { id: 2, name: "test2", description: "test test2 sara description2", date: "01-05-2019" },
-        { id: 3, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
-        { id: 4, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
-        { id: 5, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
-        { id: 6, name: "test4", description: "test 4444 dfytr description3", date: "03-02-2019" }]
+      { id: 2, name: "test2", description: "test test2 sara description2", date: "01-05-2019" },
+      { id: 3, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
+      { id: 4, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
+      { id: 5, name: "test3", description: "test test356 dfytr description3", date: "02-01-2019" },
+      { id: 6, name: "test4", description: "test 4444 dfytr description3", date: "03-02-2019" }]
 
-      if (this.selectedId)
+    if (this.selectedId) {
       this.selectedLead = this.leads.find(x => x.id == this.selectedId);
-      else
+    }
+    else {
       this.selectedLead = { id: 0, name: "", description: "", date: "" }
-
+    }
   }
 
   selectAction(action) {
     this.selectedAction = action;
+    this.actionModel = this.fnActionModel();
+    this.ButtonEvent = 'Save';
+
   }
+
   showAll(_limit) {
     this.limit = _limit;
   }
 
-  //Scheduler Methods
-   GetAllScheduler() {
-    this.ds = [];
-     this.schedulerService.getScheduler<any>()
-    .subscribe(data => {
-      data.map((x) => {
+  SetEndDate(actionModel) {
+    actionModel.EventEndDate = actionModel.EventStartDate;
+    let newDate = new Date(actionModel.EventEndDate);
+    newDate.setMinutes(newDate.getMinutes() + 30);
+    actionModel.EventEndDate = newDate;
+  }
+ 
+  updateComplete(actionid,Action,historyid,completedata) {
+    if (Action == "Call") {
+      let call = this.fnActionModel();
+      this.callService.getCallById<any>(actionid)
+        .subscribe(data => {
+            call._id = data._id,
+            call.ResponsiblePerson = data.responsiblePerson,
+            call.Subject = data.subject,
+            call.Priority = data.priority,
+            call.Types = data.types,
+            call.CreatedBy = data.createdBy,
+            call.UpdatedBy = data.updatedBy,
+            call.CreatedDate = data.createdDate,
+            call.UpdatedDate = data.updatedDate,
+            call.EventStartDate = data.eventStartDate,
+            call.EventEndDate = data.eventEndDate,
+            call.ReminderNotification = data.reminderNotification,
+            call.RepeatTask = data.repeatTask,
+              call.Completed = completedata,
+            call.Description = data.description,
+            call.Interval = data.interval,
+            call.RepeatAfter = data.repeatAfter,
+            call.Untill = data.untill,
+            call.UntillDate = data.untillDate,
+            call.UntillCompile = data.untillCompile,
+            call.RemindUsing = data.remindUsing,
+            call.RemindTo = data.remindTo,
+            call.RepeatEvery = data.repeatEvery,
+            call.RepeatOnWeekDay = data.repeatOnWeekDay,
+            call.RepeatOnDay = data.repeatOnDay,
+            call.WillRepeat = data.willRepeat,
+            call.WillRepeatWeekDay = data.willRepeatWeekDay,
+            call.RepeatOnMonth = data.repeatOnMonth
+          this.Editedhistoryid = historyid;
+          this.UpdateCall(call);
+        }, error => {
+        }, () => { });
+    }
+    else if (Action == "Meeting") {
+      let meeting = this.fnActionModel();
+      this.meetingService.getMeetingById<any>(actionid)
+        .subscribe(data => {
+            meeting._id = data._id,
+            meeting.ResponsiblePerson = data.responsiblePerson,
+            meeting.Subject = data.subject,
+            meeting.Priority = data.priority,
+            meeting.Location = data.location,
+            meeting.CreatedBy = data.createdBy,
+            meeting.UpdatedBy = data.updatedBy,
+            meeting.CreatedDate = data.createdDate,
+            meeting.UpdatedDate = data.updatedDate,
+            meeting.EventStartDate = data.eventStartDate,
+            meeting.EventEndDate = data.eventEndDate,
+            meeting.ReminderNotification = data.reminderNotification,
+            meeting.RepeatTask = data.repeatTask,
+              meeting.Completed = completedata,
+            meeting.Description = data.description,
+            meeting.Interval = data.interval,
+            meeting.RepeatAfter = data.repeatAfter,
+            meeting.Untill = data.untill,
+            meeting.UntillDate = data.untillDate,
+            meeting.UntillCompile = data.untillCompile,
+            meeting.RemindUsing = data.remindUsing,
+            meeting.RemindTo = data.remindTo,
+            meeting.RepeatEvery = data.repeatEvery,
+            meeting.RepeatOnWeekDay = data.repeatOnWeekDay,
+            meeting.RepeatOnDay = data.repeatOnDay,
+            meeting.WillRepeat = data.willRepeat,
+            meeting.WillRepeatWeekDay = data.willRepeatWeekDay,
+            meeting.RepeatOnMonth = data.repeatOnMonth
+          this.Editedhistoryid = historyid;
+          this.UpdateMeeting(meeting);
+        }, error => {
+        }, () => { });
+    }
+    else if (Action == "Task") {
+      let task = this.fnActionModel();
+      this.taskService.getTaskById<any>(actionid)
+        .subscribe(data => {
+            task._id = data._id,
+            task.ResponsiblePerson = data.responsiblePerson,
+            task.Subject = data.subject,
+            task.Priority = data.priority,
+            task.Types = data.types,
+            task.CreatedBy = data.createdBy,
+            task.UpdatedBy = data.updatedBy,
+            task.CreatedDate = data.createdDate,
+            task.UpdatedDate = data.updatedDate,
+            task.EventStartDate = data.eventStartDate,
+            task.EventEndDate = data.eventEndDate,
+            task.ReminderNotification = data.reminderNotification,
+            task.RepeatTask = data.repeatTask,
+            task.Completed = completedata,
+            task.Description = data.description,
+            task.Interval = data.interval,
+            task.RepeatAfter = data.repeatAfter,
+            task.Untill = data.untill,
+            task.UntillDate = data.untillDate,
+            task.UntillCompile = data.untillCompile,
+            task.RemindUsing = data.remindUsing,
+            task.RemindTo = data.remindTo,
+            task.RepeatEvery = data.repeatEvery,
+            task.RepeatOnWeekDay = data.repeatOnWeekDay,
+            task.RepeatOnDay = data.repeatOnDay,
+            task.WillRepeat = data.willRepeat,
+            task.WillRepeatWeekDay = data.willRepeatWeekDay,
+            task.RepeatOnMonth = data.repeatOnMonth
+          this.Editedhistoryid = historyid;
+          this.UpdateTask(task);
+        }, error => {
+        }, () => { });
+    }
+    else {
+      let comment = this.fnActionModel();
+      this.commentService.getCommentById<any>(actionid)
+        .subscribe(data => {
+            comment._id = data._id,
+            comment.ResponsiblePerson = data.responsiblePerson,
+            comment.Subject = data.subject,
+            comment.CreatedBy = data.createdBy,
+            comment.UpdatedBy = data.updatedBy,
+            comment.CreatedDate = data.createdDate,
+            comment.UpdatedDate = data.updatedDate,
+            comment.Completed = completedata
 
-        this.ds.push({
-          Description: x.description,
-          EndTime: new Date(x.endTime).toISOString(),
-          EndTimezone: x.endTimezone,
-          Id: x.id,
-          IsAllDay: x.isAllDay,
-          Location: x.location,
-          StartTime: new Date(x.startTime).toISOString(),
-          Subject: x.subject,
-          StartTimezone: x.startTimezone,
-        })
-        this.eventSettings.dataSource = this.ds;
-        console.log("dataSource", this.ds);
-      });
-       
-        
+          this.Editedhistoryid = historyid;
+          this.UpdateComment(comment);
+        }, error => {
+        }, () => { });
+    }
+
+  }
+
+  EditAction(id, Action, historyid) {
+    this.Editedhistoryid = historyid;
+    this.ButtonEvent = 'Update';
+    this.historyBox = Action;
+    if (Action == "Call") {
+      this.callService.getCallById<any>(id)
+        .subscribe(data => {
+          this.actionModel._id = data._id,
+            this.actionModel.ResponsiblePerson = data.responsiblePerson,
+            this.actionModel.Subject = data.subject,
+            this.actionModel.Priority = data.priority,
+            this.actionModel.Types = data.types,
+            this.actionModel.CreatedBy = data.createdBy,
+            this.actionModel.UpdatedBy = data.updatedBy,
+            this.actionModel.CreatedDate = data.createdDate,
+            this.actionModel.UpdatedDate = data.updatedDate,
+            this.actionModel.EventStartDate = data.eventStartDate,
+            this.actionModel.EventEndDate = data.eventEndDate,
+            this.actionModel.ReminderNotification = data.reminderNotification,
+            this.actionModel.RepeatTask = data.repeatTask,
+            this.actionModel.Completed = data.completed,
+            this.actionModel.Description = data.description,
+            this.actionModel.Interval = data.interval,
+            this.actionModel.RepeatAfter = data.repeatAfter,
+            this.actionModel.Untill = data.untill,
+            this.actionModel.UntillDate = data.untillDate,
+            this.actionModel.UntillCompile = data.untillCompile,
+            this.actionModel.RemindUsing = data.remindUsing,
+            this.actionModel.RemindTo = data.remindTo,
+            this.actionModel.RepeatEvery = data.repeatEvery,
+            this.actionModel.RepeatOnWeekDay = data.repeatOnWeekDay,
+            this.actionModel.RepeatOnDay = data.repeatOnDay,
+            this.actionModel.WillRepeat = data.willRepeat,
+            this.actionModel.WillRepeatWeekDay = data.willRepeatWeekDay,
+            this.actionModel.RepeatOnMonth = data.repeatOnMonth
+        }, error => {
+        }, () => { });
+
+
+    }
+
+    else if (Action == "Meeting") {
+      this.meetingService.getMeetingById<any>(id)
+        .subscribe(data => {
+          this.actionModel._id = data._id,
+            this.actionModel.ResponsiblePerson = data.responsiblePerson,
+            this.actionModel.Subject = data.subject,
+            this.actionModel.Priority = data.priority,
+            this.actionModel.Location = data.location,
+            this.actionModel.CreatedBy = data.createdBy,
+            this.actionModel.UpdatedBy = data.updatedBy,
+            this.actionModel.CreatedDate = data.createdDate,
+            this.actionModel.UpdatedDate = data.updatedDate,
+            this.actionModel.EventStartDate = data.eventStartDate,
+            this.actionModel.EventEndDate = data.eventEndDate,
+            this.actionModel.ReminderNotification = data.reminderNotification,
+            this.actionModel.RepeatTask = data.repeatTask,
+            this.actionModel.Completed = data.completed,
+            this.actionModel.Description = data.description,
+            this.actionModel.Interval = data.interval,
+            this.actionModel.RepeatAfter = data.repeatAfter,
+            this.actionModel.Untill = data.untill,
+            this.actionModel.UntillDate = data.untillDate,
+            this.actionModel.UntillCompile = data.untillCompile,
+            this.actionModel.RemindUsing = data.remindUsing,
+            this.actionModel.RemindTo = data.remindTo,
+            this.actionModel.RepeatEvery = data.repeatEvery,
+            this.actionModel.RepeatOnWeekDay = data.repeatOnWeekDay,
+            this.actionModel.RepeatOnDay = data.repeatOnDay,
+            this.actionModel.WillRepeat = data.willRepeat,
+            this.actionModel.WillRepeatWeekDay = data.willRepeatWeekDay,
+            this.actionModel.RepeatOnMonth = data.repeatOnMonth
+        }, error => {
+        }, () => { });
+    }
+    else if (Action == "Task") {
+      this.taskService.getTaskById<any>(id)
+        .subscribe(data => {
+          this.actionModel._id = data._id,
+            this.actionModel.ResponsiblePerson = data.responsiblePerson,
+            this.actionModel.Subject = data.subject,
+            this.actionModel.Priority = data.priority,
+            this.actionModel.Types = data.types,
+            this.actionModel.CreatedBy = data.createdBy,
+            this.actionModel.UpdatedBy = data.updatedBy,
+            this.actionModel.CreatedDate = data.createdDate,
+            this.actionModel.UpdatedDate = data.updatedDate,
+            this.actionModel.EventStartDate = data.eventStartDate,
+            this.actionModel.EventEndDate = data.eventEndDate,
+            this.actionModel.ReminderNotification = data.reminderNotification,
+            this.actionModel.RepeatTask = data.repeatTask,
+            this.actionModel.Completed = data.completed,
+            this.actionModel.Description = data.description,
+            this.actionModel.Interval = data.interval,
+            this.actionModel.RepeatAfter = data.repeatAfter,
+            this.actionModel.Untill = data.untill,
+            this.actionModel.UntillDate = data.untillDate,
+            this.actionModel.UntillCompile = data.untillCompile,
+            this.actionModel.RemindUsing = data.remindUsing,
+            this.actionModel.RemindTo = data.remindTo,
+            this.actionModel.RepeatEvery = data.repeatEvery,
+            this.actionModel.RepeatOnWeekDay = data.repeatOnWeekDay,
+            this.actionModel.RepeatOnDay = data.repeatOnDay,
+            this.actionModel.WillRepeat = data.willRepeat,
+            this.actionModel.WillRepeatWeekDay = data.willRepeatWeekDay,
+            this.actionModel.RepeatOnMonth = data.repeatOnMonth
+        }, error => {
+        }, () => { });
+    }
+    else {
+      this.commentService.getCommentById<any>(id)
+        .subscribe(data => {
+          this.actionModel._id = data._id,
+            this.actionModel.ResponsiblePerson = data.responsiblePerson,
+            this.actionModel.Subject = data.subject,
+            this.actionModel.CreatedBy = data.createdBy,
+            this.actionModel.UpdatedBy = data.updatedBy,
+            this.actionModel.CreatedDate = data.createdDate,
+            this.actionModel.UpdatedDate = data.updatedDate,
+            this.actionModel.Completed = data.completed
+        }, error => {
+        }, () => { });
+    }
+  }
+
+  //Scheduler Methods
+  GetAllScheduler() {
+    this.ds = [];
+    this.schedulerService.getScheduler<any>()
+      .subscribe(data => {
+        data.map((x) => {
+
+          this.ds.push({
+            Description: x.description,
+            EndTime: new Date(x.endTime).toISOString(),
+            EndTimezone: x.endTimezone,
+            Id: x.id,
+            IsAllDay: x.isAllDay,
+            Location: x.location,
+            StartTime: new Date(x.startTime).toISOString(),
+            Subject: x.subject,
+            StartTimezone: x.startTimezone,
+          })
+          this.eventSettings.dataSource = this.ds;
+          console.log("dataSource", this.ds);
+        });
+
+
       }, error => {
       }, () => { });
     console.log("ds", this.ds)
     return this.ds;
   }
-
   AddScheduler(scheduler) {
     console.log(scheduler);
     this.schedulerService.addScheduler<any>(scheduler)
@@ -379,7 +662,7 @@ export class AddEditLeadComponent implements OnInit {
   //Calls Methods
   GetAllCall() {
     this.tabledata = [];
-    this.service.getCall<any>()
+    this.callService.getCall<any>()
       .subscribe(data => {
         data.map((x) => {
           this.tabledata.push({
@@ -388,30 +671,50 @@ export class AddEditLeadComponent implements OnInit {
             ResponsiblePerson: x.responsiblePerson,
             RepeatTask: x.repeatTask
           })
-        
+
         });
-        console.log("tabledata", this.tabledata)
+        console.log("calltabledata", this.tabledata)
       }, error => {
       }, () => { });
   }
   AddCall(actionModel) {
-    console.log(actionModel);
-    this.service.addCall<any>(actionModel)
+    this.callService.addCall<any>(actionModel)
       .subscribe(data => {
         this.actionModelVM = data;
         this.GetAllCall();
         this.history.Action = "Call",
           this.history.Subject = actionModel.Subject,
+          this.history.ActionId = data._id,
           this.history.Panel = "Lead",
+          this.history.Completed = actionModel.Completed,
           this.history.CreatedBy = "1",
           this.history.CreatedDate = new Date(),
           this.history.Button = "Added"
         this.AddHistory(this.history);
-
+        this.actionModel=  this.fnActionModel();
 
       }, error => {
       }, () => { });
-   
+
+  }
+  UpdateCall(actionModel) {
+    this.callService.updateCall<any>(actionModel)
+      .subscribe(data => {
+        this.history._id = this.Editedhistoryid,
+          this.history.Action = "Call",
+          this.history.Subject = actionModel.Subject,
+          this.history.ActionId = data._id,
+          this.history.Panel = "Lead",
+          this.history.Completed = actionModel.Completed,
+          this.history.CreatedBy = "1",
+          this.history.CreatedDate = new Date(),
+          this.history.Button = "Updated"
+        this.UpdateHistory(this.history);
+        this.Editedhistoryid = "";
+        this.ButtonEvent = 'Save';
+        this.actionModel = this.fnActionModel();
+      }, error => {
+      }, () => { });
   }
 
   //Meeting Methods
@@ -432,7 +735,6 @@ export class AddEditLeadComponent implements OnInit {
       }, () => { });
   }
   AddMeeting(actionModel) {
-    console.log(actionModel);
     this.meetingService.addMeeting<any>(actionModel)
       .subscribe(data => {
         this.actionModelVM = data;
@@ -440,12 +742,34 @@ export class AddEditLeadComponent implements OnInit {
         this.GetAllMeeting();
         this.history.Action = "Meeting",
           this.history.Subject = actionModel.Subject,
+          this.history.ActionId = data._id,
           this.history.Panel = "Lead",
+          this.history.Completed = actionModel.Completed,
           this.history.CreatedBy = "2",
           this.history.CreatedDate = new Date(),
           this.history.Button = "Added"
         this.AddHistory(this.history);
-        console.log(data);
+        this.actionModel = this.fnActionModel();
+
+      }, error => {
+      }, () => { });
+  }
+  UpdateMeeting(actionModel) {
+    this.meetingService.updateMeeting<any>(actionModel)
+      .subscribe(data => {
+        this.history._id = this.Editedhistoryid,
+          this.history.Action = "Meeting",
+          this.history.Subject = actionModel.Subject,
+          this.history.ActionId = data._id,
+          this.history.Panel = "Lead",
+          this.history.Completed = actionModel.Completed,
+          this.history.CreatedBy = "1",
+          this.history.CreatedDate = new Date(),
+          this.history.Button = "Updated"
+        this.UpdateHistory(this.history);
+        this.Editedhistoryid = "";
+        this.ButtonEvent = 'Save';
+        this.actionModel = this.fnActionModel();
       }, error => {
       }, () => { });
   }
@@ -474,16 +798,39 @@ export class AddEditLeadComponent implements OnInit {
         this.GetAllTask();
         this.history.Action = "Task",
           this.history.Subject = actionModel.Subject,
+          this.history.ActionId = data._id,
           this.history.Panel = "Lead",
+          this.history.Completed = actionModel.Completed,
           this.history.CreatedBy = "3",
           this.history.CreatedDate = new Date(),
           this.history.Button = "Added"
         this.AddHistory(this.history);
-        console.log(data);
+        this.actionModel = this.fnActionModel();
+      }, error => {
+      }, () => { });
+  }
+  UpdateTask(actionModel) {
+    this.taskService.updateTask<any>(actionModel)
+      .subscribe(data => {
+        this.history._id = this.Editedhistoryid,
+          this.history.Action = "Task",
+          this.history.Subject = actionModel.Subject,
+          this.history.ActionId = data._id,
+          this.history.Panel = "Lead",
+          this.history.Completed = actionModel.Completed,
+          this.history.CreatedBy = "1",
+          this.history.CreatedDate = new Date(),
+          this.history.Button = "Updated"
+        this.UpdateHistory(this.history);
+        this.Editedhistoryid = "";
+        this.ButtonEvent = 'Save';
+        this.actionModel = this.fnActionModel();
+
       }, error => {
       }, () => { });
   }
 
+  //Comment Methods
   GetAllComment() {
     this.commenttabledata = [];
     this.commentService.getComment<any>()
@@ -493,15 +840,14 @@ export class AddEditLeadComponent implements OnInit {
             Description: x.description,
             Subject: x.taskSubject,
             ResponsiblePerson: x.responsiblePerson,
-            RepeatTask: x.repeatTask
+            RepeatTask: x.repeatTask,
+            Completed:x.completed
           })
         });
         console.log("commenttabledata", this.commenttabledata)
       }, error => {
       }, () => { });
   }
-
-
   AddComment(actionModel) {
     this.commentService.addComment<any>(actionModel)
       .subscribe(data => {
@@ -509,16 +855,38 @@ export class AddEditLeadComponent implements OnInit {
         this.GetAllComment();
         this.history.Action = "Comment",
           this.history.Subject = actionModel.Subject,
+          this.history.ActionId = data._id,
           this.history.Panel = "Lead",
+          this.history.Completed = actionModel.Completed,
           this.history.CreatedBy = "4",
           this.history.CreatedDate = new Date(),
           this.history.Button = "Added"
         this.AddHistory(this.history);
-        console.log(data);
+        this.actionModel = this.fnActionModel();
+
       }, error => {
       }, () => { });
   }
+  UpdateComment(actionModel) {
+    this.commentService.updateComment<any>(actionModel)
+      .subscribe(data => {
+        this.history._id = this.Editedhistoryid,
+          this.history.Action = "Comment",
+          this.history.Subject = actionModel.Subject,
+          this.history.ActionId = data._id,
+          this.history.Panel = "Lead",
+          this.history.Completed = actionModel.Completed,
+          this.history.CreatedBy = "1",
+          this.history.CreatedDate = new Date(),
+          this.history.Button = "Updated"
+        this.UpdateHistory(this.history);
+        this.Editedhistoryid = "";
+        this.ButtonEvent = 'Save';
+        this.actionModel = this.fnActionModel();
 
+      }, error => {
+      }, () => { });
+  }
   //History Methods
   GetAllHistory() {
     this.historytabledata = [];
@@ -526,21 +894,22 @@ export class AddEditLeadComponent implements OnInit {
       .subscribe(data => {
         data.map((x) => {
           this.historytabledata.push({
+            _id: x._id,
             Action: x.action,
+            ActionId: x.actionId,
             Panel: x.panel,
-            Subject:x.subject,
+            Subject: x.subject,
             CreatedBy: x.createdBy,
             CreatedDate: new Date(x.createdDate).toDateString(),
-            Button:x.button
+            Button: x.button,
+            Completed:x.completed
           })
         });
         console.log("historytabledata", this.historytabledata)
       }, error => {
       }, () => { });
   }
-
   AddHistory(history) {
-    console.log(history);
     this.historyService.addHistory<any>(history)
       .subscribe(data => {
         this.GetAllHistory();
@@ -548,5 +917,47 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
+  UpdateHistory(history) {
+    this.historyService.updateHistory<any>(history)
+      .subscribe(data => {
+        this.GetAllHistory();
+      }, error => {
+      }, () => { });
   }
+
+  fnActionModel(): any {
+    return {
+      _id: "",
+      Subject: "",
+      Location: "",
+      ResponsiblePerson: "",
+      Priority: "",
+      Types: "",
+      CreatedBy: "",
+      UpdatedBy: "",
+      CreatedDate: "",
+      UpdatedDate: "",
+      EventStartDate: "",
+      EventEndDate: "",
+      ReminderNotification: "",
+      Completed: false,
+      Description: "",
+      RepeatTask: 0,
+      Interval: "",
+      RepeatAfter: "",
+      Untill: "",
+      UntillDate: "",
+      UntillCompile: "",
+      RemindUsing: "",
+      RemindTo: "",
+      RepeatEvery: "",
+      RepeatOnWeekDay: "",
+      RepeatOnDay: "",
+      WillRepeat: "",
+      WillRepeatWeekDay: "",
+      RepeatOnMonth: ""
+    }
+  }
+
+}
 

@@ -31,6 +31,8 @@ namespace TaskManagement.Repository
                     Action=model.Action,
                     Panel=model.Panel,
                     Button=model.Button,
+                    ActionId=model.ActionId,
+                    Completed=model.Completed
                    
                 };
                 await _context.History.InsertOneAsync(_history);

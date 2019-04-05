@@ -77,7 +77,15 @@ namespace TaskManagement.Controllers
                     UntillDate = model.UntillDate,
                     UntillCompile = model.UntillCompile,
                     RemindUsing = model.RemindUsing,
-                    RemindTo = model.RemindTo
+                    RemindTo = model.RemindTo,
+
+
+                    RepeatEvery = model.RepeatEvery,
+                    RepeatOnWeekDay = model.RepeatOnWeekDay,
+                    RepeatOnDay = model.RepeatOnDay,
+                    WillRepeat = model.WillRepeat,
+                    WillRepeatWeekDay = model.WillRepeatWeekDay,
+                    RepeatOnMonth = model.RepeatOnMonth
                 };
                 await _callRepository.UpdateCall(Call);
                 return new OkObjectResult(Call);

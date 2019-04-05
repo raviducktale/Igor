@@ -31,6 +31,7 @@ namespace TaskManagement.Repository
                     CreatedBy = 1,
                     Subject = model.Subject,
                     ResponsiblePerson = model.ResponsiblePerson,
+                    Completed=model.Completed
                 };
                 await _context.Comments.InsertOneAsync(_comment);
                 return _comment;

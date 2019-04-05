@@ -57,9 +57,12 @@ namespace TaskManagement.Controllers
 
                    Action=model.Action,
                    Panel=model.Panel,
+                   Subject=model.Subject,
                    CreatedBy=model.CreatedBy,
                    CreatedDate=model.CreatedDate,
-                   Button=model.Button
+                   Button=model.Button,
+                   ActionId=model.ActionId,
+                   Completed=model.Completed
                 };
                 await _historyRepository.UpdateHistory(History);
                 return new OkObjectResult(History);

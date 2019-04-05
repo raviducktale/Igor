@@ -30,15 +30,15 @@ export class HistoryService {
     //}
     //);
   }
-  addHistory<T>(call): Observable<T> {
-    return this.http.post<T>(this._AddHistoryUrl, call, this.getRequestHeaders())
+  addHistory<T>(history): Observable<T> {
+    return this.http.post<T>(this._AddHistoryUrl, history, this.getRequestHeaders())
     //.catch(error => {
     //  return Observable.throw(error);
     //}
     //);
   }
-  updateHistory<T>(call): Observable<T> {
-    return this.http.put<T>(this._UpdateHistoryUrl, call, this.getRequestHeaders())
+  updateHistory<T>(history): Observable<T> {
+    return this.http.put<T>(this._UpdateHistoryUrl, history, this.getRequestHeaders())
 
   }
   deleteHistory<T>(id): Observable<T> {

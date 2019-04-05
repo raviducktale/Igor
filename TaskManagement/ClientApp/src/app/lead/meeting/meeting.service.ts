@@ -28,6 +28,15 @@ export class MeetingService {
     //}
     //);
   }
+
+  getMeetingById<T>(id): Observable<T> {
+    return this.http.get<T>(this._AllMeetingUrl + "/" + id, this.getRequestHeaders())
+    //.catch(error => {
+    //  return Observable.throw(error);
+    //}
+    //);
+  }
+
   addMeeting<T>(meeting): Observable<T> {
     return this.http.post<T>(this._AddMeetingUrl, meeting, this.getRequestHeaders())
     //.catch(error => {

@@ -36,6 +36,14 @@ export class TaskService {
     //);
   }
 
+  getTaskById<T>(id): Observable<T> {
+    return this.http.get<T>(this._AllUrl + "/" + id, this.getRequestHeaders())
+    //.catch(error => {
+    //  return Observable.throw(error);
+    //}
+    //);
+  }
+
   addTask<T>(actionModel): Observable<T> {
     return this.http.post<T>(this._AddUrl, actionModel, this.getRequestHeaders())
     //.catch(error => {

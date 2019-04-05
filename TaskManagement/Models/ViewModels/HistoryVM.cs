@@ -14,5 +14,8 @@ namespace TaskManagement.Models
         public int? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string Button { get; set; }
+        public string ActionId { get; set; }
+        public bool Completed { get; set; }
+
     }
 }

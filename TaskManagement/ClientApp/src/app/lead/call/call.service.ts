@@ -30,6 +30,9 @@ export class CallService {
     //}
     //);
   }
+  getCallById<T>(id): Observable<T> {
+    return this.http.get<T>(this._AllCallUrl + "/" + id, this.getRequestHeaders())
+  }
   addCall<T>(call): Observable<T> {
     return this.http.post<T>(this._AddCallUrl, call, this.getRequestHeaders())
     //.catch(error => {

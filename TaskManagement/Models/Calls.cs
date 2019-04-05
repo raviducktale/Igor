@@ -32,8 +32,13 @@ namespace TaskManagement.Models
         public int? UntillCompile { get; set; }
         public DateTime? RemindUsing { get; set; }
         public string RemindTo { get; set; }
-      
 
 
+        public int? RepeatEvery { get; set; }
+        public int? RepeatOnWeekDay { get; set; }
+        public int? RepeatOnDay { get; set; }
+        public int? WillRepeat { get; set; }
+        public int? WillRepeatWeekDay { get; set; }
+        public int? RepeatOnMonth { get; set; }
     }
 }

@@ -80,6 +80,15 @@ namespace TaskManagement.Repository
                     UntillCompile = model.UntillCompile,
                     RemindUsing = model.RemindUsing,
                     RemindTo = model.RemindTo,
+
+
+                    RepeatEvery = model.RepeatEvery,
+                    RepeatOnWeekDay = model.RepeatOnWeekDay,
+                    RepeatOnDay = model.RepeatOnDay,
+                    WillRepeat = model.WillRepeat,
+                    WillRepeatWeekDay = model.WillRepeatWeekDay,
+                    RepeatOnMonth = model.RepeatOnMonth
+
                 };
                 await _context.Meetings.InsertOneAsync(_meeting);
                 return _meeting;
