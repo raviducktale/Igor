@@ -1,17 +1,17 @@
-import { Component, OnInit, Query, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Query, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CallService } from '../call/call.service';
 import { MeetingService } from '../meeting/meeting.service';
-import { SchedulerService } from '../scheduler/scheduler.service';
 import { HistoryService } from '../history/history.service';
 import { TaskService } from '../task/task.service';
 import { CommentService } from '../comment/comment.service';
-
-import { EventSettingsModel, View, PopupOpenEventArgs, ActionEventArgs,  } from '@syncfusion/ej2-schedule';
-import { DayService, WeekService, MonthService } from '@syncfusion/ej2-angular-schedule';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService  } from '@syncfusion/ej2-angular-richtexteditor';
 import { debug } from 'util';
 import { fn } from '@angular/compiler/src/output/output_ast';
+import { read } from 'fs';
+import { Action } from 'rxjs/internal/scheduler/Action';
+import { NgModule } from '@angular/core';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 enum ACTIONS {
   Call,
@@ -25,10 +25,11 @@ enum ACTIONS {
   selector: 'app-add-edit-lead',
   templateUrl: './add-edit-lead.component.html',
   styleUrls: ['./add-edit-lead.component.css'],
-  providers: [DayService, WeekService, MonthService, ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService],
+  providers: [ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService],
 })
 
 export class AddEditLeadComponent implements OnInit {
+ 
   ACTIONS = ACTIONS;
   selectedAction: any;
   limit = 4;
@@ -100,34 +101,7 @@ export class AddEditLeadComponent implements OnInit {
     Completed: true,
     Description: ""
   }
-
-  scheduler: any = {
-    _id: "",
-    id: "",
-    Subject: "",
-    StartTime: "",
-    EndTime: "",
-    StartTimezone: "",
-    EndTimezone: "",
-    Location: "",
-    Description: "",
-    IsAllDay: false,
-    Recurrence: "",
-    RecurrenceRule: "",
-    Frequency: "",
-    Interval: "",
-    Count: "",
-    IsReadonly: false,
-    IsBlock: false,
-    Untill: "",
-    ByDay: "",
-    BYMonthDay: "",
-    BYMonth: "",
-    BYSetPOS: ""
-  }
-
   actionModel: any = this.fnActionModel();
-
   history: any = {
     id: "",
     Subject: "",
@@ -146,7 +120,7 @@ export class AddEditLeadComponent implements OnInit {
 
   ButtonEvent: string = 'Save';
   Editedhistoryid: string;
-  historyBox: string;
+  historyBox: string="";
   ResponsiblePersondata: Object[];
   ResponsiblePersonfields: Object;
   priorities: { [key: string]: Object }[];
@@ -155,14 +129,12 @@ export class AddEditLeadComponent implements OnInit {
   typesfields: Object;
   completes: { [key: string]: Object }[];
   completesfields: Object;
-  completes1: string[];
   repeattaskoptions: { [key: string]: Object }[];
   repeattaskoptionsfields: Object;
   untills: { [key: string]: Object }[];
   untillsfields: Object;
   reminds: { [key: string]: Object }[];
   remindsfields: Object;
-
   repeatOnWeekDays: { [key: string]: Object }[];
   repeatOnWeekfields: Object;
   willRepeats: { [key: string]: Object }[];
@@ -181,68 +153,41 @@ export class AddEditLeadComponent implements OnInit {
   tasktabledata: any;
   historytabledata: any;
   commenttabledata: any;
-  ds: any;
 
-  public currentView: View = 'Month';
-  public selectedDate: Date = new Date();
-  public eventSettings: EventSettingsModel = {
-    dataSource: [{
-      Description: "Description1",
-      EndTime: "2019-04-03T22:00:00.000Z",
-      EndTimezone: "",
-      Id: 1,
-      IsAllDay: false,
-      Location: "",
-      StartTime: "2019-04-03T18:30:00.000Z",
-      StartTimezone: "",
-      Subject: "subject1",
-    },
-    {
-      Description: "Description2",
-      EndTime: "2019-04-07T22:00:00.000Z",
-      EndTimezone: "",
-      Id: 2,
-      IsAllDay: false,
-      Location: "",
-      StartTime: "2019-04-07T18:30:00.000Z",
-      StartTimezone: "",
-      Subject: "subject2",
-    },
-    ]
-  };
+  callActive = false;
+  meetingActive = false;
+  taskActive = false;
+  commentActive = false;
+  closeResult: string;
 
   constructor(private router: ActivatedRoute,
     protected callService: CallService,
     protected meetingService: MeetingService,
-    protected schedulerService: SchedulerService,
-    protected historyService: HistoryService,
+    protected historyService: HistoryService, 
+    protected taskService: TaskService,
     protected commentService: CommentService,
-    protected taskService: TaskService) {
-
-    //this.GetAllCall();
-    //this.GetAllMeeting();
-    //this.GetAllTask();
+    private modalService: NgbModal
+  ) {
     this.GetAllHistory();
     this.router.params.subscribe(params => { this.selectedId = +params['id']; });
   }
+  
 
   ngOnInit() {
-
     this.tabledata = [];
     this.meetingtabledata = [];
-    this.ds = [];
     this.tasktabledata = [];
     this.historytabledata = [];
     this.commenttabledata = [];
 
     this.ResponsiblePersondata = [
-      { id: 'Game1', sports: 'Asley Thomas' },
-      { id: 'Game2', sports: 'Mithun' },
-      { id: 'Game3', sports: 'Abhiram Thomas' },
-      { id: 'Game4', sports: 'Sanjeev Kumar' },
-      { id: 'Game5', sports: 'Baljeet' }
+      { id: '1', sports: 'Asley Thomas' },
+      { id: '2', sports: 'Mithun' },
+      { id: '3', sports: 'Abhiram Thomas' },
+      { id: '4', sports: 'Sanjeev Kumar' },
+      { id: '5', sports: 'Baljeet' }
     ],
-      this.ResponsiblePersonfields = { text: 'sports', value: 'sports' },
+      this.ResponsiblePersonfields = { text: 'sports', value: 'id' },
       this.priorities = [
         { prioritiesName: 'High', prioritiesId: 1 },
         { prioritiesName: 'Medium', prioritiesId: 2 },
@@ -255,11 +200,11 @@ export class AddEditLeadComponent implements OnInit {
       ],
       this.typesfields = { text: 'typesName', value: 'typesId' },
       this.repeattaskoptions = [
-        { repeattaskoptionsName: 'Never', repeattaskoptionsId: 0 },
-        { repeattaskoptionsName: 'Daily', repeattaskoptionsId: 1 },
-        { repeattaskoptionsName: 'Week', repeattaskoptionsId: 2 },
-        { repeattaskoptionsName: 'Month', repeattaskoptionsId: 3 },
-        { repeattaskoptionsName: 'Year', repeattaskoptionsId: 4 },
+        { repeattaskoptionsName: 'Never', repeattaskoptionsId: 'NEVER' },
+        { repeattaskoptionsName: 'Daily', repeattaskoptionsId: 'DAILY' },
+        { repeattaskoptionsName: 'Weekly', repeattaskoptionsId: 'WEEKLY' },
+        { repeattaskoptionsName: 'Monthly', repeattaskoptionsId: 'MONTHLY' },
+        { repeattaskoptionsName: 'Yearly', repeattaskoptionsId: 'YEARLY' },
       ],
       this.repeattaskoptionsfields = { text: 'repeattaskoptionsName', value: 'repeattaskoptionsId' },
       this.completes = [
@@ -281,13 +226,14 @@ export class AddEditLeadComponent implements OnInit {
       ],
       this.remindsfields = { text: 'remindsName', value: 'remindsId' },
 
-      this.completes1 = ['Yes', 'No'];
-
       this.repeatOnWeekDays = [
-        { repeatOnWeekDaysName: 'Sunday', repeatOnWeekDaysId: 1 },
-        { repeatOnWeekDaysName: 'Monday', repeatOnWeekDaysId: 2 },
-        { repeatOnWeekDaysName: 'Tuesday', repeatOnWeekDaysId: 3 },
-        { repeatOnWeekDaysName: 'Wednesday', repeatOnWeekDaysId: 4 },
+        { repeatOnWeekDaysName: 'Sunday', repeatOnWeekDaysId: 'SU' },
+        { repeatOnWeekDaysName: 'Monday', repeatOnWeekDaysId: 'MO' },
+        { repeatOnWeekDaysName: 'Tuesday', repeatOnWeekDaysId: 'TU' },
+        { repeatOnWeekDaysName: 'Wednesday', repeatOnWeekDaysId: 'WE' },
+        { repeatOnWeekDaysName: 'Thursday', repeatOnWeekDaysId: 'TH' },
+        { repeatOnWeekDaysName: 'Friday', repeatOnWeekDaysId:   'FR' },
+        { repeatOnWeekDaysName: 'Saturday', repeatOnWeekDaysId: 'SA' },
       ],
       this.repeatOnWeekfields = { text: 'repeatOnWeekDaysName', value: 'repeatOnWeekDaysId' },
       this.willRepeats = [
@@ -295,20 +241,34 @@ export class AddEditLeadComponent implements OnInit {
         { willRepeatsName: 'Second', willRepeatsId: 2 },
         { willRepeatsName: 'Third', willRepeatsId: 3 },
         { willRepeatsName: 'Forth', willRepeatsId: 4 },
+        { willRepeatsName: 'Last', willRepeatsId: 5 },
       ],
       this.willRepeatsfields = { text: 'willRepeatsName', value: 'willRepeatsId' },
       this.willRepeatOnWeekDays = [
-        { willRepeatOnWeekDaysName: 'Sund', willRepeatOnWeekDaysId: 1 },
-        { willRepeatOnWeekDaysName: 'Mond', willRepeatOnWeekDaysId: 2 },
-        { willRepeatOnWeekDaysName: 'Tue', willRepeatOnWeekDaysId: 3 },
-        { willRepeatOnWeekDaysName: 'Wed', willRepeatOnWeekDaysId: 4 },
+        { willRepeatOnWeekDaysName: 'Sunday', willRepeatOnWeekDaysId: 1 },
+        { willRepeatOnWeekDaysName: 'Monday', willRepeatOnWeekDaysId: 2 },
+        { willRepeatOnWeekDaysName: 'Tuesday', willRepeatOnWeekDaysId: 3 },
+        { willRepeatOnWeekDaysName: 'Wednesday', willRepeatOnWeekDaysId: 4 },
+        { willRepeatOnWeekDaysName: 'Thursday', willRepeatOnWeekDaysId: 5 },
+        { willRepeatOnWeekDaysName: 'Friday', willRepeatOnWeekDaysId: 6 },
+        { willRepeatOnWeekDaysName: 'Saturday', willRepeatOnWeekDaysId: 7 },
+
       ],
       this.willRepeatOnWeekDaysfields = { text: 'willRepeatOnWeekDaysName', value: 'willRepeatOnWeekDaysId' },
       this.repeatonmonths = [
-        { repeatonmonthsName: 'Jan', repeatonmonthsId: 1 },
-        { repeatonmonthsName: 'Feb', repeatonmonthsId: 2 },
-        { repeatonmonthsName: 'Mar', repeatonmonthsId: 3 },
-        { repeatonmonthsName: 'Apr', repeatonmonthsId: 4 },
+        { repeatonmonthsName: 'January', repeatonmonthsId: 1 },
+        { repeatonmonthsName: 'February', repeatonmonthsId: 2 },
+        { repeatonmonthsName: 'March', repeatonmonthsId: 3 },
+        { repeatonmonthsName: 'April', repeatonmonthsId: 4 },
+        { repeatonmonthsName: 'May', repeatonmonthsId: 5 },
+        { repeatonmonthsName: 'June', repeatonmonthsId: 6 },
+        { repeatonmonthsName: 'July', repeatonmonthsId: 7 },
+        { repeatonmonthsName: 'August', repeatonmonthsId: 8 },
+        { repeatonmonthsName: 'September', repeatonmonthsId: 9 },
+        { repeatonmonthsName: 'October', repeatonmonthsId: 10 },
+        { repeatonmonthsName: 'November', repeatonmonthsId: 11 },
+        { repeatonmonthsName: 'December', repeatonmonthsId: 12 },
+
       ],
       this.repeatonmonthsfields = { text: 'repeatonmonthsName', value: 'repeatonmonthsId' },
 
@@ -328,14 +288,24 @@ export class AddEditLeadComponent implements OnInit {
   }
 
   selectAction(action) {
+    debugger
     this.selectedAction = action;
     this.actionModel = this.fnActionModel();
     this.ButtonEvent = 'Save';
-
   }
 
   showAll(_limit) {
     this.limit = _limit;
+  }
+
+  openReminderOption() {
+    if (this.actionModel.ShowReminder == true) {
+      this.actionModel.ShowReminder = false;
+    }
+    else {
+      this.actionModel.ShowReminder = true;
+    }
+
   }
 
   SetEndDate(actionModel) {
@@ -345,12 +315,18 @@ export class AddEditLeadComponent implements OnInit {
     actionModel.EventEndDate = newDate;
   }
  
-  updateComplete(actionid,Action,historyid,completedata) {
-    if (Action == "Call") {
+  updateComplete(historyData, event) {
+    
+    let actionid = historyData.ActionId;
+    let action = historyData.Action;
+    let historyid = historyData._id;
+    let completedata = event.target.checked;
+    
+    if (action == "Call") {
       let call = this.fnActionModel();
       this.callService.getCallById<any>(actionid)
         .subscribe(data => {
-            call._id = data._id,
+          call._id = data._id,
             call.ResponsiblePerson = data.responsiblePerson,
             call.Subject = data.subject,
             call.Priority = data.priority,
@@ -363,7 +339,7 @@ export class AddEditLeadComponent implements OnInit {
             call.EventEndDate = data.eventEndDate,
             call.ReminderNotification = data.reminderNotification,
             call.RepeatTask = data.repeatTask,
-              call.Completed = completedata,
+            call.Completed = completedata,
             call.Description = data.description,
             call.Interval = data.interval,
             call.RepeatAfter = data.repeatAfter,
@@ -377,13 +353,20 @@ export class AddEditLeadComponent implements OnInit {
             call.RepeatOnDay = data.repeatOnDay,
             call.WillRepeat = data.willRepeat,
             call.WillRepeatWeekDay = data.willRepeatWeekDay,
-            call.RepeatOnMonth = data.repeatOnMonth
+            call.RepeatOnMonth = data.repeatOnMonth,
+            call.IsAllDay = data.isAllDay,
+            call.StartTimeZone = data.startTimeZone,
+            call.EndTimeZone = data.endTimeZone,
+            call.ShowReminder = data.showReminder,
+            call.ReminderDate = data.reminderDate,
+            call.ReminderPerson = data.reminderPerson
+
           this.Editedhistoryid = historyid;
           this.UpdateCall(call);
         }, error => {
         }, () => { });
     }
-    else if (Action == "Meeting") {
+    else if (action == "Meeting") {
       let meeting = this.fnActionModel();
       this.meetingService.getMeetingById<any>(actionid)
         .subscribe(data => {
@@ -400,7 +383,7 @@ export class AddEditLeadComponent implements OnInit {
             meeting.EventEndDate = data.eventEndDate,
             meeting.ReminderNotification = data.reminderNotification,
             meeting.RepeatTask = data.repeatTask,
-              meeting.Completed = completedata,
+            meeting.Completed = completedata,
             meeting.Description = data.description,
             meeting.Interval = data.interval,
             meeting.RepeatAfter = data.repeatAfter,
@@ -414,17 +397,23 @@ export class AddEditLeadComponent implements OnInit {
             meeting.RepeatOnDay = data.repeatOnDay,
             meeting.WillRepeat = data.willRepeat,
             meeting.WillRepeatWeekDay = data.willRepeatWeekDay,
-            meeting.RepeatOnMonth = data.repeatOnMonth
+            meeting.RepeatOnMonth = data.repeatOnMonth,
+            meeting.IsAllDay = data.isAllDay,
+            meeting.StartTimeZone = data.startTimeZone,
+              meeting.EndTimeZone = data.endTimeZone,
+              meeting.ShowReminder = data.showReminder,
+              meeting.ReminderDate = data.reminderDate,
+              meeting.ReminderPerson = data.reminderPerson
           this.Editedhistoryid = historyid;
           this.UpdateMeeting(meeting);
         }, error => {
         }, () => { });
     }
-    else if (Action == "Task") {
+    else if (action == "Task") {
       let task = this.fnActionModel();
       this.taskService.getTaskById<any>(actionid)
         .subscribe(data => {
-            task._id = data._id,
+          task._id = data._id,
             task.ResponsiblePerson = data.responsiblePerson,
             task.Subject = data.subject,
             task.Priority = data.priority,
@@ -451,7 +440,13 @@ export class AddEditLeadComponent implements OnInit {
             task.RepeatOnDay = data.repeatOnDay,
             task.WillRepeat = data.willRepeat,
             task.WillRepeatWeekDay = data.willRepeatWeekDay,
-            task.RepeatOnMonth = data.repeatOnMonth
+            task.RepeatOnMonth = data.repeatOnMonth,
+            task.IsAllDay = data.isAllDay,
+            task.StartTimeZone = data.startTimeZone,
+            task.EndTimeZone = data.endTimeZone,
+            task.ShowReminder = data.showReminder,
+            task.ReminderDate = data.reminderDate,
+            task.ReminderPerson = data.reminderPerson
           this.Editedhistoryid = historyid;
           this.UpdateTask(task);
         }, error => {
@@ -482,6 +477,7 @@ export class AddEditLeadComponent implements OnInit {
     this.Editedhistoryid = historyid;
     this.ButtonEvent = 'Update';
     this.historyBox = Action;
+    this.actionModel= this.fnActionModel();
     if (Action == "Call") {
       this.callService.getCallById<any>(id)
         .subscribe(data => {
@@ -512,7 +508,13 @@ export class AddEditLeadComponent implements OnInit {
             this.actionModel.RepeatOnDay = data.repeatOnDay,
             this.actionModel.WillRepeat = data.willRepeat,
             this.actionModel.WillRepeatWeekDay = data.willRepeatWeekDay,
-            this.actionModel.RepeatOnMonth = data.repeatOnMonth
+            this.actionModel.RepeatOnMonth = data.repeatOnMonth,
+            this.actionModel.IsAllDay = data.isAllDay,
+            this.actionModel.StartTimeZone = data.startTimeZone,
+            this.actionModel.EndTimeZone = data.endTimeZone,
+          this.actionModel.ShowReminder = data.showReminder,
+            this.actionModel.ReminderDate = data.reminderDate,
+            this.actionModel.ReminderPerson = data.reminderPerson
         }, error => {
         }, () => { });
 
@@ -549,10 +551,17 @@ export class AddEditLeadComponent implements OnInit {
             this.actionModel.RepeatOnDay = data.repeatOnDay,
             this.actionModel.WillRepeat = data.willRepeat,
             this.actionModel.WillRepeatWeekDay = data.willRepeatWeekDay,
-            this.actionModel.RepeatOnMonth = data.repeatOnMonth
+            this.actionModel.RepeatOnMonth = data.repeatOnMonth,
+            this.actionModel.IsAllDay = data.isAllDay,
+            this.actionModel.StartTimeZone = data.startTimeZone,
+            this.actionModel.EndTimeZone = data.endTimeZone,
+            this.actionModel.ShowReminder = data.showReminder,
+            this.actionModel.ReminderDate = data.reminderDate,
+            this.actionModel.ReminderPerson = data.reminderPerson
         }, error => {
         }, () => { });
     }
+
     else if (Action == "Task") {
       this.taskService.getTaskById<any>(id)
         .subscribe(data => {
@@ -583,13 +592,23 @@ export class AddEditLeadComponent implements OnInit {
             this.actionModel.RepeatOnDay = data.repeatOnDay,
             this.actionModel.WillRepeat = data.willRepeat,
             this.actionModel.WillRepeatWeekDay = data.willRepeatWeekDay,
-            this.actionModel.RepeatOnMonth = data.repeatOnMonth
+            this.actionModel.RepeatOnMonth = data.repeatOnMonth,
+            this.actionModel.IsAllDay = data.isAllDay,
+            this.actionModel.StartTimeZone = data.startTimeZone,
+            this.actionModel.EndTimeZone = data.endTimeZone,
+            this.actionModel.ShowReminder = data.showReminder,
+            this.actionModel.ReminderDate = data.reminderDate,
+            this.actionModel.ReminderPerson = data.reminderPerson
+          console.log("mydatacheck", this.actionModel);
+          console.log("mydatacheck1",data);
         }, error => {
         }, () => { });
     }
     else {
       this.commentService.getCommentById<any>(id)
         .subscribe(data => {
+
+
           this.actionModel._id = data._id,
             this.actionModel.ResponsiblePerson = data.responsiblePerson,
             this.actionModel.Subject = data.subject,
@@ -603,60 +622,20 @@ export class AddEditLeadComponent implements OnInit {
     }
   }
 
-  //Scheduler Methods
-  GetAllScheduler() {
-    this.ds = [];
-    this.schedulerService.getScheduler<any>()
-      .subscribe(data => {
-        data.map((x) => {
+  GetHistorySeperator(date) {
+    let dated = new Date(date);
+    let current = new Date();
 
-          this.ds.push({
-            Description: x.description,
-            EndTime: new Date(x.endTime).toISOString(),
-            EndTimezone: x.endTimezone,
-            Id: x.id,
-            IsAllDay: x.isAllDay,
-            Location: x.location,
-            StartTime: new Date(x.startTime).toISOString(),
-            Subject: x.subject,
-            StartTimezone: x.startTimezone,
-          })
-          this.eventSettings.dataSource = this.ds;
-          console.log("dataSource", this.ds);
-        });
+    if (dated.getFullYear() === current.getFullYear() && dated.getMonth() === current.getMonth() && dated.getDate() === current.getDate()) {
+      return "Today";
+    }
 
-
-      }, error => {
-      }, () => { });
-    console.log("ds", this.ds)
-    return this.ds;
-  }
-  AddScheduler(scheduler) {
-    console.log(scheduler);
-    this.schedulerService.addScheduler<any>(scheduler)
-      .subscribe(data => {
-        this.GetAllScheduler();
-        console.log(data);
-      }, error => {
-      }, () => { });
-  }
-  UpdateScheduler(scheduler) {
-    alert(scheduler);
-    this.schedulerService.updateScheduler<any>(scheduler)
-      .subscribe(data => {
-        this.GetAllScheduler();
-        console.log(data);
-      }, error => {
-      }, () => { });
-  }
-  DeleteScheduler(id) {
-    alert(id);
-    this.schedulerService.deleteScheduler<any>(id)
-      .subscribe(data => {
-        this.GetAllScheduler();
-        console.log(data);
-      }, error => {
-      }, () => { });
+    else if (dated.getFullYear() === current.getFullYear() && dated.getMonth() === current.getMonth() && dated.getDate() === current.getDate() - 1) {
+      return "Yesterday";
+    }
+    else {
+      return dated.toDateString();
+    }
   }
 
   //Calls Methods
@@ -673,29 +652,34 @@ export class AddEditLeadComponent implements OnInit {
           })
 
         });
-        console.log("calltabledata", this.tabledata)
       }, error => {
       }, () => { });
   }
   AddCall(actionModel) {
-    this.callService.addCall<any>(actionModel)
-      .subscribe(data => {
-        this.actionModelVM = data;
-        this.GetAllCall();
-        this.history.Action = "Call",
-          this.history.Subject = actionModel.Subject,
-          this.history.ActionId = data._id,
-          this.history.Panel = "Lead",
-          this.history.Completed = actionModel.Completed,
-          this.history.CreatedBy = "1",
-          this.history.CreatedDate = new Date(),
-          this.history.Button = "Added"
-        this.AddHistory(this.history);
-        this.actionModel=  this.fnActionModel();
+    if (actionModel.Subject === undefined || actionModel.Subject === "") {
+      alert("Please enter Call Subject");
+      return false;
+    }
+    else {
 
-      }, error => {
-      }, () => { });
+      this.callService.addCall<any>(actionModel)
+        .subscribe(data => {
+          this.actionModelVM = data;
+          this.GetAllCall();
+          this.history.Action = "Call",
+            this.history.Subject = actionModel.Subject,
+            this.history.ActionId = data._id,
+            this.history.Panel = "Lead",
+            this.history.Completed = actionModel.Completed,
+            this.history.CreatedBy = "1",
+            this.history.CreatedDate = new Date(),
+            this.history.Button = "Added"
+          this.AddHistory(this.history);
+          this.actionModel = this.fnActionModel();
 
+        }, error => {
+        }, () => { });
+    }
   }
   UpdateCall(actionModel) {
     this.callService.updateCall<any>(actionModel)
@@ -730,15 +714,17 @@ export class AddEditLeadComponent implements OnInit {
             RepeatTask: x.repeatTask
           })
         });
-        console.log("meetingtabledata", this.meetingtabledata)
       }, error => {
       }, () => { });
   }
   AddMeeting(actionModel) {
+    if (actionModel.Subject === undefined || actionModel.Subject === "") {
+      alert("Please enter meeting Subject");
+      return false;
+    }
     this.meetingService.addMeeting<any>(actionModel)
       .subscribe(data => {
         this.actionModelVM = data;
-        console.log(data);
         this.GetAllMeeting();
         this.history.Action = "Meeting",
           this.history.Subject = actionModel.Subject,
@@ -787,11 +773,14 @@ export class AddEditLeadComponent implements OnInit {
             RepeatTask: x.repeatTask
           })
         });
-        console.log("tasktabledata", this.tasktabledata)
       }, error => {
       }, () => { });
   }
   AddTask(actionModel) {
+    if (actionModel.Subject === undefined || actionModel.Subject === "") {
+      alert("Please enter Task Subject");
+      return false;
+    }
     this.taskService.addTask<any>(actionModel)
       .subscribe(data => {
         this.actionModelVM = data;
@@ -844,11 +833,14 @@ export class AddEditLeadComponent implements OnInit {
             Completed:x.completed
           })
         });
-        console.log("commenttabledata", this.commenttabledata)
       }, error => {
       }, () => { });
   }
   AddComment(actionModel) {
+    if (actionModel.Subject === undefined || actionModel.Subject === "") {
+      alert("Please enter comment Subject");
+      return false;
+    }
     this.commentService.addComment<any>(actionModel)
       .subscribe(data => {
         this.actionModelVM = data;
@@ -887,6 +879,7 @@ export class AddEditLeadComponent implements OnInit {
       }, error => {
       }, () => { });
   }
+
   //History Methods
   GetAllHistory() {
     this.historytabledata = [];
@@ -896,16 +889,17 @@ export class AddEditLeadComponent implements OnInit {
           this.historytabledata.push({
             _id: x._id,
             Action: x.action,
+            Icon: x.action === 'Call' ? 'fa fa-phone' : (x.action === 'Meeting' ? 'fa fa-user' : (x.action === 'Task' ? 'fa fa-list' : (x.action === 'Comment' ? 'fa fa-comments' : 'fa fa-comments'))),
             ActionId: x.actionId,
             Panel: x.panel,
             Subject: x.subject,
             CreatedBy: x.createdBy,
-            CreatedDate: new Date(x.createdDate).toDateString(),
+            CreatedDate: new Date(x.createdDate).toLocaleDateString(),
             Button: x.button,
-            Completed:x.completed
+            Completed: x.completed,
+            Divide: this.GetHistorySeperator(x.createdDate)
           })
         });
-        console.log("historytabledata", this.historytabledata)
       }, error => {
       }, () => { });
   }
@@ -913,7 +907,6 @@ export class AddEditLeadComponent implements OnInit {
     this.historyService.addHistory<any>(history)
       .subscribe(data => {
         this.GetAllHistory();
-        console.log(data);
       }, error => {
       }, () => { });
   }
@@ -925,13 +918,17 @@ export class AddEditLeadComponent implements OnInit {
       }, () => { });
   }
 
+  Clear() {
+    this.actionModel = this.fnActionModel();
+  }
+
   fnActionModel(): any {
     return {
       _id: "",
       Subject: "",
       Location: "",
       ResponsiblePerson: "",
-      Priority: "",
+      Priority: "2",
       Types: "",
       CreatedBy: "",
       UpdatedBy: "",
@@ -942,7 +939,7 @@ export class AddEditLeadComponent implements OnInit {
       ReminderNotification: "",
       Completed: false,
       Description: "",
-      RepeatTask: 0,
+      RepeatTask: "NEVER",
       Interval: "",
       RepeatAfter: "",
       Untill: "",
@@ -955,9 +952,15 @@ export class AddEditLeadComponent implements OnInit {
       RepeatOnDay: "",
       WillRepeat: "",
       WillRepeatWeekDay: "",
-      RepeatOnMonth: ""
+      RepeatOnMonth: "",
+      IsAllDay: true,
+      StartTimeZone:"",
+      EndTimeZone: "",
+      ShowReminder: false,
+      ReminderDate: "",
+      ReminderPerson:""
+
     }
   }
-
 }
 

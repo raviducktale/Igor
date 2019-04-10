@@ -49,16 +49,18 @@ namespace TaskManagement.Repository
                     UntillCompile = model.UntillCompile,
                     RemindUsing = model.RemindUsing,
                     RemindTo = model.RemindTo,
-
-
                     RepeatEvery = model.RepeatEvery,
                     RepeatOnWeekDay = model.RepeatOnWeekDay,
                     RepeatOnDay = model.RepeatOnDay,
                     WillRepeat = model.WillRepeat,
                     WillRepeatWeekDay = model.WillRepeatWeekDay,
-                    RepeatOnMonth = model.RepeatOnMonth
-
-
+                    RepeatOnMonth = model.RepeatOnMonth,
+                    IsAllDay = model.IsAllDay,
+                    StartTimeZone = model.StartTimeZone,
+                    EndTimeZone = model.EndTimeZone,
+                     ShowReminder = model.ShowReminder,
+                    ReminderDate = model.ReminderDate,
+                    ReminderPerson = model.ReminderPerson
                 };
 
 

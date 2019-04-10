@@ -19,6 +19,5 @@ namespace TaskManagement.Models
         public string Button { get; set; }
         public string ActionId { get; set; }
         public bool Completed { get; set; }
-
     }
 }

@@ -15,13 +15,13 @@ namespace TaskManagement.Repository
     public class CallsRepository : ICallsRepository
     {
         private readonly DBContext _context = null;
+        private readonly IHistoryRepository _historyRepository;
 
-        public CallsRepository(IOptions<MongoSetting> settings)
+        public CallsRepository(IOptions<MongoSetting> settings, IHistoryRepository historyRepository)
         {
             _context = new DBContext(settings);
+            _historyRepository = historyRepository;
         }
-
-
 
         public Task<List<Calls>> GetAllCall()
         {
@@ -82,14 +82,18 @@ namespace TaskManagement.Repository
                     UntillCompile = model.UntillCompile,
                     RemindUsing = model.RemindUsing,
                     RemindTo = model.RemindTo,
-
                     RepeatEvery=model.RepeatEvery,
                     RepeatOnWeekDay=model.RepeatOnWeekDay,
                     RepeatOnDay=model.RepeatOnDay,
                     WillRepeat=model.WillRepeat,
                     WillRepeatWeekDay=model.WillRepeatWeekDay,
-                    RepeatOnMonth=model.RepeatOnMonth
-                    
+                    RepeatOnMonth=model.RepeatOnMonth,
+                    IsAllDay=model.IsAllDay,
+                    StartTimeZone=model.StartTimeZone,
+                    EndTimeZone=model.EndTimeZone,
+                    ShowReminder=model.ShowReminder,
+                    ReminderDate=model.ReminderDate,
+                    ReminderPerson=model.ReminderPerson
                 };
                 await _context.Calls.InsertOneAsync(_call);
                 return _call;
@@ -123,6 +127,22 @@ namespace TaskManagement.Repository
                 Call.UpdatedDate = DateTime.Now;
                 Call.UpdatedBy = 1;
                 await _context.Calls.ReplaceOneAsync(b => b._id == Call._id, Call);
+
+                //History history = new History()
+                //{
+                //    Action = "Call",
+                //    Subject = Call.Subject,
+                //    ActionId = _call.UpsertedId.ToString(),
+                //    Panel = "Lead",
+                //    Completed = Call.Completed,
+                //    CreatedBy = 1,
+                //    CreatedDate = DateTime.Now,
+                //    Button = "Updated"
+                //};
+
+                //await _historyRepository.UpdateHistory(history);
+
+                //return _call;
             }
             catch (Exception ex)
             {

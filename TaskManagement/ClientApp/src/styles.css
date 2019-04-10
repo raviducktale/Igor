@@ -21,12 +21,6 @@ body {
   font-family: "Source Sans Pro", sans-serif;
 }
 
-.historystyle {
-  border-style: double;
-  border-color: red;
-}
-
-
 .lead-add-list {
   padding: 40px 0;
 }
@@ -170,9 +164,9 @@ body {
     clear: both;
   }
   .timeline-alt > li.timeline-separator:before, .timeline > li.timeline-separator:before {
-    content: attr(data-datetime);
+    content: attr(title);
     display: inline-block;
-    width: 120px;
+    width: 145px;
     text-align: center;
     padding: 0 20px;
     line-height: 30px;

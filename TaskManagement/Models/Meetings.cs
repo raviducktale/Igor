@@ -21,28 +21,29 @@ namespace TaskManagement.Models
         public DateTime? UpdatedDate { get; set; }
         public DateTime? EventStartDate { get; set; }
         public DateTime? EventEndDate { get; set; }
-
         public int? ReminderNotification { get; set; }
         public bool Completed { get; set; }
         public string Description { get; set; }
-        public int? RepeatTask { get; set; }
-
+        public string RepeatTask { get; set; }
         public int? Interval { get; set; }
         public DateTime? RepeatAfter { get; set; }
-        public string Untill { get; set; }
+        public int? Untill { get; set; }
         public DateTime? UntillDate { get; set; }
         public int? UntillCompile { get; set; }
         public DateTime? RemindUsing { get; set; }
-        public string RemindTo { get; set; }
-
+        public string[] RemindTo { get; set; }
         public int? RepeatEvery { get; set; }
-        public int? RepeatOnWeekDay { get; set; }
+        public string RepeatOnWeekDay { get; set; }
         public int? RepeatOnDay { get; set; }
         public int? WillRepeat { get; set; }
         public int? WillRepeatWeekDay { get; set; }
         public int? RepeatOnMonth { get; set; }
-
-
+        public bool IsAllDay { get; set; }
+        public string StartTimeZone { get; set; }
+        public string EndTimeZone { get; set; }
+        public bool ShowReminder { get; set; }
+        public DateTime? ReminderDate { get; set; }
+        public string[] ReminderPerson { get; set; }
 
     }
 

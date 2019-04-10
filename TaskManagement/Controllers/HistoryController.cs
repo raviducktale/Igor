@@ -24,7 +24,7 @@ namespace TaskManagement.Controllers
         public async Task<IActionResult> GetHistory()
         {
             IEnumerable<History> model = await _historyRepository.GetAllHistory();
-            return Ok(model);
+            return Ok(model.OrderByDescending(x => x.CreatedDate));
         }
 
         [HttpGet("{id}")]
