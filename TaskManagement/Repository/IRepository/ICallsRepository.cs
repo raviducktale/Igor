@@ -14,5 +14,6 @@ namespace TaskManagement.Repository.IRepository
         Task<Calls> AddCall(CallsVM item);
         Task UpdateCall(Calls item);
         Task<bool> RemoveCall(string id);
+        List<Calls> GetAllCalls();
     }
 }

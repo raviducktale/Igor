@@ -11,8 +11,8 @@ namespace TaskManagement.Models.ViewModels
         public string _id { get; set; }
         public string Subject { get; set; }
         public int? Id { get; set; }
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public string StartTimezone { get; set; }
         public string EndTimezone { get; set; }
         public string Location { get; set; }
@@ -31,7 +31,9 @@ namespace TaskManagement.Models.ViewModels
         public string BYMonth { get; set; }
         public string BYSetPOS { get; set; }
 
-
-
+        List<SchedulerVM> list { get; set; }
+       
     }
+  
+   
 }

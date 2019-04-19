@@ -22,6 +22,17 @@ namespace TaskManagement.Repository
             _context = new DBContext(settings);
             _historyRepository = historyRepository;
         }
+        public List<Calls> GetAllCalls()
+        {
+            try
+            {
+                return _context.Calls.Find(_ => true).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public Task<List<Calls>> GetAllCall()
         {

@@ -5,7 +5,6 @@ import { LeadComponent } from './lead.component';
 import { LeadService } from './lead.service';
 import { AddEditLeadComponent } from './add-edit-lead/add-edit-lead.component';
 import { FormsModule } from '@angular/forms';
-import { ScheduleModule } from '@syncfusion/ej2-angular-schedule';
 import { MultiSelectModule } from '@syncfusion/ej2-angular-dropdowns';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { DateTimePickerModule } from "@syncfusion/ej2-angular-calendars";
@@ -34,6 +33,11 @@ import { HistoryComponent } from './history/history.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ContactsComponent } from './contacts/contacts.component';
 
+import { from } from 'rxjs';
+import { EventSchedulerComponent } from './event-scheduler/event-scheduler.component';
+
+import { ScheduleModule, AgendaService, DayService, WeekService, WorkWeekService, MonthService, DragAndDropService, ResizeService } from '@syncfusion/ej2-angular-schedule';
+
 export const routes = [
   { path: '', component: LeadComponent, pathMatch: 'full', data: { title: 'Manage Lead' } },
   { path: 'add', component: AddEditLeadComponent, data: { title: 'Add' } },
@@ -56,7 +60,8 @@ export const routes = [
     SharedModule,
     ScheduleModule,
     MultiSelectModule, DropDownListModule, DateTimePickerModule, RichTextEditorAllModule,
-    NumericTextBoxModule, TooltipModule, CheckBoxModule, RadioButtonModule, NgbModule, NgMultiSelectDropDownModule
+    NumericTextBoxModule, TooltipModule, CheckBoxModule, RadioButtonModule, NgbModule,
+    NgMultiSelectDropDownModule
    
   ],
   declarations: [
@@ -69,12 +74,14 @@ export const routes = [
     SchedulerComponent,
     HistoryComponent,
     ContactsComponent,
+    EventSchedulerComponent,
   ],
   providers: [
     LeadService,
     CallService,
     CommentService,
     TaskService,
+    AgendaService, DayService, WeekService, WorkWeekService, MonthService, DragAndDropService, ResizeService,
     MeetingService, ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService,
   ],
   //entryComponents: [AddEditLeadComponent],

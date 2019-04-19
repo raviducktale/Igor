@@ -1,0 +1,11 @@
+E:\IGOR\TaskManagerApp\OData\bin\Debug\netcoreapp2.1\OData.deps.json
+E:\IGOR\TaskManagerApp\OData\bin\Debug\netcoreapp2.1\OData.runtimeconfig.json
+E:\IGOR\TaskManagerApp\OData\bin\Debug\netcoreapp2.1\OData.runtimeconfig.dev.json
+E:\IGOR\TaskManagerApp\OData\bin\Debug\netcoreapp2.1\OData.dll
+E:\IGOR\TaskManagerApp\OData\bin\Debug\netcoreapp2.1\OData.pdb
+E:\IGOR\TaskManagerApp\OData\obj\Debug\netcoreapp2.1\OData.csprojAssemblyReference.cache
+E:\IGOR\TaskManagerApp\OData\obj\Debug\netcoreapp2.1\OData.csproj.CoreCompileInputs.cache
+E:\IGOR\TaskManagerApp\OData\obj\Debug\netcoreapp2.1\OData.AssemblyInfoInputs.cache
+E:\IGOR\TaskManagerApp\OData\obj\Debug\netcoreapp2.1\OData.AssemblyInfo.cs
+E:\IGOR\TaskManagerApp\OData\obj\Debug\netcoreapp2.1\OData.dll
+E:\IGOR\TaskManagerApp\OData\obj\Debug\netcoreapp2.1\OData.pdb

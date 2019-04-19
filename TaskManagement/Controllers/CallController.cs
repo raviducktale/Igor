@@ -24,6 +24,7 @@ namespace TaskManagement.Controllers
         }
 
         [HttpGet]
+        [Produces("application/xml")]
         public async Task<IActionResult> GetCall()
         {
             IEnumerable<Calls> model = await _callRepository.GetAllCall();

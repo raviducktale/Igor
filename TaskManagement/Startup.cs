@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using TaskManagement.Models;
 using TaskManagement.Repository;
 using TaskManagement.Repository.IRepository;
@@ -32,9 +34,9 @@ namespace TaskManagement
                 .AllowCredentials());
             });
 
-
+            //services.AddOData();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+            services.AddMvc().AddXmlSerializerFormatters();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -46,6 +48,7 @@ namespace TaskManagement
                 options.ConnectionString = Configuration.GetSection("MongoConnection:ConnectionString").Value;
                 options.Database = Configuration.GetSection("MongoConnection:Database").Value;
             });
+
             // Configurations
             services.AddCors();
             services.AddRouting();
@@ -55,12 +58,17 @@ namespace TaskManagement
             services.AddScoped<ISchedulerRepository, SchedulerRepository>();
             services.AddScoped<IHistoryRepository, HistoryRepository>();
             services.AddScoped<ICommentsRepository, CommentsRepository>();
+
+            //services.AddOData();
+            services.AddMvc().AddJsonOptions(opt =>
+            {
+               // opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
-
-    
-
+                
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors(x => x
               .AllowAnyOrigin()
@@ -89,9 +97,7 @@ namespace TaskManagement
                     template: "{controller}/{action=Index}/{id?}");
             });
 
-           
-
-
+          
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,

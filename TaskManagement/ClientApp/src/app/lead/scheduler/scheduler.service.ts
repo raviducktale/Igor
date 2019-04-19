@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { debounce } from '@syncfusion/ej2-base';
 
 
 @Injectable({
@@ -19,6 +20,7 @@ export class SchedulerService {
   private readonly _AllSchedulerUrl: string = this.BASE_URL + "/Scheduler";
   private readonly _UpdateSchedulerUrl: string = this.BASE_URL + "/Scheduler/Update";
   private readonly _DeleteSchedulerUrl: string = this.BASE_URL + "/Scheduler/Delete";
+  private readonly _GetData: string = this.BASE_URL +"/Scheduler/GetCalls";
 
 
   //Methods
@@ -43,7 +45,10 @@ export class SchedulerService {
   deleteScheduler<T>(id): Observable<T> {
     return this.http.delete<T>(this._DeleteSchedulerUrl + "/" + id, { headers: this.getHeaders() })
   }
-
+  getSchedulerData<T>(): Observable<T> {
+    debugger
+    return this.http.get<T>(this._GetData, this.getRequestHeaders())
+  }
 
   //SET HEADERS
   protected getRequestHeaders(): { headers: HttpHeaders | { [header: string]: string | string[]; } } {
