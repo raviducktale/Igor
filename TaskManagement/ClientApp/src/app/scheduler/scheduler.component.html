@@ -1,0 +1,210 @@
+
+<div class="mt-10 container">
+  <div class="row col-12">
+    <div class="col-12 text-right py-4">
+      <a [routerLink]="['/']">Home</a>&nbsp;
+      <a [routerLink]="['/lead']">Lead</a>
+    </div>
+
+    <!--<ejs-schedule #scheduleObj width='100%' height='650px'
+                [selectedDate]="selectedDate"
+                [currentDate]="currentDate"
+                [eventSettings]="eventSettings"
+                [currentView]="currentView"
+                timezone="UTC"
+                (queryCellInfo)="checkInfo($event)"
+                (appointmentWindowOpen)="onAppointmentWindowOpen($event)"
+                [readonly]="readonly">
+  </ejs-schedule>-->
+
+    <!--<ej-schedule id="Schedule1" width="100%" height="525px" (queryCellInfo)="checkInfo($event)">
+    </ej-schedule>-->
+
+    <div *ngIf="false">
+      <ej-schedule id="Schedule1" width="100%" height="525px"
+                   [currentDate]="currentDate"
+                   [appointmentSettings.dataSource]="dataSource"
+                   (appointmentWindowOpen)="onAppointmentWindowOpen($event)">
+      </ej-schedule>
+
+      <ej-dialog width="600px" height="auto" [showOnInit]="false" [enableModal]="true" title="Appointment Window" [enableResize]="false"
+                 (close)="clearFields($event)" id="customWindow" style="display: none">
+        <div id="appWindow">
+          <form id="custom">
+            <table width="100%" cellpadding="5">
+              <tbody>
+                <tr style="display: none">
+                  <td>
+                    Id:
+                  </td>
+                  <td colspan="2">
+                    <input id="customId" type="text" name="Id" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Subject:
+                  </td>
+                  <td colspan="2">
+                    <input id="subject" type="text" value="" name="Subject" style="width: 100%" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Description:
+                  </td>
+                  <td colspan="2">
+                    <textarea id="customdescription" name="Description" rows="3" cols="50" style="width: 100%; resize: vertical"></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    StartTime:
+                  </td>
+                  <td>
+                    <input id="StartTime" ej-datetimepicker width="150" type="text" value="" name="StartTime" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    EndTime:
+                  </td>
+                  <td>
+                    <input id="EndTime" ej-datetimepicker width="150" type="text" value="" name="EndTime" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Appointment Type:</td>
+                  <td>
+                    <input type="text" ej-dropdownlist fields.text="text" fields.id="id"
+                           fields.value="text" id="AppointmentType" />
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3">
+                    <div class="customcheck">AllDay:</div>
+                    <div class="customcheck">
+                      <input id="allDay" type="checkbox" name="AllDay" (change)="allDayCheck($event)" />
+                    </div>
+                    <div class="customcheck">Recurrence:</div>
+                    <div>
+                      <input id="recurrence" type="checkbox" name="Recurrence" />
+                    </div>
+                  </td>
+                </tr>
+                <tr id="summary" style="display:none;">
+                  <td colspan="3">
+                    <div class="recSummary">Summary:</div>
+                    <div>
+                      <label id="recSummary" name="Summary"></label>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="edit" style="display:none;">
+                  <td colspan="3">
+                    <div><a id="recedit" (click)="recurrenceRule()">Edit</a></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
+          <div>
+            <button type="button" (ejclick)="cancel($event)" ej-button width="85px" text="Cancel" id="btncancel" style="float:right;margin-right:20px;margin-bottom:10px;"></button>
+            <button type="button" (ejclick)="save($event)" ej-button width="85px" text="Submit" id="btnsubmit" style="float:right;margin-right:20px;margin-bottom:10px;"></button>
+          </div>
+        </div>
+        <div id="recWindow" style="display: none">
+          <div id="recurrenceEditor"></div>
+          <br />
+          <div>
+            <input ej-button (ejclick)="onRecurrenceClick($event)" text="Cancel" type="button" id="recCancel" />
+            <input ej-button (ejclick)="onRecurrenceClick($event)" text="Submit" type="button" id="recSubmit" />
+          </div>
+        </div>
+      </ej-dialog>
+
+    </div>
+
+       
+
+
+    <ejs-schedule #scheduleObj width='100%' height='550px' [selectedDate]="selectedDate" [eventSettings]="eventSettings"
+                  (popupOpen)="onPopupOpen($event)">
+
+      <!-- Header template -->
+      <ng-template #quickInfoTemplatesHeader let-data>
+        <div *ngIf="data.elementType == 'cell' || data.elementType == 'event'">
+          <div class="e-popup-header">
+            <div class="e-header-icon-wrapper">
+              <div *ngIf="data.elementType == 'event'" class="subject">{{data.Subject}}</div>
+              <button class="e-close e-close-icon e-icons" title="Close" (click)="onCloseClick($event)"></button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Content Template -->
+      <ng-template #quickInfoTemplatesContent let-data>
+        <div *ngIf="data.elementType == 'cell'" class="e-cell-content">
+          <form class="e-schedule-form">
+            <div style="padding:10px">
+              <input class="subject e-field e-input" type="text" name="Subject" placeholder="Title" style="width:100%">
+            </div>
+            <div style="padding:10px">
+              <input class="location e-field e-input" type="text" name="Location" placeholder="Location" style="width:100%">
+            </div>
+            <div style="padding:10px">
+              <input class="Assignee e-field e-input" type="text" name="Assignee" placeholder="Assignee" style="width:100%">
+            </div>
+            <div style="padding:10px">
+              <input class="Responsible e-field e-input" type="text" name="Responsible" placeholder="Responsible" style="width:100%">
+            </div>
+          </form>
+        </div>
+        <div *ngIf="data.elementType == 'event'" class="e-event-content">
+          <div class="start-time">Start: {{data.StartTime.toLocaleString()}}</div>
+          <div class="end-time">End: {{data.EndTime.toLocaleString()}}</div>
+          <div *ngIf="data.Location != undefined && data.Location != ''" class="location">Location: {{data.Location}}</div>
+          <div *ngIf="data.Assignee != undefined && data.Assignee != ''" class="location">Assignee: {{data.Assignee}}</div>
+          <div *ngIf="data.Responsible != undefined && data.Responsible != ''" class="location">Responsible: {{data.Responsible}}</div>
+        </div>
+      </ng-template>
+
+      <!-- Footer Template -->
+      <ng-template #quickInfoTemplatesFooter let-data>
+        <div *ngIf="data.elementType == 'cell'" class="e-cell-footer">
+          <div class="left-button">
+            <button class="e-event-details" title="Extra Details" (click)="onDetailsClick($event)">More Details</button>
+          </div>
+          <div class="right-button">
+            <button class="e-event-create" title="Add" (click)="onAddClick($event)">Add</button>
+          </div>
+        </div>
+        <div *ngIf="data.elementType == 'event'" class="e-event-footer">
+          <div class="left-button">
+            <button class="e-delete" title="Delete" (click)="onDeleteClick($event)">Delete</button>
+            <button *ngIf="data.RecurrenceRule != undefined && data.RecurrenceRule != ''" class="e-delete-series"
+                    title="Delete" (click)="onDeleteClick($event)">
+              Delete Series
+            </button>
+          </div>
+          <div class="right-button">
+            <button class="e-edit" title="Edit" (click)="onEditClick($event)">Edit</button>
+            <button *ngIf="data.RecurrenceRule != undefined && data.RecurrenceRule != ''" class="e-edit-series"
+                    title="Edit" (click)="onEditClick($event)">
+              Edit Series
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ejs-schedule>
+    
+
+  </div>
+</div>
+
+<style>
+  .validation {
+    border-color: red;
+  }
+</style>

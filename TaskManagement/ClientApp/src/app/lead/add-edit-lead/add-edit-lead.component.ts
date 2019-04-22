@@ -6,11 +6,6 @@ import { HistoryService } from '../history/history.service';
 import { TaskService } from '../task/task.service';
 import { CommentService } from '../comment/comment.service';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService  } from '@syncfusion/ej2-angular-richtexteditor';
-import { debug } from 'util';
-import { fn } from '@angular/compiler/src/output/output_ast';
-import { read } from 'fs';
-import { Action } from 'rxjs/internal/scheduler/Action';
-import { NgModule } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 enum ACTIONS {

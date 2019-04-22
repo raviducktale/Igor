@@ -9,6 +9,9 @@ export const ROUTES: Routes = [{
     path: 'home', component: HomeComponent
   },
   {
+    path: 'scheduler', loadChildren: './scheduler/scheduler.module#SchedulerModule'
+  },
+  {
     path: 'lead', loadChildren: './lead/lead.module#LeadModule'
   },
 ];

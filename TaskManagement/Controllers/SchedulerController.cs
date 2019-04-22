@@ -123,7 +123,7 @@ namespace TaskManagement.Controllers
 
         [HttpPost("GetCalls")]
        // [Produces("application/xml")]
-        public async Task<JsonResult> GetCallsAsync(string StartDate, string EndDate)
+        public async Task<JsonResult> GetCallsAsync()
         {
             //IEnumerable<Calls> model = _callRepository.GetAllCalls();
             //List<DefaultSchedule> schedulerModelList = new List<DefaultSchedule>();

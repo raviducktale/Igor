@@ -27,15 +27,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { UiSwitchModule } from 'ngx-toggle-switch';
-import { SchedulerComponent } from './scheduler/scheduler.component';
 import { SharedModule } from '../shared/shared.module';
 import { HistoryComponent } from './history/history.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ContactsComponent } from './contacts/contacts.component';
-
 import { from } from 'rxjs';
-import { EventSchedulerComponent } from './event-scheduler/event-scheduler.component';
-
 import { ScheduleModule, AgendaService, DayService, WeekService, WorkWeekService, MonthService, DragAndDropService, ResizeService } from '@syncfusion/ej2-angular-schedule';
 
 export const routes = [
@@ -46,7 +42,6 @@ export const routes = [
   { path: 'comment', component: CommentComponent, data: { title: 'Edit' } },
   { path: 'meeting', component: MeetingComponent, data: { title: 'Edit' } },
   { path: 'call', component: CallComponent, data: { title: 'Edit' } },
-  { path: 'scheduler', component: SchedulerComponent, data: { title: 'scheduler' } }
 ];
 
 @NgModule({
@@ -71,17 +66,16 @@ export const routes = [
     CommentComponent,
     TaskComponent,
     MeetingComponent,
-    SchedulerComponent,
     HistoryComponent,
-    ContactsComponent,
-    EventSchedulerComponent,
+    ContactsComponent
   ],
   providers: [
     LeadService,
     CallService,
     CommentService,
     TaskService,
-    AgendaService, DayService, WeekService, WorkWeekService, MonthService, DragAndDropService, ResizeService,
+    DragAndDropService,
+    ResizeService,
     MeetingService, ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService,
   ],
   //entryComponents: [AddEditLeadComponent],

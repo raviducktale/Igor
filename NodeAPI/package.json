@@ -1,0 +1,21 @@
+{
+  "name": "node-api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app",
+    "server": "node ./server.js",
+    "ng": "ng"
+  },
+  "description": "NodeAPI",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.0",
+    "debug": "^2.2.0",
+    "express": "^4.14.0",
+    "mongodb": "^3.2.3"
+  }
+}
